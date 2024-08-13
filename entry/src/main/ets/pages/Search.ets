@@ -7,6 +7,7 @@ let httpRequest = http.createHttp();
 let options: preferences.Options = { name: 'myStore' };
 let dataPreferences: preferences.Preferences = preferences.getPreferencesSync(getContext(), options);
 
+
 interface University {
   alpha_two_code: string;
   name: string;
@@ -24,6 +25,7 @@ struct search {
 
   @State currentIndex: number = 0
   controller: TabsController = new TabsController();
+  dataPreferences: preferences.Preferences = preferences.getPreferencesSync(getContext(), options);
   @Builder LabelImage(label: string, targetIndex: number, selectedImg: Resource, normalImg: Resource) {
     Column() {
       Image(this.currentIndex === targetIndex ? selectedImg : normalImg)
@@ -184,6 +186,7 @@ struct search {
                           .onClick(() => {
                             let value: string = dataPreferences.getSync('universities', '[]').toString();
                             let universities: University[] = JSON.parse(value)
+                            console.log('' + universities.length)
                             if(universities.length >= 100) {
                               promptAction.showToast({message: '最多收藏100所大学'})
                             } else {
