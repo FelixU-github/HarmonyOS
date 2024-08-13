@@ -41,6 +41,7 @@ struct search {
     .height('100%')
 
   }
+
   @State universities: University[] = []
 
   requestData() {
@@ -181,19 +182,19 @@ struct search {
                           .textAlign(TextAlign.JUSTIFY)
                           .margin({left:20, bottom:15})
                           .onClick(() => {
-                            let value: string = dataPreferences.getSync('Universities', '[]').toString();
-                            let Universities: University[] = JSON.parse(value)
-                            if(Universities.length >= 100) {
+                            let value: string = dataPreferences.getSync('universities', '[]').toString();
+                            let universities: University[] = JSON.parse(value)
+                            if(universities.length >= 100) {
                               promptAction.showToast({message: '最多收藏100所大学'})
                             } else {
-                              let result = Universities.some((value) => {
+                              let result = universities.some((value) => {
                                 return value.name=== item.name
                               })
                               if(result) {
                                 promptAction.showToast({message: '不能重复收藏'})
                               } else {
-                                Universities.push(item)
-                                dataPreferences.putSync('Universities', JSON.stringify(Universities))
+                                universities.push(item)
+                                dataPreferences.putSync('universities', JSON.stringify(universities))
                                 dataPreferences.flush()
                                 promptAction.showToast({
                                   message: '已收藏'
@@ -315,8 +316,8 @@ struct search {
                         topRight: 10
                       })
                       .width('94%')
-                    Row() {
 
+                    Row() {
                       Text('删除').margin({right: 15})
                         .onClick(() => {
                           AlertDialog.show({
@@ -327,12 +328,12 @@ struct search {
                             primaryButton: {
                               value: '确定',
                               action: () => {
-                                let value: string = dataPreferences.getSync('cats', '[]').toString();
-                                let cats: University[] = JSON.parse(value)
-                                cats.splice(index, 1)
-                                dataPreferences.putSync('cats', JSON.stringify(cats))
+                                let value: string = dataPreferences.getSync('universities', '[]').toString();
+                                let universities: University[] = JSON.parse(value)
+                                universities.splice(index, 1)
+                                dataPreferences.putSync('universities', JSON.stringify(universities))
                                 dataPreferences.flush()
-                                this.universities = cats
+                                this.universities = universities
                                 promptAction.showToast({
                                   message: '已删除'
                                 })
