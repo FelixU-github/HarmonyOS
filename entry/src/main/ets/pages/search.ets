@@ -271,6 +271,30 @@ struct search {
               ForEach(this.uns, (item: University, index: number) => {
                 ListItem() {
                   Column() {
+                    
+                    Row({space: 10}){
+                      Image($r('app.media.university'))
+                        .width(50)
+                        .height(50)
+                        .margin({left: 10,top: 10,bottom: 10})
+                        .border({radius: 10})
+                        .shadow({ radius: 10, color: '#C0C0C0'})
+
+                      Text(item.name)
+                        .width(250)
+                        .maxLines(2)
+                        .margin(5)
+                        .fontSize(14)
+                        .fontStyle(FontStyle.Italic)
+                        .fontWeight(FontWeight.Bold)
+                        .fontColor('#0000ff')
+
+                    }
+                    .width('100%')
+                    .margin({left: 10,right: 10})
+                    .backgroundColor('#fff8f8fc')
+                    .border({radius: 10})
+
                     Text('国家：'+item.country)
                       .width('100%')
                       .fontSize(16)
