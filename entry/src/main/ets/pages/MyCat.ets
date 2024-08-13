@@ -222,7 +222,8 @@ struct Index {
         TabContent() {
           Column() {
             List() {
-              ForEach(this.saveCats, (item: Cat, index: number) => {
+              ForEach(this.saveCats,
+                (item: Cat, index: number) => {
                 ListItem() {
                   Column() {
                     Image(item.url)

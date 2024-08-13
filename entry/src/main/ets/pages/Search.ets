@@ -22,33 +22,15 @@ interface University {
 struct search {
   @State keyword: string = ''
   @State count: number = 0
-
-  @State currentIndex: number = 0
-  controller: TabsController = new TabsController();
-  dataPreferences: preferences.Preferences = preferences.getPreferencesSync(getContext(), options);
-  @Builder LabelImage(label: string, targetIndex: number, selectedImg: Resource, normalImg: Resource) {
-    Column() {
-      Image(this.currentIndex === targetIndex ? selectedImg : normalImg)
-        .size({width: 25})
-      Text(label)
-        .fontColor(this.currentIndex === targetIndex ? '#1296db' : '#8a8a8a')
-        .fontSize(12)
-    }
-    .onClick(() => {
-      this.currentIndex = targetIndex
-      this.controller.changeIndex(this.currentIndex)
-    })
-    .backgroundColor('#FFFFFF')
-    .width('100%')
-    .height('100%')
-
-  }
   @State saved_universities: University[] = []
   @State universities: University[] = []
+  @State currentIndex: number = 0
+  controller: TabsController = new TabsController();
+
 
   requestData() {
     const url = `http://universities.hipolabs.com/search?name=${encodeURIComponent(this.keyword)}`;
-    httpRequest.request(url, (err: Error, data: http.HttpResponse) => {
+    httpRequest.request(url, (err, data) => {
       if (!err) {
         // 解析为 University 对象数组
         let New_universities: University[] = JSON.parse(data.result.toString())
@@ -70,6 +52,26 @@ struct search {
       }
     });
   }
+
+  @Builder LabelImage(label: string, targetIndex: number, selectedImg: Resource, normalImg: Resource) {
+    Column() {
+      Image(this.currentIndex === targetIndex ? selectedImg : normalImg)
+        .size({width: 25})
+      Text(label)
+        .fontColor(this.currentIndex === targetIndex ? '#1296db' : '#8a8a8a')
+        .fontSize(12)
+    }
+    .onClick(() => {
+      this.currentIndex = targetIndex
+      this.controller.changeIndex(this.currentIndex)
+    })
+    .backgroundColor('#FFFFFF')
+    .width('100%')
+    .height('100%')
+
+  }
+
+
 
   build() {
     Column(){
@@ -127,7 +129,7 @@ struct search {
                   bottom: 10
                 })
               List({ space: 20, initialIndex: 0 }) {
-                ForEach(this.universities, (item: University,) => {
+                ForEach(this.universities, (item: University) => {
                   ListItem() {
                     Column({space: 10}){
                       Row({space: 10}){
@@ -240,27 +242,27 @@ struct search {
 
         TabContent() {
           Column(){
-            Row(){
-              Image($r('app.media.img'))
-                .width("20%")
-                .shadow({ radius: 10, color: '#C0C0C0'})
-                .borderRadius(50)
-                .margin({left:10,right:10})
-            Column(){
-              Row(){
-                Text('账户昵称 ：')
-                Text('XXXXXXXX')
-              }
-              Row(){
-                Text('账户 ID：')
-                Text('2023120253')
-              }
-            }
-
-            }
-            .width('100%')
-            .height(120)
-            .backgroundColor("#ffffffff")
+            // Row(){
+            //   Image($r('app.media.img'))
+            //     .width("20%")
+            //     .shadow({ radius: 10, color: '#C0C0C0'})
+            //     .borderRadius(50)
+            //     .margin({left:10,right:10})
+            // Column(){
+            //   Row(){
+            //     Text('账户昵称 ：')
+            //     Text('XXXXXXXX')
+            //   }
+            //   Row(){
+            //     Text('账户 ID：')
+            //     Text('2023120253')
+            //   }
+            // }
+            //
+            // }
+            // .width('100%')
+            // .height(120)
+            // .backgroundColor("#ffffffff")
 
             List() {
               ForEach(this.saved_universities,
