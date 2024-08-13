@@ -121,13 +121,18 @@ struct search {
             }
 
             Column() {
-              Text('找到'+ this.count + '所大学')
-                .fontSize(20)
-                .fontColor(Color.Black)
-                .fontWeight(FontWeight.Bold)
-                .margin({
-                  bottom: 10
-                })
+
+              if (this.universities.length === 0) {
+                Text('寻找你喜欢的大学').fontSize(24)
+              }else {
+                Text('找到'+ this.count + '所大学')
+                  .fontSize(20)
+                  .fontColor(Color.Black)
+                  .fontWeight(FontWeight.Bold)
+                  .margin({
+                    bottom: 10
+                  })
+              }
               List({ space: 20, initialIndex: 0 }) {
                 ForEach(this.universities, (item: University) => {
                   ListItem() {

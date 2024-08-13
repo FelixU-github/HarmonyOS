@@ -2,14 +2,9 @@
 import {router} from '@kit.ArkUI'
 import { BusinessError } from '@kit.BasicServicesKit';
 
-
-
 @Entry
 @Component
-
 struct Index {
-
-
 
   build() {
     Column() {
@@ -92,9 +87,7 @@ struct Index {
             })
           })
         }
-        .margin({
-          top:30
-        })
+        .margin({ top:30 })
 
           Column({space:20}){
             Text('-Or sign in with-')

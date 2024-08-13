@@ -2,10 +2,6 @@
 import { router , promptAction} from '@kit.ArkUI';
 import { http } from '@kit.NetworkKit';
 
-let httpRequest = http.createHttp();
-let options: http.HttpRequestOptions = {
-  // 请求选项
-}
 
 interface University {
   alpha_two_code: string;
@@ -42,36 +38,6 @@ struct Home {
 
   @State keyword: string = ''
   @State count: number = 0
-
-  @State uns: University[] = []
-  requestData() {
-    const url = `http://universities.hipolabs.com/search?name=${encodeURIComponent(this.keyword)}`;
-
-    httpRequest.request(url, options, (err: Error, data: http.HttpResponse) => {
-      if (!err) {
-
-        // 将结果解析为 University 对象数组
-
-        let newuns: University[] = JSON.parse(data.result.toString())
-        this.uns = [...this.uns, ...newuns]
-        this.count = this.uns.length
-        console.info('count:' + this.count)
-
-        // 逐个打印每个大学的信息
-        newuns.slice(0,5).forEach((university) => {
-          console.info('University Name: ' + university.name);
-          console.info('Country: ' + university.country);
-          console.info('Web Pages: ' + university.web_pages.join(', '));
-          console.info('Domains: ' + university.domains.join(', '));
-          console.info('State Province: ' + university.state_province);
-          console.info('-----');
-        })
-      } else {
-        console.info('error:' + JSON.stringify(err));
-      }
-    });
-  }
-
 
 
   build() {
@@ -151,13 +117,13 @@ struct Home {
 
             Column(){
               Row(){
-                Text('日常办公 |')
+                Text('最近使用 |')
                   .fontSize(12)
                   .textAlign(TextAlign.Start)
                   .margin({left:10,right:5})
                   .fontColor('#ff000000')
 
-                Text('最近使用')
+                Text('日常办公')
                   .fontSize(12)
                   .textAlign(TextAlign.Start)
                   .margin({right:230})
@@ -170,18 +136,29 @@ struct Home {
 
               Row({space:5}){
                 Column(){
-                  Image($r('app.media.GoogleLogo'))
+                  Image($r('app.media.Uni'))
                     .width(50)
                     .height(50)
                     .margin({left:5,right:5,bottom:5,top:2})
                     .borderRadius(10)
                     .shadow({ radius: 10, color: '#C0C0C0'})
-                  Text('日历')
+                    .onClick(() => {
+                      router.pushUrl({
+                        url: 'pages/Search' // 目标url
+                      }, router.RouterMode.Standard, (err) => {
+                        if (err) {
+                          console.error(`Invoke pushUrl failed, code is ${err.code}, message is ${err.message}`);
+                          return;
+                        }
+                        console.info('Invoke pushUrl succeeded.');
+                      });
+                    })
+                  Text('找大学')
                     .fontSize(14)
                 }
 
                 Column(){
-                  Image($r('app.media.GoogleLogo'))
+                  Image($r('app.media.Cat'))
                     .width(50)
                     .height(50)
                     .margin({left:5,right:5,bottom:5,top:2})
@@ -198,7 +175,7 @@ struct Home {
                         console.info('Invoke pushUrl succeeded.');
                       });
                     })
-                  Text('日历')
+                  Text('找猫咪')
                     .fontSize(14)
                 }
 
@@ -336,110 +313,6 @@ struct Home {
 
           Column(){
 
-            Row(){
-              Search({ placeholder: '请输入大学名称'})
-                .searchButton('SEARCH')
-                .onChange((value) => {
-                  this.keyword = value
-                })
-            }
-            .backgroundColor('#fff8f8fc')
-
-            Button('搜索')
-              .onClick(()=>{
-                if(this.keyword === ''){
-                  promptAction.showToast({message: '请输入大学名称'})
-                }else {
-                  this.uns = [] // 清空搜索数组
-                  this.requestData()
-                }
-
-              })
-
-            Column() {
-              Text('搜索结果：'+this.count)
-                .fontSize(20)
-                .fontColor(Color.Black)
-                .fontWeight(FontWeight.Bold)
-                .margin({
-                  bottom: 10
-                })
-              List({ space: 20, initialIndex: 0 }) {
-                ForEach(this.uns, (item: University,) => {
-                  ListItem() {
-                    Column({space: 10}){
-                      Row({space: 10}){
-                        Image($r('app.media.university'))
-                          .width(50)
-                          .height(50)
-                          .margin({left: 10,top: 10,bottom: 10})
-                          .border({radius: 10})
-                          .shadow({ radius: 10, color: '#C0C0C0'})
-
-                        Text(item.name)
-                          .width(250)
-                          .maxLines(2)
-                          .margin(5)
-                          .fontSize(14)
-                          .fontStyle(FontStyle.Italic)
-                          .fontWeight(FontWeight.Bold)
-                          .fontColor('#0000ff')
-
-                      }
-                      .width('100%')
-                      .margin({left: 10,right: 10})
-                      .backgroundColor('#fff8f8fc')
-                      .border({radius: 10})
-
-                      Column({space: 20}){
-                        Text('国家：'+item.country)
-                          .width('100%')
-                          .fontSize(16)
-                          .textAlign(TextAlign.Start)
-                          .margin({left:20})
-
-                        Text('省份的信息：'+item.state_province)
-                          .width('100%')
-                          .fontSize(16)
-                          .textAlign(TextAlign.Start)
-                          .margin({left:20})
-
-                        Text('官方域名：'+item.domains)
-                          .width('100%')
-                          .fontSize(16)
-                          .textAlign(TextAlign.JUSTIFY)
-                          .margin({left:20})
-
-                        Text('官方网站：'+item.web_pages)
-                          .width('100%')
-                          .fontSize(16)
-                          .textAlign(TextAlign.JUSTIFY)
-                          .margin({left:20, bottom:15})
-                      }
-
-                    }
-                    .borderRadius(10)
-                    .width('92%') // 卡片宽度
-                    .margin({bottom: 10})
-                    .backgroundColor(0xFFFFFF)
-                    .shadow({
-                      radius: 10,
-                      color: '#C0C0C0'
-                    })
-
-
-                  }
-                  .width('100%')
-                }, (item: University) => {
-                  return item.name;
-                })
-
-              }.width('100%')
-              .scrollBar(BarState.Auto)
-            }
-            .width('100%')
-            .height('100%')
-            .backgroundColor("#F5F5F5")
           }
 
         }
