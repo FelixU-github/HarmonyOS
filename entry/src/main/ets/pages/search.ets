@@ -271,6 +271,31 @@ struct search {
               ForEach(this.uns, (item: University, index: number) => {
                 ListItem() {
                   Column() {
+                    Text('国家：'+item.country)
+                      .width('100%')
+                      .fontSize(16)
+                      .textAlign(TextAlign.Start)
+                      .margin({left:20})
+
+                    Text('省份的信息：'+item.state_province)
+                      .width('100%')
+                      .fontSize(16)
+                      .textAlign(TextAlign.Start)
+                      .margin({left:20})
+
+                    Text('官方域名：'+item.domains)
+                      .width('100%')
+                      .fontSize(16)
+                      .textAlign(TextAlign.JUSTIFY)
+                      .margin({left:20})
+
+                    Text('官方网站：'+item.web_pages)
+                      .width('100%')
+                      .fontSize(16)
+                      .textAlign(TextAlign.JUSTIFY)
+                      .margin({left:20, bottom:15})
+
+
                     Image(item.name)
                       .borderRadius({
                         topLeft: 10,
@@ -278,6 +303,7 @@ struct search {
                       })
                       .width('94%')
                     Row() {
+
 
                       Text('删除').margin({right: 15})
                         .onClick(() => {
