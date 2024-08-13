@@ -263,7 +263,9 @@ struct search {
             // .width('100%')
             // .height(120)
             // .backgroundColor("#ffffffff")
-
+            if (this.saved_universities.length === 0) {
+              Text('您尚未收藏大学').fontSize(24)
+            }
             List() {
               ForEach(this.saved_universities,
                 (item: University, index: number) => {
@@ -377,7 +379,10 @@ struct search {
 
         }
         .tabBar(this.LabelImage('收藏', 1, $r('app.media.like_selected'), $r('app.media.like_normal')))
-
+        .onWillShow(() => {
+          let value: string = dataPreferences.getSync('universities', '[]').toString();
+          this.saved_universities = JSON.parse(value)
+        })
       }
 
     }
