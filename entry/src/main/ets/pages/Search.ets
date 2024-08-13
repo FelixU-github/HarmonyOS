@@ -7,7 +7,6 @@ let httpRequest = http.createHttp();
 let options: preferences.Options = { name: 'myStore' };
 let dataPreferences: preferences.Preferences = preferences.getPreferencesSync(getContext(), options);
 
-
 interface University {
   alpha_two_code: string;
   name: string;
@@ -16,7 +15,6 @@ interface University {
   state_province: string | null;
   web_pages: string[];
 }
-
 
 @Entry
 @Component
@@ -43,37 +41,32 @@ struct search {
     .height('100%')
 
   }
+  @State universities: University[] = []
 
-  @State uns: University[] = []
   requestData() {
     const url = `http://universities.hipolabs.com/search?name=${encodeURIComponent(this.keyword)}`;
-
     httpRequest.request(url, (err: Error, data: http.HttpResponse) => {
       if (!err) {
-
         // 解析为 University 对象数组
-        let newuns: University[] = JSON.parse(data.result.toString())
-        this.uns = [...this.uns, ...newuns]
-        this.count = this.uns.length
+        let universities: University[] = JSON.parse(data.result.toString())
+        this.universities = [...this.universities, ...universities]
+        this.count = this.universities.length
         console.info('count:' + this.count)
 
         // 打印每个大学的信息
-        newuns.slice(0,5).forEach((university) => {
+        universities.slice(0,5).forEach((university) => {
           console.info('University Name: ' + university.name);
-          console.info('Country: ' + university.country);
-          console.info('Web Pages: ' + university.web_pages.join(', '));
-          console.info('Domains: ' + university.domains.join(', '));
-          console.info('State Province: ' + university.state_province);
-          console.info('-----');
+          // console.info('Country: ' + university.country);
+          // console.info('Web Pages: ' + university.web_pages.join(', '));
+          // console.info('Domains: ' + university.domains.join(', '));
+          // console.info('State Province: ' + university.state_province);
+          // console.info('-----');
         })
       } else {
         console.info('error:' + JSON.stringify(err));
       }
     });
   }
-
-
-
 
   build() {
     Column(){
@@ -97,8 +90,9 @@ struct search {
       .width('100%')
       .height(40)
       .align(Alignment.Top)
-      Tabs({ controller: this.controller ,barPosition: BarPosition.End}){
 
+
+      Tabs({ controller: this.controller ,barPosition: BarPosition.End}){
         TabContent(){
           Column(){
 
@@ -115,14 +109,14 @@ struct search {
                   if(this.keyword === ''){
                     promptAction.showToast({message: '请输入大学名称'})
                   }else {
-                    this.uns = [] // 清空搜索数组
+                    this.universities = [] // 清空搜索数组
                     this.requestData()
                   }
                 })
             }
 
             Column() {
-              Text('搜索结果：'+this.count)
+              Text('找到'+ this.count + '所大学')
                 .fontSize(20)
                 .fontColor(Color.Black)
                 .fontWeight(FontWeight.Bold)
@@ -130,7 +124,7 @@ struct search {
                   bottom: 10
                 })
               List({ space: 20, initialIndex: 0 }) {
-                ForEach(this.uns, (item: University,) => {
+                ForEach(this.universities, (item: University,) => {
                   ListItem() {
                     Column({space: 10}){
                       Row({space: 10}){
@@ -187,19 +181,19 @@ struct search {
                           .textAlign(TextAlign.JUSTIFY)
                           .margin({left:20, bottom:15})
                           .onClick(() => {
-                            let value: string = dataPreferences.getSync('cats', '[]').toString();
-                            let cats: University[] = JSON.parse(value)
-                            if(cats.length >= 5) {
-                              promptAction.showToast({message: '最多收藏5只猫'})
+                            let value: string = dataPreferences.getSync('Universities', '[]').toString();
+                            let Universities: University[] = JSON.parse(value)
+                            if(Universities.length >= 100) {
+                              promptAction.showToast({message: '最多收藏100所大学'})
                             } else {
-                              let result = cats.some((value) => {
+                              let result = Universities.some((value) => {
                                 return value.name=== item.name
                               })
                               if(result) {
                                 promptAction.showToast({message: '不能重复收藏'})
                               } else {
-                                cats.push(item)
-                                dataPreferences.putSync('cats', JSON.stringify(cats))
+                                Universities.push(item)
+                                dataPreferences.putSync('Universities', JSON.stringify(Universities))
                                 dataPreferences.flush()
                                 promptAction.showToast({
                                   message: '已收藏'
@@ -218,7 +212,6 @@ struct search {
                       radius: 10,
                       color: '#C0C0C0'
                     })
-
 
                   }
                   .width('100%')
@@ -241,10 +234,8 @@ struct search {
         .tabBar(this.LabelImage('发现', 0, $r('app.media.search_selected'), $r('app.media.search_normal')))
 
 
-
         TabContent() {
           Column(){
-
             Row(){
               Image($r('app.media.img'))
                 .width("20%")
@@ -268,10 +259,9 @@ struct search {
             .backgroundColor("#ffffffff")
 
             List() {
-              ForEach(this.uns, (item: University, index: number) => {
+              ForEach(this.universities, (item: University, index: number) => {
                 ListItem() {
                   Column() {
-                    
                     Row({space: 10}){
                       Image($r('app.media.university'))
                         .width(50)
@@ -319,7 +309,6 @@ struct search {
                       .textAlign(TextAlign.JUSTIFY)
                       .margin({left:20, bottom:15})
 
-
                     Image(item.name)
                       .borderRadius({
                         topLeft: 10,
@@ -327,7 +316,6 @@ struct search {
                       })
                       .width('94%')
                     Row() {
-
 
                       Text('删除').margin({right: 15})
                         .onClick(() => {
@@ -344,7 +332,7 @@ struct search {
                                 cats.splice(index, 1)
                                 dataPreferences.putSync('cats', JSON.stringify(cats))
                                 dataPreferences.flush()
-                                this.uns = cats
+                                this.universities = cats
                                 promptAction.showToast({
                                   message: '已删除'
                                 })
@@ -378,22 +366,12 @@ struct search {
             .width('100%')
             .height('100%')
             .backgroundColor("#DCDCDC")
-
           }
-
 
         }
         .tabBar(this.LabelImage('收藏', 1, $r('app.media.like_selected'), $r('app.media.like_normal')))
 
-
       }
-
-
-
-
-
-
-
 
     }
 

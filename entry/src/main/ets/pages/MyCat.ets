@@ -1,6 +1,7 @@
 import http from '@ohos.net.http';
 import { preferences } from '@kit.ArkData';
 import promptAction from '@ohos.promptAction';
+import { router } from '@kit.ArkUI';
 
 let options: preferences.Options = { name: 'myStore' };
 let dataPreferences: preferences.Preferences = preferences.getPreferencesSync(getContext(), options);
@@ -24,7 +25,8 @@ struct Index {
   @State visible: Visibility = Visibility.Hidden
   @State imageIndex: number = 0
   private swiperController: SwiperController = new SwiperController()
-  requestData() {
+
+  requestData() { // 请求数据
     let httpRequest = http.createHttp()
     httpRequest.request(
       'https://api.thecatapi.com/v1/images/search?limit=10',
@@ -37,6 +39,7 @@ struct Index {
       }
     )
   }
+
   aboutToAppear(): void {
     this.requestData()
   }
@@ -44,7 +47,7 @@ struct Index {
   @Builder LabelImage(label: string, targetIndex: number, selectedImg: Resource, normalImg: Resource) {
     Column() {
       Image(this.currentIndex === targetIndex ? selectedImg : normalImg)
-        .size({width: 30, height: 30})
+        .size({width: 25, height: 25})
       Text(label)
         .fontColor(this.currentIndex === targetIndex ? '#1296db' : '#8a8a8a')
     }
@@ -52,12 +55,36 @@ struct Index {
       this.currentIndex = targetIndex
       this.controller.changeIndex(this.currentIndex)
     })
-    .backgroundColor('#665566')
+    .backgroundColor('#FFFFFF')
     .width('100%')
+
+
   }
 
   build() {
     Column() {
+      Row(){
+        Image($r('app.media.back'))
+          .width('6%')
+          .margin({left: 10})
+          .onClick(() => {
+            router.replaceUrl({
+              url: 'pages/Home'
+            })
+          })
+        Text('寻找你喜欢的猫咪')
+        Image($r('app.media.share'))
+          .width('6%')
+          .margin({right: 10})
+      }
+      .justifyContent(FlexAlign.SpaceBetween)
+      .shadow({ radius: 5, color: '#696969' ,offsetY: 5})
+      .backgroundColor('#ffffff')
+      .width('100%')
+
+      .align(Alignment.Top)
+      .margin({bottom: 10})
+
       Tabs({controller: this.controller}) {
 
         TabContent() {
@@ -187,7 +214,9 @@ struct Index {
           }
           .width('100%')
           .height('100%')
-        }.tabBar(this.LabelImage('首页', 0, $r('app.media.home_selected'), $r('app.media.home_normal')))
+        }
+        .tabBar(this.LabelImage('首页', 0, $r('app.media.home_selected'), $r('app.media.home_normal')))
+
 
 
         TabContent() {
@@ -264,6 +293,8 @@ struct Index {
       }
       .barPosition(BarPosition.End)
       .scrollable(false)
+      .height('100%')
+
     }
     .height('100%')
     .width('100%')
