@@ -1,0 +1,12 @@
+{
+  "src": [
+    "pages/Index",
+    "pages/Second",
+    "pages/Home",
+    "pages/Google",
+    "pages/Github",
+    "pages/Forgot",
+    "pages/Signup",
+    "pages/MyCat"
+  ]
+}

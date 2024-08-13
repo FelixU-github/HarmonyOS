@@ -1,0 +1,352 @@
+import { http } from '@kit.NetworkKit';
+import { promptAction, router } from '@kit.ArkUI';
+import { preferences } from '@kit.ArkData';
+
+let httpRequest = http.createHttp();
+
+let options: preferences.Options = { name: 'myStore' };
+let dataPreferences: preferences.Preferences = preferences.getPreferencesSync(getContext(), options);
+
+
+interface University {
+  alpha_two_code: string;
+  name: string;
+  domains: string[];
+  country: string;
+  state_province: string | null;
+  web_pages: string[];
+}
+
+
+@Entry
+@Component
+struct search {
+  @State keyword: string = ''
+  @State count: number = 0
+
+  @State currentIndex: number = 0
+  controller: TabsController = new TabsController();
+  @Builder LabelImage(label: string, targetIndex: number, selectedImg: Resource, normalImg: Resource) {
+    Column() {
+      Image(this.currentIndex === targetIndex ? selectedImg : normalImg)
+        .size({width: 25})
+      Text(label)
+        .fontColor(this.currentIndex === targetIndex ? '#1296db' : '#8a8a8a')
+        .fontSize(12)
+    }
+    .onClick(() => {
+      this.currentIndex = targetIndex
+      this.controller.changeIndex(this.currentIndex)
+    })
+    .backgroundColor('#FFFFFF')
+    .width('100%')
+    .height('100%')
+
+  }
+
+  @State uns: University[] = []
+  requestData() {
+    const url = `http://universities.hipolabs.com/search?name=${encodeURIComponent(this.keyword)}`;
+
+    httpRequest.request(url, (err: Error, data: http.HttpResponse) => {
+      if (!err) {
+
+        // 解析为 University 对象数组
+        let newuns: University[] = JSON.parse(data.result.toString())
+        this.uns = [...this.uns, ...newuns]
+        this.count = this.uns.length
+        console.info('count:' + this.count)
+
+        // 打印每个大学的信息
+        newuns.slice(0,5).forEach((university) => {
+          console.info('University Name: ' + university.name);
+          console.info('Country: ' + university.country);
+          console.info('Web Pages: ' + university.web_pages.join(', '));
+          console.info('Domains: ' + university.domains.join(', '));
+          console.info('State Province: ' + university.state_province);
+          console.info('-----');
+        })
+      } else {
+        console.info('error:' + JSON.stringify(err));
+      }
+    });
+  }
+
+
+
+
+  build() {
+    Column(){
+      Row(){
+        Image($r('app.media.back'))
+          .width('6%')
+          .margin({left: 10})
+          .onClick(() => {
+            router.back({
+              url: 'pages/Home'
+            })
+          })
+        Text('发现大学')
+        Image($r('app.media.share'))
+          .width('6%')
+          .margin({right: 10})
+      }
+      .justifyContent(FlexAlign.SpaceBetween)
+      .shadow({ radius: 5, color: '#696969' ,offsetY: 5})
+      .backgroundColor('#ffffff')
+      .width('100%')
+      .height(40)
+      .align(Alignment.Top)
+      Tabs({ controller: this.controller ,barPosition: BarPosition.End}){
+
+        TabContent(){
+          Column(){
+
+            Row(){
+              Search({ placeholder: '搜索'})
+                .searchButton('SEARCH')
+                .onChange((value) => {
+                  this.keyword = value
+                })
+                .width('95%')
+                .height(40)
+                .margin({left:10,right:10,top:10})
+                .onClick(()=>{
+                  if(this.keyword === ''){
+                    promptAction.showToast({message: '请输入大学名称'})
+                  }else {
+                    this.uns = [] // 清空搜索数组
+                    this.requestData()
+                  }
+                })
+            }
+
+            Column() {
+              Text('搜索结果：'+this.count)
+                .fontSize(20)
+                .fontColor(Color.Black)
+                .fontWeight(FontWeight.Bold)
+                .margin({
+                  bottom: 10
+                })
+              List({ space: 20, initialIndex: 0 }) {
+                ForEach(this.uns, (item: University,) => {
+                  ListItem() {
+                    Column({space: 10}){
+                      Row({space: 10}){
+                        Image($r('app.media.university'))
+                          .width(50)
+                          .height(50)
+                          .margin({left: 10,top: 10,bottom: 10})
+                          .border({radius: 10})
+                          .shadow({ radius: 10, color: '#C0C0C0'})
+
+                        Text(item.name)
+                          .width(250)
+                          .maxLines(2)
+                          .margin(5)
+                          .fontSize(14)
+                          .fontStyle(FontStyle.Italic)
+                          .fontWeight(FontWeight.Bold)
+                          .fontColor('#0000ff')
+
+                      }
+                      .width('100%')
+                      .margin({left: 10,right: 10})
+                      .backgroundColor('#fff8f8fc')
+                      .border({radius: 10})
+
+                      Column({space: 20}){
+                        Text('国家：'+item.country)
+                          .width('100%')
+                          .fontSize(16)
+                          .textAlign(TextAlign.Start)
+                          .margin({left:20})
+
+                        Text('省份的信息：'+item.state_province)
+                          .width('100%')
+                          .fontSize(16)
+                          .textAlign(TextAlign.Start)
+                          .margin({left:20})
+
+                        Text('官方域名：'+item.domains)
+                          .width('100%')
+                          .fontSize(16)
+                          .textAlign(TextAlign.JUSTIFY)
+                          .margin({left:20})
+
+                        Text('官方网站：'+item.web_pages)
+                          .width('100%')
+                          .fontSize(16)
+                          .textAlign(TextAlign.JUSTIFY)
+                          .margin({left:20, bottom:15})
+
+                        Text('收藏')
+                          .width('100%')
+                          .fontSize(16)
+                          .textAlign(TextAlign.JUSTIFY)
+                          .margin({left:20, bottom:15})
+                          .onClick(() => {
+                            let value: string = dataPreferences.getSync('cats', '[]').toString();
+                            let cats: University[] = JSON.parse(value)
+                            if(cats.length >= 5) {
+                              promptAction.showToast({message: '最多收藏5只猫'})
+                            } else {
+                              let result = cats.some((value) => {
+                                return value.name=== item.name
+                              })
+                              if(result) {
+                                promptAction.showToast({message: '不能重复收藏'})
+                              } else {
+                                cats.push(item)
+                                dataPreferences.putSync('cats', JSON.stringify(cats))
+                                dataPreferences.flush()
+                                promptAction.showToast({
+                                  message: '已收藏'
+                                })
+                              }
+                            }
+                          })
+                      }
+
+                    }
+                    .borderRadius(10)
+                    .width('92%') // 卡片宽度
+                    .margin({bottom: 10})
+                    .backgroundColor(0xFFFFFF)
+                    .shadow({
+                      radius: 10,
+                      color: '#C0C0C0'
+                    })
+
+
+                  }
+                  .width('100%')
+                }, (item: University) => {
+                  return item.name;
+                })
+
+              }.width('100%')
+              .scrollBar(BarState.Auto)
+            }
+            .width('100%')
+            .height('100%')
+            .backgroundColor("#F5F5F5")
+
+          }
+
+        }
+        .width('100%')
+        .height('100%')
+        .tabBar(this.LabelImage('发现', 0, $r('app.media.search_selected'), $r('app.media.search_normal')))
+
+
+
+        TabContent() {
+          Column(){
+
+            Row(){
+              Image($r('app.media.img'))
+                .width("20%")
+                .shadow({ radius: 10, color: '#C0C0C0'})
+                .borderRadius(50)
+                .margin({left:10,right:10})
+            Column(){
+              Row(){
+                Text('账户昵称 ：')
+                Text('XXXXXXXX')
+              }
+              Row(){
+                Text('账户 ID：')
+                Text('2023120253')
+              }
+            }
+
+            }
+            .width('100%')
+            .height(120)
+            .backgroundColor("#ffffffff")
+
+            List() {
+              ForEach(this.uns, (item: University, index: number) => {
+                ListItem() {
+                  Column() {
+                    Image(item.name)
+                      .borderRadius({
+                        topLeft: 10,
+                        topRight: 10
+                      })
+                      .width('94%')
+                    Row() {
+
+                      Text('删除').margin({right: 15})
+                        .onClick(() => {
+                          AlertDialog.show({
+                            title: '提示',
+                            message: '确定要删除吗？',
+                            autoCancel: true,
+                            alignment: DialogAlignment.Bottom,
+                            primaryButton: {
+                              value: '确定',
+                              action: () => {
+                                let value: string = dataPreferences.getSync('cats', '[]').toString();
+                                let cats: University[] = JSON.parse(value)
+                                cats.splice(index, 1)
+                                dataPreferences.putSync('cats', JSON.stringify(cats))
+                                dataPreferences.flush()
+                                this.uns = cats
+                                promptAction.showToast({
+                                  message: '已删除'
+                                })
+                              }
+                            },
+                            secondaryButton: {
+                              value: '取消',
+                              action: () => {}
+                            }
+                          })
+                        })
+                    }
+                    .width('94%')
+                    .height(30)
+                    .margin({top: 10})
+                    .justifyContent(FlexAlign.SpaceBetween)
+                  }
+                  .borderRadius(10)
+                  .margin({bottom: 20})
+                  .shadow({
+                    radius: 10,
+                    color: Color.Gray,
+                    offsetX: 10,
+                    offsetY: 10
+                  })
+                }.width('100%')
+              },(item: University) => {
+                return item.name
+              })
+            }
+            .width('100%')
+            .height('100%')
+            .backgroundColor("#DCDCDC")
+
+          }
+
+
+        }
+        .tabBar(this.LabelImage('收藏', 1, $r('app.media.like_selected'), $r('app.media.like_normal')))
+
+
+      }
+
+
+
+
+
+
+
+
+    }
+
+  }
+
+}
