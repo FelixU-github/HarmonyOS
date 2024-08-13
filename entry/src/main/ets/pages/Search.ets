@@ -242,27 +242,27 @@ struct search {
 
         TabContent() {
           Column(){
-            // Row(){
-            //   Image($r('app.media.img'))
-            //     .width("20%")
-            //     .shadow({ radius: 10, color: '#C0C0C0'})
-            //     .borderRadius(50)
-            //     .margin({left:10,right:10})
-            // Column(){
-            //   Row(){
-            //     Text('账户昵称 ：')
-            //     Text('XXXXXXXX')
-            //   }
-            //   Row(){
-            //     Text('账户 ID：')
-            //     Text('2023120253')
-            //   }
-            // }
-            //
-            // }
-            // .width('100%')
-            // .height(120)
-            // .backgroundColor("#ffffffff")
+            Row(){
+              Image($r('app.media.img'))
+                .width("20%")
+                .shadow({ radius: 10, color: '#C0C0C0'})
+                .borderRadius(50)
+                .margin({left:10,right:10})
+            Column(){
+              Row(){
+                Text('账户昵称 ：')
+                Text('XXXXXXXX')
+              }
+              Row(){
+                Text('账户 ID：')
+                Text('2023120253')
+              }
+            }
+
+            }
+            .width('100%')
+            .height(120)
+            .backgroundColor("#ffffffff")
             if (this.saved_universities.length === 0) {
               Text('您尚未收藏大学').fontSize(24)
             }
