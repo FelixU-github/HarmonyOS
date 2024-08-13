@@ -41,7 +41,7 @@ struct search {
     .height('100%')
 
   }
-
+  @State saveuniversities: University[] = []
   @State universities: University[] = []
 
   requestData() {
@@ -260,7 +260,8 @@ struct search {
             .backgroundColor("#ffffffff")
 
             List() {
-              ForEach(this.universities, (item: University, index: number) => {
+              ForEach(this.saveuniversities,
+                (item: University, index: number) => {
                 ListItem() {
                   Column() {
                     Row({space: 10}){
@@ -333,7 +334,7 @@ struct search {
                                 universities.splice(index, 1)
                                 dataPreferences.putSync('universities', JSON.stringify(universities))
                                 dataPreferences.flush()
-                                this.universities = universities
+                                this.saveuniversities = universities
                                 promptAction.showToast({
                                   message: '已删除'
                                 })
