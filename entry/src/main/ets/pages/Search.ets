@@ -41,7 +41,7 @@ struct search {
     .height('100%')
 
   }
-  @State saveuniversities: University[] = []
+  @State saved_universities: University[] = []
   @State universities: University[] = []
 
   requestData() {
@@ -49,13 +49,13 @@ struct search {
     httpRequest.request(url, (err: Error, data: http.HttpResponse) => {
       if (!err) {
         // 解析为 University 对象数组
-        let universities: University[] = JSON.parse(data.result.toString())
-        this.universities = [...this.universities, ...universities]
+        let New_universities: University[] = JSON.parse(data.result.toString())
+        this.universities = [...this.universities, ...New_universities]
         this.count = this.universities.length
         console.info('count:' + this.count)
 
         // 打印每个大学的信息
-        universities.slice(0,5).forEach((university) => {
+        New_universities.slice(0,5).forEach((university) => {
           console.info('University Name: ' + university.name);
           // console.info('Country: ' + university.country);
           // console.info('Web Pages: ' + university.web_pages.join(', '));
@@ -260,7 +260,7 @@ struct search {
             .backgroundColor("#ffffffff")
 
             List() {
-              ForEach(this.saveuniversities,
+              ForEach(this.saved_universities,
                 (item: University, index: number) => {
                 ListItem() {
                   Column() {
@@ -334,7 +334,7 @@ struct search {
                                 universities.splice(index, 1)
                                 dataPreferences.putSync('universities', JSON.stringify(universities))
                                 dataPreferences.flush()
-                                this.saveuniversities = universities
+                                this.saved_universities = universities
                                 promptAction.showToast({
                                   message: '已删除'
                                 })
