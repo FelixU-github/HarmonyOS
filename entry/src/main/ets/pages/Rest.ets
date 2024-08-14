@@ -2,14 +2,26 @@
 import {  router ,promptAction } from '@kit.ArkUI';
 import { UIContext } from '@kit.ArkUI';
 import { preferences } from '@kit.ArkData';
-let options: preferences.Options = { name: 'myStore' };
+// let options: preferences.Options = { name: 'myStore' };
 
 @Entry
 @Component
 
 struct Rest {
-  dataPreferences: preferences.Preferences = preferences.getPreferencesSync(getContext(), options);
+
   @State meritCount: number = 0; // 功德计数变量
+  dataPreferences: preferences.Preferences = preferences.getPreferencesSync(getContext(), { name: 'myStore' });
+
+  ToAppear() {
+    // 从本地存储读取保存的功德计数，并解析为 number 类型
+    let savedStr: string = this.dataPreferences.getSync('meritCount', '0').toString();
+    this.meritCount = parseFloat(savedStr);
+  }
+
+
+
+
+
   @State myScale: number = 1.0;
   @State myScale_font: number = 1.0;
   @State isAutoIncrementing: boolean = false; // 自动增加标志
@@ -65,15 +77,13 @@ struct Rest {
       }
     ]);
     this.meritCount += 1;
-    this.dataPreferences.putSync('meritCount', this.meritCount.toString());
+    this.dataPreferences.putSync('meritCount', this.meritCount.toString()); // 保存到本地存储
     this.dataPreferences.flush(); // 确保数据持久化
 
-
-    // 读取存储的数据进行验证
+    // 验证保存是否成功
     let savedStr: string = this.dataPreferences.getSync('meritCount', '0').toString();
     let savedMeritCount: number = parseFloat(savedStr);
 
-    // 检查存储是否成功
     if (savedMeritCount === this.meritCount) {
       console.log('数据保存成功:', savedMeritCount);
       promptAction.showToast({ message: '功德保存成功' });
@@ -81,6 +91,7 @@ struct Rest {
       console.log('数据保存失败，读取到的值:', savedMeritCount);
       promptAction.showToast({ message: '功德保存失败' });
     }
+
   }
 
   auto_add():void{
@@ -141,7 +152,9 @@ struct Rest {
 
 
 
-      Text('累计功德：' + this.meritCount)
+      Text(`当前功德：${this.meritCount}`)
+        .fontSize(20)
+        .fontWeight(FontWeight.Bold)
       //   .onCh(() => {
       //
       //     let str: string = this.dataPreferences.getSync('meritCount', '0').toString(); // 默认值为 '0'
