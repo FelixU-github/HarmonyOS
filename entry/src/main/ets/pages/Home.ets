@@ -1,16 +1,5 @@
 // Home.ets
 import { router , promptAction} from '@kit.ArkUI';
-import { http } from '@kit.NetworkKit';
-
-
-interface University {
-  alpha_two_code: string;
-  name: string;
-  domains: string[];
-  country: string;
-  state_province: string | null;
-  web_pages: string[];
-}
 
 @Entry
 @Component
@@ -30,7 +19,7 @@ struct Home {
       this.currentIndex = targetIndex
       this.controller.changeIndex(this.currentIndex)
     })
-    .backgroundColor('#FFFFFF')
+    .backgroundColor('#ffffffff')
     .width('100%')
     .height('100%')
 
@@ -59,7 +48,7 @@ struct Home {
       }
       .justifyContent(FlexAlign.SpaceBetween)
       .shadow({ radius: 5, color: '#696969' ,offsetY: 5})
-      .backgroundColor('#ffffff')
+      .backgroundColor('#ffffffff')
       .width('100%')
       .height(40)
       .align(Alignment.Top)
@@ -78,6 +67,13 @@ struct Home {
                   .onChange((value) => {
                     this.keyword = value
                   })
+                  .onClick(() => {
+                    if(this.keyword === ''){
+                      promptAction.showToast({message: '请输入想要查找的内容'})
+                    }else {
+                      promptAction.showToast({message: '未查找到'+this.keyword+'内容'})
+                    }
+                  })
                   .width('95%')
                   .height(40)
                   .margin({left:10,right:10,top:10})
@@ -85,14 +81,14 @@ struct Home {
 
               Column(){
                 Swiper() {
-                  Image($r('app.media.hitposter1'))
+                  Image($r('app.media.hit_poster1'))
                     .width('100%')
                     .height('100%')
                     .backgroundColor(Color.Gray)
                     .borderRadius(10)
                     .shadow({ radius: 10, color: '#C0C0C0'})
 
-                  Image($r('app.media.hitposter2'))
+                  Image($r('app.media.hit_poster2'))
                     .width('100%')
                     .height('100%')
                     .backgroundColor(Color.Green)
@@ -100,7 +96,7 @@ struct Home {
                     .shadow({ radius: 10, color: '#C0C0C0'})
 
 
-                  Image($r('app.media.hitposter3'))
+                  Image($r('app.media.hit_poster3'))
                     .width('100%')
                     .height('100%')
                     .backgroundColor(Color.Pink)
@@ -121,7 +117,7 @@ struct Home {
                   .fontSize(12)
                   .textAlign(TextAlign.Start)
                   .margin({left:10,right:5})
-                  .fontColor('#ff000000')
+                  .fontColor('#ff00000')
 
                 Text('日常办公')
                   .fontSize(12)
@@ -154,11 +150,11 @@ struct Home {
                       });
                     })
                   Text('找大学')
-                    .fontSize(14)
+                    .fontSize(12)
                 }
 
                 Column(){
-                  Image($r('app.media.Cat'))
+                  Image($r('app.media.CatDog'))
                     .width(50)
                     .height(50)
                     .margin({left:5,right:5,bottom:5,top:2})
@@ -175,39 +171,41 @@ struct Home {
                         console.info('Invoke pushUrl succeeded.');
                       });
                     })
-                  Text('找猫咪')
-                    .fontSize(14)
+                  Text('看猫狗')
+                    .fontSize(12)
                 }
 
                 Column(){
-                  Image($r('app.media.GoogleLogo'))
+                  Image($r('app.media.Rest'))
                     .width(50)
                     .height(50)
                     .margin({left:5,right:5,bottom:5,top:2})
                     .borderRadius(10)
                     .shadow({ radius: 10, color: '#C0C0C0'})
-                  Text('日历')
-                    .fontSize(14)
+                  Text('打坐')
+                    .fontSize(12)
                 }
+
                 Column(){
-                  Image($r('app.media.GoogleLogo'))
+                  Image($r('app.media.Map'))
                     .width(50)
                     .height(50)
                     .margin({left:5,right:5,bottom:5,top:2})
                     .borderRadius(10)
                     .shadow({ radius: 10, color: '#C0C0C0'})
-                  Text('日历')
-                    .fontSize(14)
+                  Text('校园地图')
+                    .fontSize(12)
                 }
+
                 Column(){
-                  Image($r('app.media.GoogleLogo'))
+                  Image($r('app.media.Forum'))
                     .width(50)
                     .height(50)
                     .margin({left:5,right:5,bottom:5,top:2})
                     .borderRadius(10)
                     .shadow({ radius: 10, color: '#C0C0C0'})
-                  Text('日历')
-                    .fontSize(14)
+                  Text('论坛')
+                    .fontSize(12)
                 }
               }
 
@@ -215,67 +213,56 @@ struct Home {
 
               Row({space:5}){
                 Column(){
-                  Image($r('app.media.GoogleLogo'))
+                  Image($r('app.media.Lab'))
                     .width(50)
                     .height(50)
                     .margin({left:5,right:5,bottom:5,top:2})
                     .borderRadius(10)
                     .shadow({ radius: 10, color: '#C0C0C0'})
-                  Text('日历')
-                    .fontSize(14)
+                  Text('实验室')
+                    .fontSize(12)
                 }
 
                 Column(){
-                  Image($r('app.media.GoogleLogo'))
+                  Image($r('app.media.Benefit'))
                     .width(50)
                     .height(50)
                     .margin({left:5,right:5,bottom:5,top:2})
                     .borderRadius(10)
                     .shadow({ radius: 10, color: '#C0C0C0'})
-                    .onClick(() => {
-                      router.pushUrl({
-                        url: 'pages/MyCat' // 目标url
-                      }, router.RouterMode.Standard, (err) => {
-                        if (err) {
-                          console.error(`Invoke pushUrl failed, code is ${err.code}, message is ${err.message}`);
-                          return;
-                        }
-                        console.info('Invoke pushUrl succeeded.');
-                      });
-                    })
-                  Text('日历')
-                    .fontSize(14)
+                  Text('爱公益')
+                    .fontSize(12)
                 }
 
                 Column(){
-                  Image($r('app.media.GoogleLogo'))
+                  Image($r('app.media.Notice'))
                     .width(50)
                     .height(50)
                     .margin({left:5,right:5,bottom:5,top:2})
                     .borderRadius(10)
                     .shadow({ radius: 10, color: '#C0C0C0'})
-                  Text('日历')
-                    .fontSize(14)
+                  Text('校园热榜')
+                    .fontSize(12)
                 }
                 Column(){
-                  Image($r('app.media.GoogleLogo'))
+                  Image($r('app.media.Calender'))
                     .width(50)
                     .height(50)
                     .margin({left:5,right:5,bottom:5,top:2})
                     .borderRadius(10)
                     .shadow({ radius: 10, color: '#C0C0C0'})
-                  Text('日历')
-                    .fontSize(14)
+                  Text('校历')
+                    .fontSize(12)
                 }
                 Column(){
-                  Image($r('app.media.GoogleLogo'))
+                  Image($r('app.media.More1'))
                     .width(50)
                     .height(50)
                     .margin({left:5,right:5,bottom:5,top:2})
                     .borderRadius(10)
                     .shadow({ radius: 10, color: '#C0C0C0'})
                   Text('更多')
-                    .fontSize(14)
+                    .fontSize(12)
                 }
               }
               .margin({left:4,right:4,top:5,bottom:5})
@@ -312,6 +299,35 @@ struct Home {
         TabContent(){ // 这是第二个页面
 
           Column(){
+            Tabs({ barPosition: BarPosition.Start }) {
+              // TabContent的内容:首页、发现、推荐、我的
+              TabContent() {
+                Flex({ wrap: FlexWrap.Wrap }) {
+                  Text('首页的内容').fontSize(30)
+                }
+
+
+              }
+              .tabBar('首页')
+
+              TabContent() {
+                Text('推荐的内容').fontSize(30)
+              }
+              .tabBar('推荐')
+
+              TabContent() {
+                Text('发现的内容').fontSize(30)
+              }
+              .tabBar('发现')
+
+              TabContent() {
+                Text('我的内容').fontSize(30)
+              }
+              .tabBar("我的")
+            }
+            .vertical(true)
+            .barWidth(100)
+            .barHeight(200)
 
           }
 
@@ -322,7 +338,159 @@ struct Home {
 
 
         TabContent(){
-          Text('123test')
+          Column(){
+            Row(){
+              Image($r('app.media.img'))
+                .width("15%")
+                .shadow({ radius: 10, color: '#C0C0C0'})
+                .borderRadius(50)
+                .margin({left:30,right:10})
+
+              Column(){
+                Row(){
+                  Text('大王叫我来巡山')
+                    .fontSize(20)
+
+                }
+                .margin({left:10,right:10,top:30})
+
+                Row(){
+                  Text('ID：')
+                    .fontColor("#808080")
+                  Text('2023120253')
+                    .fontColor("#808080")
+
+                }
+                .margin({left:-15,top:15})
+              }
+              .margin({right:-20,bottom:30})
+
+              Row(){
+
+                Image($r('app.media.QRCode'))
+                .width(20)
+                .margin({left:40})
+
+                Image($r('app.media.More'))
+                  .width(25)
+                  .margin({left:10})
+              }
+              .margin({left:15})
+
+            }
+            .width('100%')
+            .height(120)
+            .backgroundColor("#ffffffff")
+            .margin({left:10,right:10,top:-161})
+
+
+            Row(){
+              Image($r('app.media.Cloud'))
+                .width(25)
+                .margin({left:20})
+              Text('云空间')
+                .margin({left:20})
+              Image($r('app.media.More'))
+                .width(25)
+                .margin({left:200})
+            }
+            .width('100%')
+            .height(50)
+            .backgroundColor("#ffffffff")
+            .margin({top:10})
+
+            Row(){
+              Image($r('app.media.Moments'))
+                .width(25)
+                .margin({left:20})
+              Text('朋友圈')
+                .margin({left:20})
+              Image($r('app.media.More'))
+                .width(25)
+                .margin({left:200})
+            }
+            .width('100%')
+            .height(50)
+            .backgroundColor("#ffffffff")
+            .margin({top:1})
+
+            Row(){
+              Image($r('app.media.Notification'))
+                .width(25)
+                .margin({left:20})
+              Text('我的消息')
+                .margin({left:20})
+              Image($r('app.media.More'))
+                .width(25)
+                .margin({left:185})
+            }
+            .width('100%')
+            .height(50)
+            .backgroundColor("#ffffffff")
+            .margin({top:1})
+
+            Row(){
+              Image($r('app.media.Liking'))
+                .width(25)
+                .margin({left:20})
+              Text('关注')
+                .margin({left:20})
+              Image($r('app.media.More'))
+                .width(25)
+                .margin({left:215})
+            }
+            .width('100%')
+            .height(50)
+            .backgroundColor("#ffffffff")
+            .margin({top:1})
+
+            Row(){
+              Image($r('app.media.Wallet'))
+                .width(25)
+                .margin({left:20})
+              Text('我的钱包')
+                .margin({left:20})
+              Image($r('app.media.More'))
+                .width(25)
+                .margin({left:185})
+            }
+            .width('100%')
+            .height(50)
+            .backgroundColor("#ffffffff")
+            .margin({top:1})
+
+            Row(){
+              Image($r('app.media.Settings'))
+                .width(25)
+                .margin({left:20})
+              Text('设置')
+                .margin({left:20})
+              Image($r('app.media.More'))
+                .width(25)
+                .margin({left:215})
+
+            }
+            .width('100%')
+            .height(50)
+            .backgroundColor("#ffffffff")
+            .margin({top:10})
+
+            Row(){
+              Image($r('app.media.Service'))
+                .width(25)
+                .margin({left:20})
+              Text('客服')
+                .margin({left:20})
+              Image($r('app.media.More'))
+                .width(25)
+                .margin({left:215})
+            }
+            .width('100%')
+            .height(50)
+            .backgroundColor("#ffffffff")
+            .margin({top:1})
+
+          }
 
         }
         .width('100%')
@@ -335,6 +503,6 @@ struct Home {
 
     }
     .height('100%')
-    .backgroundColor('#CFD0CF')
+    .backgroundColor('#F8F8FF')
   }
 }
