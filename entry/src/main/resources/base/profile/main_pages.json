@@ -8,6 +8,7 @@
     "pages/Forgot",
     "pages/Signup",
     "pages/MyCat",
-    "pages/Search"
+    "pages/Search",
+    "pages/Rest"
   ]
 }

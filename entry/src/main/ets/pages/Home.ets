@@ -199,7 +199,18 @@ struct Home {
                     .margin({left:5,right:5,bottom:5,top:2})
                     .borderRadius(10)
                     .shadow({ radius: 10, color: '#C0C0C0'})
-                  Text('打坐')
+                    .onClick(() => {
+                      router.pushUrl({
+                        url: 'pages/Rest' // 目标url
+                      }, router.RouterMode.Standard, (err) => {
+                        if (err) {
+                          console.error(`Invoke pushUrl failed, code is ${err.code}, message is ${err.message}`);
+                          return;
+                        }
+                        console.info('Invoke pushUrl succeeded.');
+                      });
+                    })
+                  Text('休息一下')
                     .fontSize(12)
                 }
 
