@@ -1,9 +1,23 @@
 // Home.ets
 import { router , promptAction} from '@kit.ArkUI';
+class DividerTmp {
+  strokeWidth: Length = 1
+  startMargin: Length = 30
+  endMargin: Length = 30
+  color: ResourceColor = '#0000ff'
 
+  constructor(strokeWidth: Length, startMargin: Length, endMargin: Length, color: ResourceColor) {
+    this.strokeWidth = strokeWidth
+    this.startMargin = startMargin
+    this.endMargin = endMargin
+    this.color = color
+  }
+  // startMargin和endMargin属性分别用于设置分隔线距离列表侧边起始端的距离和距离列表侧边结束端的距离。
+}
 @Entry
 @Component
 struct Home {
+  @State egDivider: DividerTmp = new DividerTmp(0.5, 30, 45, '#0000ff')
   @State currentIndex: number = 0
   controller: TabsController = new TabsController();
 
@@ -27,6 +41,7 @@ struct Home {
 
   @State keyword: string = ''
   @State count: number = 0
+  @State egLanes: LengthConstrain = { minLength: 200, maxLength: 300 }
 
 
   build() {
@@ -104,6 +119,8 @@ struct Home {
                     .shadow({ radius: 10, color: '#C0C0C0'})
                 }
                 .loop(true)
+                .autoPlay(true)
+                .interval(3000)
               }
               .height(180)
               .width("95%")
@@ -276,13 +293,257 @@ struct Home {
 
 
           Column(){
+            Row(){
+              Text('校园资讯 |')
+                .fontSize(12)
+                .textAlign(TextAlign.Start)
+                .margin({left:10,right:5})
+                .fontColor('#ff00000')
+
+              Text('学校要闻')
+                .fontSize(12)
+                .textAlign(TextAlign.Start)
+                .margin({right:230})
+                .fontColor('#A9A9A9')
+
+            }
+            .justifyContent(FlexAlign.Start)
+            .margin({top:10,left:8,bottom:2})
+
+            List() {
+
+
+              ListItem(){
+                Row({ }) {
+                  Text('通知')
+                    .fontSize(12)
+                    .fontColor('#0000ff')
+                    .margin({left:20,right:1,bottom:5,top:10})
+                  Text("：")
+                    .fontSize(12)
+                    .fontColor('#0000ff')
+                    .margin({bottom:5,top:10})
+                  Text('关于开展2024年全国大学生陶艺作品展校内作品征集的通知')
+                    .width(235)
+                    .textOverflow({ overflow: TextOverflow.Ellipsis })
+                    .maxLines(1)
+                    .fontSize(12)
+                    .fontColor('#000000')
+                    .margin({ top:10,bottom:5})
+                  Image($r('app.media.Notification1'))
+                    .width(15)
+                    .margin({left:10,right:5,bottom:5,top:10})
+                }
+              }
+
+              ListItem(){
+                Row({ }) {
+                  Text('通知')
+                    .fontSize(12)
+                    .fontColor('#0000ff')
+                    .margin({left:20,right:1,bottom:5})
+                  Text("：")
+                    .fontSize(12)
+                    .fontColor('#0000ff')
+                    .margin({bottom:5})
+                  Text('关于2024年秋季学期本科生注册安排的通知')
+                    .width(235)
+                    .textOverflow({ overflow: TextOverflow.Ellipsis })
+                    .maxLines(1)
+                    .fontSize(12)
+                    .fontColor('#000000')
+                    .margin({ bottom:5})
+                  Image($r('app.media.Notification1'))
+                    .width(15)
+                    .margin({left:10,right:5,bottom:5})
+                }
+                .margin({top:10})
+              }
+
+              ListItem(){
+                Row({ }) {
+                  Text('资讯')
+                    .fontSize(12)
+                    .fontColor('#0000ff')
+                    .margin({left:20,right:1,bottom:5})
+                  Text("：")
+                    .fontSize(12)
+                    .fontColor('#0000ff')
+                    .margin({bottom:5})
+                  Text('助力师生创新创业 2024年度“天壹训练营”结营')
+                    .width(235)
+                    .textOverflow({ overflow: TextOverflow.Ellipsis })
+                    .maxLines(1)
+                    .fontSize(12)
+                    .fontColor('#000000')
+                    .margin({ bottom:5})
+                  Image($r('app.media.Hot_review'))
+                    .width(15)
+                    .margin({left:10,right:5,bottom:5})
+                }
+                .margin({top:10})
+              }
+
+              ListItem(){
+                Row({ }) {
+                  Text('会议')
+                    .fontSize(12)
+                    .fontColor('#0000ff')
+                    .margin({left:20,right:1,bottom:5})
+                  Text("：")
+                    .fontSize(12)
+                    .fontColor('#0000ff')
+                    .margin({bottom:5})
+                  Text('关于举办“多模态智能及应用”学术报告会的通知')
+                    .width(235)
+                    .textOverflow({ overflow: TextOverflow.Ellipsis })
+                    .maxLines(1)
+                    .fontSize(12)
+                    .fontColor('#000000')
+                    .margin({ bottom:5})
+                  Image($r('app.media.Meeting'))
+                    .width(15)
+                    .margin({left:10,right:5,bottom:5})
+                }
+                .margin({top:10})
+              }
+
+              ListItem(){
+                Row({ }) {
+                  Text('公示')
+                    .fontSize(12)
+                    .fontColor('#0000ff')
+                    .margin({left:20,right:1,bottom:5})
+                  Text("：")
+                    .fontSize(12)
+                    .fontColor('#0000ff')
+                    .margin({bottom:5})
+                  Text('2024年度北京市科学技术奖提名项目候选单位公示')
+                    .width(235)
+                    .textOverflow({ overflow: TextOverflow.Ellipsis })
+                    .maxLines(1)
+                    .fontSize(12)
+                    .fontColor('#000000')
+                    .margin({ bottom:5})
+                  Image($r('app.media.Notification1'))
+                    .width(15)
+                    .margin({left:10,right:5,bottom:5})
+                }
+                .margin({top:10})
+              }
+
+              ListItem(){
+                Row({ }) {
+                  Text('通知')
+                    .fontSize(12)
+                    .fontColor('#0000ff')
+                    .margin({left:20,right:1,bottom:5})
+                  Text("：")
+                    .fontSize(12)
+                    .fontColor('#0000ff')
+                    .margin({bottom:5})
+                  Text('关于组织开展国家国防科工局“十五五”关键材料和基础机电产品发展论证工作的通知')
+                    .width(235)
+                    .textOverflow({ overflow: TextOverflow.Ellipsis })
+                    .maxLines(1)
+                    .fontSize(12)
+                    .fontColor('#000000')
+                    .margin({ bottom:5})
+                  Image($r('app.media.Notification1'))
+                    .width(15)
+                    .margin({left:10,right:5,bottom:5})
+                }
+                .margin({top:10})
+              }
+
+
+
+              ListItem(){
+                Row({ }) {
+                  Text('资讯')
+                    .fontSize(12)
+                    .fontColor('#0000ff')
+                    .margin({left:20,right:1,bottom:5})
+                  Text("：")
+                    .fontSize(12)
+                    .fontColor('#0000ff')
+                    .margin({bottom:5})
+                  Text('助力师生创新创业 2024年度“天壹训练营”结营')
+                    .width(235)
+                    .textOverflow({ overflow: TextOverflow.Ellipsis })
+                    .maxLines(1)
+                    .fontSize(12)
+                    .fontColor('#000000')
+                    .margin({ bottom:5})
+                  Image($r('app.media.Hot_review'))
+                    .width(15)
+                    .margin({left:10,right:5,bottom:5})
+                }
+                .margin({top:10})
+              }
+
+              ListItem(){
+                Row({ }) {
+                  Text('通知')
+                    .fontSize(12)
+                    .fontColor('#0000ff')
+                    .margin({left:20,right:1,bottom:5})
+                  Text("：")
+                    .fontSize(12)
+                    .fontColor('#0000ff')
+                    .margin({bottom:5})
+                  Text('关于2024年秋季学期本科生注册安排的通知')
+                    .width(235)
+                    .textOverflow({ overflow: TextOverflow.Ellipsis })
+                    .maxLines(1)
+                    .fontSize(12)
+                    .fontColor('#000000')
+                    .margin({ bottom:5})
+                  Image($r('app.media.Notification1'))
+                    .width(15)
+                    .margin({left:10,right:5,bottom:5})
+                }
+                .margin({top:10})
+              }
+
+              ListItem(){
+                Row({ }) {
+                  Text('资讯')
+                    .fontSize(12)
+                    .fontColor('#0000ff')
+                    .margin({left:20,right:1,bottom:5})
+                  Text("：")
+                    .fontSize(12)
+                    .fontColor('#0000ff')
+                    .margin({bottom:5})
+                  Text('助力师生创新创业 2024年度“天壹训练营”结营')
+                    .width(235)
+                    .textOverflow({ overflow: TextOverflow.Ellipsis })
+                    .maxLines(1)
+                    .fontSize(12)
+                    .fontColor('#000000')
+                    .margin({ bottom:5})
+                  Image($r('app.media.Hot_review'))
+                    .width(15)
+                    .margin({left:10,right:5,bottom:5})
+                }
+                .margin({top:10})
+              }
+
+
+            }
+            .lanes(this.egLanes)
+            .scrollBar(BarState.Auto)
+            .divider(this.egDivider)
+            .height(190)
 
           }
           .backgroundColor('#ffffffff')
           .shadow({ radius: 10, color: '#C0C0C0'})
           .borderRadius(10)
           .width('95%')
-          .margin({left:10,right:10})
+          .height(215)
+          .margin({left:10,right:10,top:10,bottom:5})
 
             }.width('100%').height('100%') // 这是首页的容器
 
