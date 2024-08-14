@@ -12,11 +12,11 @@ struct Rest {
   @State meritCount: number = 0; // 功德计数变量
   dataPreferences: preferences.Preferences = preferences.getPreferencesSync(getContext(), { name: 'myStore' });
 
-  ToAppear() {
-    // 从本地存储读取保存的功德计数，并解析为 number 类型
-    let savedStr: string = this.dataPreferences.getSync('meritCount', '0').toString();
-    this.meritCount = parseFloat(savedStr);
-  }
+  // ToAppear() {
+  //
+  //   let savedStr: string = this.dataPreferences.getSync('meritCount', '0').toString();
+  //   this.meritCount = parseFloat(savedStr);
+  // }
 
 
 
@@ -48,6 +48,9 @@ struct Rest {
 
   aboutToAppear() {
     this.uiContext = this.getUIContext?.();
+    // 从本地存储读取保存的功德计数，并解析为 number 类型
+    let savedStr: string = this.dataPreferences.getSync('meritCount', '0').toString();
+    this.meritCount = parseFloat(savedStr);
   }
 
   add(): void {
