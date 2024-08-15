@@ -23,9 +23,7 @@ struct Rest {
     // 启动自动功德+1定时器
     if (!this.autoIncrementInterval) {
       this.autoIncrementInterval = setInterval(() => {
-        this.meritCount += 1;
-        this.dataPreferences.putSync('meritCount', this.meritCount.toString()); // 保存到本地存储
-        this.dataPreferences.flush(); // 确保数据持久化
+        this.add()
       }, 1000); // 每秒增加一次功德
     }
   }
@@ -233,7 +231,7 @@ struct Rest {
           .onClick(() => {
             // 点击后禁用按钮
             this.isButtonEnabled = false;
-            // this.auto_add()
+            this.auto_add()
             if (this.isAutoIncrementing) {
               // 如果已经在自动增加，停止自动增加
               this.stopAutoIncrement();
