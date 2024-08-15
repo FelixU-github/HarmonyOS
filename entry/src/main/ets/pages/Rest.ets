@@ -218,7 +218,7 @@ struct Rest {
             this.add()
           })
 
-
+        // Test
         Button("自动功德+1")
           .enabled(this.isButtonEnabled) // 按钮启用状态
           .type(ButtonType.Normal)
