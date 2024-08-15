@@ -7,6 +7,8 @@ import { preferences } from '@kit.ArkData';
 @Component
 struct Rest {
 
+
+
   @State meritCount: number = 0; // 功德计数变量
   dataPreferences: preferences.Preferences = preferences.getPreferencesSync(getContext(), { name: 'myStore' });
 
@@ -114,6 +116,8 @@ struct Rest {
       }
     ]);
     this.meritCount += 1
+    this.dataPreferences.putSync('meritCount', this.meritCount.toString()); // 保存到本地存储
+    this.dataPreferences.flush(); // 确保数据持久化
 
   }
 
