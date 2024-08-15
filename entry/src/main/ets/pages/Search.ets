@@ -315,15 +315,19 @@ struct search {
             .margin({top:10})
 
 
+            Column(){
 
-            // Row(){
-            //   if (this.saved_universities.length = 0){
-            //     Image($r("app.media.wasp"))
-            //     Text('等待收藏大学')
-            //       .fontSize(20)
-            //       .margin({top:10})
-            //   }
-            // }
+
+              if (this.saved_universities.length = 0){
+                Image($r("app.media.wasp"))
+                  .width(200)
+                Text('等待收藏大学')
+                  .fontSize(20)
+                  .margin({top:10})
+              }else {
+
+
+
 
 
             List() {
@@ -433,6 +437,9 @@ struct search {
                   return item.name
                 })
             }
+              }
+
+          }
           .width('95%')
           .height('100%')
           .backgroundColor("#ffffff")
