@@ -141,7 +141,7 @@ struct Rest {
       }
       .justifyContent(FlexAlign.SpaceBetween)
       .shadow({ radius: 10, color: '#C0C0C0'})
-      .backgroundColor('#ffffff')
+      .backgroundColor('#ffffffff')
       .width('100%')
       .height(40)
       .align(Alignment.Top)
@@ -166,7 +166,7 @@ struct Rest {
 
         Text("功德+1")
           .fontSize(1)
-          .fontColor('#000000')
+          .fontColor('#00000000')
           .scale({ x: this.myScale_font, y: this.myScale_font })
           .margin({left:30,bottom:100})
 
@@ -176,7 +176,7 @@ struct Rest {
 
       .width('95%')
       .height(300)
-      .backgroundColor('#FFFFFF')
+      .backgroundColor('#FFFFFFFF')
       .borderRadius(10)
       .shadow({ radius: 10, color: '#C0C0C0'})
 
