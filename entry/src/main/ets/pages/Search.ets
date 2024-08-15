@@ -20,6 +20,8 @@ interface University {
 @Entry
 @Component
 struct search {
+  @State isButtonEnabled: boolean = true; // 按钮启用状态
+  @State collection: string = '收藏'
   @State keyword: string = ''
   @State count: number = 0
   @State saved_universities: University[] = []
@@ -105,25 +107,13 @@ struct search {
 
             Column(){
 
-              if (this.universities.length === 0) {
-                Text('寻找你喜欢的大学')
+                Text('发现你喜欢的大学')
                   .fontSize(24)
                   .fontColor(Color.Black)
                   .fontWeight(FontWeight.Bold)
                   .margin({
                     top:20
                   })
-              }
-              else {
-                Text('找到'+ this.count + '所大学')
-                  .fontSize(24)
-                  .fontColor(Color.Black)
-                  .fontWeight(FontWeight.Bold)
-                  .margin({
-                    top:20
-                  })
-              }
-
 
               Search({ placeholder: '搜索'})
                 .searchButton('SEARCH')
@@ -152,10 +142,19 @@ struct search {
 
             Column() {
               if (this.universities.length === 0) {
-                Text('搜索时间')
+                Image($r("app.media.wasp"))
+                  .width(200)
+                  .margin({top:10})
+
+                Text('正在等待发现大学')
+                  .fontSize(20)
+                  .margin({top:10})
               }
               else {
-                Text('搜索时间')
+                Text('找到'+ this.count + '所大学')
+                  .fontSize(20)
+                  .margin({top:10})
+
               }
 
 
@@ -211,15 +210,16 @@ struct search {
                           .textAlign(TextAlign.JUSTIFY)
                           .margin({left:20, bottom:15})
 
-                        Text('收藏')
+                        Button(this.collection)
+                          .enabled(this.isButtonEnabled) // 按钮启用状态
                           .width('100%')
                           .fontSize(16)
-                          .textAlign(TextAlign.JUSTIFY)
                           .margin({left:20, bottom:15})
                           .onClick(() => {
                             let value: string = dataPreferences.getSync('universities', '[]').toString();
                             let universities: University[] = JSON.parse(value)
                             console.log('' + universities.length)
+
                             if(universities.length >= 100) {
                               promptAction.showToast({message: '最多收藏100所大学'})
                             } else {
@@ -229,6 +229,8 @@ struct search {
                               if(result) {
                                 promptAction.showToast({message: '不能重复收藏'})
                               } else {
+                                this.isButtonEnabled = false;
+                                this.collection = '已收藏'
                                 universities.push(item)
                                 dataPreferences.putSync('universities', JSON.stringify(universities))
                                 dataPreferences.flush()
@@ -237,6 +239,8 @@ struct search {
                                 })
                               }
                             }
+
+
                           })
                       }.margin({top:1})
 
