@@ -76,16 +76,16 @@ struct Rest {
     this.dataPreferences.flush(); // 确保数据持久化
 
     // 验证保存是否成功
-    let savedStr: string = this.dataPreferences.getSync('meritCount', '0').toString();
-    let savedMeritCount: number = parseFloat(savedStr);
-
-    if (savedMeritCount === this.meritCount) {
-      console.log('数据保存成功:', savedMeritCount);
-      promptAction.showToast({ message: '功德增加成功' });
-    } else {
-      console.log('数据保存失败，读取到的值:', savedMeritCount);
-      promptAction.showToast({ message: '功德保存失败' });
-    }
+    // let savedStr: string = this.dataPreferences.getSync('meritCount', '0').toString();
+    // let savedMeritCount: number = parseFloat(savedStr);
+    //
+    // if (savedMeritCount === this.meritCount) {
+    //   console.log('数据保存成功:', savedMeritCount);
+    //   promptAction.showToast({ message: '功德增加成功' });
+    // } else {
+    //   console.log('数据保存失败，读取到的值:', savedMeritCount);
+    //   promptAction.showToast({ message: '功德保存失败' });
+    // }
 
   }
 
@@ -121,16 +121,16 @@ struct Rest {
     this.dataPreferences.flush(); // 确保数据持久化
 
     // 验证保存是否成功
-    let savedStr: string = this.dataPreferences.getSync('meritCount', '0').toString();
-    let savedMeritCount: number = parseFloat(savedStr);
-
-    if (savedMeritCount === this.meritCount) {
-      console.log('数据保存成功:', savedMeritCount);
-      promptAction.showToast({ message: '功德增加成功' });
-    } else {
-      console.log('数据保存失败，读取到的值:', savedMeritCount);
-      promptAction.showToast({ message: '功德保存失败' });
-    }
+    // let savedStr: string = this.dataPreferences.getSync('meritCount', '0').toString();
+    // let savedMeritCount: number = parseFloat(savedStr);
+    //
+    // if (savedMeritCount === this.meritCount) {
+    //   console.log('数据保存成功:', savedMeritCount);
+    //   promptAction.showToast({ message: '功德增加成功' });
+    // } else {
+    //   console.log('数据保存失败，读取到的值:', savedMeritCount);
+    //   promptAction.showToast({ message: '功德保存失败' });
+    // }
 
   }
 
