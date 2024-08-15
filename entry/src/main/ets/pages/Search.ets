@@ -151,7 +151,7 @@ struct search {
                   .margin({top:10})
               }
               else {
-                Text('找到'+ this.count + '所大学')
+                Text('找到'+ this.count + '所名字含有'+ this.keyword + '的大学')
                   .fontSize(20)
                   .margin({top:10})
 
@@ -212,13 +212,12 @@ struct search {
 
                         Button(this.collection)
                           .enabled(this.isButtonEnabled) // 按钮启用状态
-                          .width('100%')
+                          .width('50%')
                           .fontSize(16)
-                          .margin({left:20, bottom:15})
+                          .margin({left:10, bottom:15})
                           .onClick(() => {
                             let value: string = dataPreferences.getSync('universities', '[]').toString();
                             let universities: University[] = JSON.parse(value)
-                            console.log('' + universities.length)
 
                             if(universities.length >= 100) {
                               promptAction.showToast({message: '最多收藏100所大学'})
@@ -227,13 +226,16 @@ struct search {
                                 return value.name=== item.name
                               })
                               if(result) {
+
                                 promptAction.showToast({message: '不能重复收藏'})
                               } else {
                                 this.isButtonEnabled = false;
                                 this.collection = '已收藏'
+
                                 universities.push(item)
                                 dataPreferences.putSync('universities', JSON.stringify(universities))
                                 dataPreferences.flush()
+
                                 promptAction.showToast({
                                   message: '已收藏'
                                 })
@@ -332,13 +334,13 @@ struct search {
                   (item: University, index: number) => {
                     ListItem() {
                       Column() {
-                        Row({ space: 10 }) {
+                        Row({space: 10}){
                           Image($r('app.media.university'))
                             .width(50)
                             .height(50)
-                            .margin({ left: 10, top: 10, bottom: 10 })
-                            .border({ radius: 10 })
-                            .shadow({ radius: 10, color: '#C0C0C0' })
+                            .margin({left: 10,top: 10,bottom: 10})
+                            .border({radius: 10})
+                            .shadow({ radius: 10, color: '#C0C0C0'})
 
                           Text(item.name)
                             .width(250)
@@ -351,9 +353,9 @@ struct search {
 
                         }
                         .width('100%')
-                        .margin({ left: 10, right: 10 })
+                        .margin({left: 10,right: 10})
                         .backgroundColor('#fff8f8fc')
-                        .border({ radius: 10 })
+                        .border({radius: 10})
 
                         Text('国家：' + item.country)
                           .width('100%')
