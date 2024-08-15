@@ -231,16 +231,19 @@ struct Rest {
           .onClick(() => {
             // 点击后禁用按钮
             this.isButtonEnabled = false;
-            this.auto_add()
-            if (this.isAutoIncrementing) {
-              // 如果已经在自动增加，停止自动增加
-              this.stopAutoIncrement();
-              this.isAutoIncrementing = false;
-            } else {
-              // 否则，开始自动增加
-              this.startAutoIncrement();
-              this.isAutoIncrementing = true;
-            }
+            // this.auto_add()
+            this.startAutoIncrement();
+            this.isAutoIncrementing = true;
+
+            // if (this.isAutoIncrementing) { // 如果已经在自动增加，停止自动增加
+            //
+            //   this.stopAutoIncrement();
+            //   this.isAutoIncrementing = false;
+            // } else {
+            //
+            //   this.startAutoIncrement(); // 否则，开始自动增加
+            //   this.isAutoIncrementing = true;
+            // }
 
           })
 
@@ -264,6 +267,23 @@ struct Rest {
           .fontStyle(FontStyle.Italic)
           .onClick(() => {
             this.delete_count()
+          })
+
+        Button("停止自动功德")
+          // .enabled(this.isButtonEnabled) // 按钮启用状态
+          .type(ButtonType.Normal)
+          .borderRadius(130)
+          .width(130)
+          .height(40)
+          .backgroundColor(Color.Gray)
+          .fontSize(15)
+          .fontColor(Color.White)
+          .fontWeight(FontWeight.Bold)
+          .fontStyle(FontStyle.Italic)
+          .onClick(()=>{
+            this.stopAutoIncrement();
+            this.isAutoIncrementing = false;
+            this.isButtonEnabled = true;
           })
       }
 
