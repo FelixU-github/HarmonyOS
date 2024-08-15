@@ -7,7 +7,7 @@ import { preferences } from '@kit.ArkData';
 @Component
 struct Rest {
 
-
+  @State isButtonEnabled: boolean = true; // 按钮启用状态
 
   @State meritCount: number = 0; // 功德计数变量
   dataPreferences: preferences.Preferences = preferences.getPreferencesSync(getContext(), { name: 'myStore' });
@@ -208,7 +208,7 @@ struct Rest {
           .type(ButtonType.Normal)
           .borderRadius(130)
           .width(130)
-          .height(130)
+          .height(40)
           .backgroundColor(Color.Gray)
           .fontSize(15)
           .fontColor(Color.White)
@@ -220,10 +220,11 @@ struct Rest {
 
 
         Button("自动功德+1")
+          .enabled(this.isButtonEnabled) // 按钮启用状态
           .type(ButtonType.Normal)
           .borderRadius(130)
           .width(130)
-          .height(130)
+          .height(40)
           .backgroundColor(Color.Gray)
           .fontSize(15)
           .fontColor(Color.White)
@@ -231,6 +232,8 @@ struct Rest {
           .fontStyle(FontStyle.Italic)
           .onClick(() => {
             this.auto_add()
+            // 点击后禁用按钮
+            this.isButtonEnabled = false;
             if (this.isAutoIncrementing) {
               // 如果已经在自动增加，停止自动增加
               this.stopAutoIncrement();
@@ -240,13 +243,22 @@ struct Rest {
               this.startAutoIncrement();
               this.isAutoIncrementing = true;
             }
+
           })
 
+
+    }
+    .margin({top: 120})
+    .width('100%')
+    .height(100)
+    .justifyContent(FlexAlign.Center)
+
+      Row({space:30}) {
         Button("重置功德")
           .type(ButtonType.Normal)
           .borderRadius(130)
           .width(130)
-          .height(130)
+          .height(40)
           .backgroundColor(Color.Gray)
           .fontSize(15)
           .fontColor(Color.White)
@@ -255,12 +267,8 @@ struct Rest {
           .onClick(() => {
             this.delete_count()
           })
+      }
 
-    }
-    .margin({top: 120})
-    .width('100%')
-    .height(100)
-    .justifyContent(FlexAlign.Center)
 
 
     }
