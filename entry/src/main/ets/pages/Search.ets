@@ -210,41 +210,44 @@ struct search {
                           .textAlign(TextAlign.JUSTIFY)
                           .margin({left:20, bottom:15})
 
-                        Button(this.collection)
-                          .enabled(this.isButtonEnabled) // 按钮启用状态
-                          .width('50%')
-                          .fontSize(16)
-                          .margin({left:10, bottom:15})
-                          .onClick(() => {
-                            let value: string = dataPreferences.getSync('universities', '[]').toString();
-                            let universities: University[] = JSON.parse(value)
+                        Row(){
+                          Button(this.collection)
+                            .enabled(this.isButtonEnabled) // 按钮启用状态
+                            .width('50%')
+                            .fontSize(16)
+                            .margin({left:10, bottom:10})
+                            .onClick(() => {
+                              let value: string = dataPreferences.getSync('universities', '[]').toString();
+                              let universities: University[] = JSON.parse(value)
 
-                            if(universities.length >= 100) {
-                              promptAction.showToast({message: '最多收藏100所大学'})
-                            } else {
-                              let result = universities.some((value) => {
-                                return value.name=== item.name
-                              })
-                              if(result) {
-
-                                promptAction.showToast({message: '不能重复收藏'})
+                              if(universities.length >= 100) {
+                                promptAction.showToast({message: '最多收藏100所大学'})
                               } else {
-                                this.isButtonEnabled = false;
-                                this.collection = '已收藏'
-
-                                universities.push(item)
-                                dataPreferences.putSync('universities', JSON.stringify(universities))
-                                dataPreferences.flush()
-
-                                promptAction.showToast({
-                                  message: '已收藏'
+                                let result = universities.some((value) => {
+                                  return value.name=== item.name
                                 })
-                              }
-                            }
+                                if(result) {
 
+                                  promptAction.showToast({message: '不能重复收藏'})
+                                }
+                                  else {
+                                    this.isButtonEnabled = false;
+                                    this.collection = '已收藏'
 
-                          })
-                      }.margin({top:1})
+                                    universities.push(item)
+                                    dataPreferences.putSync('universities', JSON.stringify(universities))
+                                    dataPreferences.flush()
+
+                                    promptAction.showToast({
+                                      message: '已收藏'
+                                    })
+                                  }
+                                }
+                            })
+                          }
+
+                      }
+                      .margin({top:10,left:5})
 
                     }
                     .borderRadius(10)
@@ -357,72 +360,76 @@ struct search {
                         .backgroundColor('#fff8f8fc')
                         .border({radius: 10})
 
-                        Text('国家：' + item.country)
-                          .width('100%')
-                          .fontSize(16)
-                          .textAlign(TextAlign.Start)
-                          .margin({ left: 20 })
+                        Column({space: 10}) {
+                          Text('国家：' + item.country)
+                            .width('100%')
+                            .fontSize(16)
+                            .textAlign(TextAlign.Start)
+                            .margin({ left: 20 })
 
-                        Text('省份的信息：' + item.state_province)
-                          .width('100%')
-                          .fontSize(16)
-                          .textAlign(TextAlign.Start)
-                          .margin({ left: 20 })
+                          Text('省份的信息：' + item.state_province)
+                            .width('100%')
+                            .fontSize(16)
+                            .textAlign(TextAlign.Start)
+                            .margin({ left: 20 })
 
-                        Text('官方域名：' + item.domains)
-                          .width('100%')
-                          .fontSize(16)
-                          .textAlign(TextAlign.JUSTIFY)
-                          .margin({ left: 20 })
+                          Text('官方域名：' + item.domains)
+                            .width('100%')
+                            .fontSize(16)
+                            .textAlign(TextAlign.JUSTIFY)
+                            .margin({ left: 20 })
 
-                        Text('官方网站：' + item.web_pages)
-                          .width('100%')
-                          .fontSize(16)
-                          .textAlign(TextAlign.JUSTIFY)
-                          .margin({ left: 20, bottom: 15 })
+                          Text('官方网站：' + item.web_pages)
+                            .width('100%')
+                            .fontSize(16)
+                            .textAlign(TextAlign.JUSTIFY)
+                            .margin({ left: 20, bottom: 15 })
 
-                        Image(item.name)
-                          .borderRadius({
-                            topLeft: 10,
-                            topRight: 10
-                          })
-                          .width('94%')
-
-                        Row() {
-                          Text('删除')
-                            .margin({ right: 15 })
-                            .onClick(() => {
-                              AlertDialog.show({
-                                title: '提示',
-                                message: '确定要删除吗？',
-                                autoCancel: true,
-                                alignment: DialogAlignment.Bottom,
-                                primaryButton: {
-                                  value: '确定',
-                                  action: () => {
-                                    let value: string = dataPreferences.getSync('universities', '[]').toString();
-                                    let universities: University[] = JSON.parse(value)
-                                    universities.splice(index, 1)
-                                    dataPreferences.putSync('universities', JSON.stringify(universities))
-                                    dataPreferences.flush()
-                                    this.saved_universities = universities
-                                    promptAction.showToast({
-                                      message: '已删除'
-                                    })
-                                  }
-                                },
-                                secondaryButton: {
-                                  value: '取消',
-                                  action: () => {
-                                  }
-                                }
-                              })
+                          Image(item.name)
+                            .borderRadius({
+                              topLeft: 10,
+                              topRight: 10
                             })
+                            .width('94%')
+
+                          Row() {
+                            Text('删除')
+                              .margin({ right: 15 })
+                              .onClick(() => {
+                                AlertDialog.show({
+                                  title: '提示',
+                                  message: '确定要删除吗？',
+                                  autoCancel: true,
+                                  alignment: DialogAlignment.Bottom,
+                                  primaryButton: {
+                                    value: '确定',
+                                    action: () => {
+                                      let value: string = dataPreferences.getSync('universities', '[]').toString();
+                                      let universities: University[] = JSON.parse(value)
+                                      universities.splice(index, 1)
+                                      dataPreferences.putSync('universities', JSON.stringify(universities))
+                                      dataPreferences.flush()
+                                      this.saved_universities = universities
+                                      promptAction.showToast({
+                                        message: '已删除'
+                                      })
+                                    }
+                                  },
+                                  secondaryButton: {
+                                    value: '取消',
+                                    action: () => {
+                                    }
+                                  }
+                                })
+                              })
+                          }
+                          .width('94%')
+                          .height(30)
+                          .margin({ top: 10 })
+                          .justifyContent(FlexAlign.SpaceBetween)
+
                         }
-                        .width('94%')
-                        .height(30)
-                        .margin({ top: 10 })
-                        .justifyContent(FlexAlign.SpaceBetween)
+
                       }
                       .width('95%')
                       .borderRadius(10)
