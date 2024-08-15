@@ -2,24 +2,13 @@
 import {  router ,promptAction } from '@kit.ArkUI';
 import { UIContext } from '@kit.ArkUI';
 import { preferences } from '@kit.ArkData';
-// let options: preferences.Options = { name: 'myStore' };
 
 @Entry
 @Component
-
 struct Rest {
 
   @State meritCount: number = 0; // 功德计数变量
   dataPreferences: preferences.Preferences = preferences.getPreferencesSync(getContext(), { name: 'myStore' });
-
-  // ToAppear() {
-  //
-  //   let savedStr: string = this.dataPreferences.getSync('meritCount', '0').toString();
-  //   this.meritCount = parseFloat(savedStr);
-  // }
-
-
-
 
 
   @State myScale: number = 1.0;
@@ -155,14 +144,10 @@ struct Rest {
 
 
 
-      Text(`当前功德：${this.meritCount}`)
+      Text(`已累计功德：${this.meritCount}`)
         .fontSize(20)
         .fontWeight(FontWeight.Bold)
-      //   .onCh(() => {
-      //
-      //     let str: string = this.dataPreferences.getSync('meritCount', '0').toString(); // 默认值为 '0'
-      //     let myNumber: number = parseFloat(str); // 将字符串转换回 number 类型
-      // })
+        .margin({top: 20, bottom: 20})
 
 
       Row() {
@@ -184,7 +169,7 @@ struct Rest {
 
 
       }
-      .margin({top: 30})
+
       .width('95%')
       .height(300)
       .backgroundColor('#FFFFFF')
