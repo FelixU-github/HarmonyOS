@@ -1,4 +1,4 @@
-// pages/NotesPage.ets
+// NotesPage.ets
 @Entry
 @Component
 struct NotesPage {
