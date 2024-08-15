@@ -166,7 +166,7 @@ struct Rest {
 
         Text("功德+1")
           .fontSize(1)
-          .fontColor('#00000000')
+          .fontColor('#000000')
           .scale({ x: this.myScale_font, y: this.myScale_font })
           .margin({left:30,bottom:100})
 
