@@ -39,7 +39,7 @@ struct search {
         this.universities = [...this.universities, ...New_universities]
         this.count = this.universities.length
         console.info('count:' + this.count)
-        if (this.saved_universities.length === 0) {
+        if (this.count === 0) {
           promptAction.showToast({message: '未找到名字包含' + this.keyword + '的大学'})
         }
 
