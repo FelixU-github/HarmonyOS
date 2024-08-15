@@ -24,6 +24,8 @@ struct Rest {
     if (!this.autoIncrementInterval) {
       this.autoIncrementInterval = setInterval(() => {
         this.meritCount += 1;
+        this.dataPreferences.putSync('meritCount', this.meritCount.toString()); // 保存到本地存储
+        this.dataPreferences.flush(); // 确保数据持久化
       }, 1000); // 每秒增加一次功德
     }
   }
@@ -80,7 +82,7 @@ struct Rest {
 
     if (savedMeritCount === this.meritCount) {
       console.log('数据保存成功:', savedMeritCount);
-      promptAction.showToast({ message: '功德保存成功' });
+      promptAction.showToast({ message: '功德增加成功' });
     } else {
       console.log('数据保存失败，读取到的值:', savedMeritCount);
       promptAction.showToast({ message: '功德保存失败' });
@@ -119,8 +121,27 @@ struct Rest {
     this.dataPreferences.putSync('meritCount', this.meritCount.toString()); // 保存到本地存储
     this.dataPreferences.flush(); // 确保数据持久化
 
+    // 验证保存是否成功
+    let savedStr: string = this.dataPreferences.getSync('meritCount', '0').toString();
+    let savedMeritCount: number = parseFloat(savedStr);
+
+    if (savedMeritCount === this.meritCount) {
+      console.log('数据保存成功:', savedMeritCount);
+      promptAction.showToast({ message: '功德增加成功' });
+    } else {
+      console.log('数据保存失败，读取到的值:', savedMeritCount);
+      promptAction.showToast({ message: '功德保存失败' });
+    }
+
   }
 
+
+  delete_count():void{
+    this.meritCount = 0
+    this.dataPreferences.putSync('meritCount', this.meritCount.toString()); // 保存到本地存储
+    this.dataPreferences.flush(); // 确保数据持久化
+
+  }
 
 
   build() {
@@ -220,6 +241,21 @@ struct Rest {
               this.isAutoIncrementing = true;
             }
           })
+
+        Button("重置功德")
+          .type(ButtonType.Normal)
+          .borderRadius(130)
+          .width(130)
+          .height(130)
+          .backgroundColor(Color.Gray)
+          .fontSize(15)
+          .fontColor(Color.White)
+          .fontWeight(FontWeight.Bold)
+          .fontStyle(FontStyle.Italic)
+          .onClick(() => {
+            this.delete_count()
+          })
+
     }
     .margin({top: 120})
     .width('100%')
