@@ -39,6 +39,9 @@ struct search {
         this.universities = [...this.universities, ...New_universities]
         this.count = this.universities.length
         console.info('count:' + this.count)
+        if (this.saved_universities.length === 0) {
+          promptAction.showToast({message: '未找到名字包含' + this.keyword + '的大学'})
+        }
 
         // 打印大学的信息
         New_universities.slice(0,5).forEach((university) => {
@@ -112,7 +115,7 @@ struct search {
                   .fontColor(Color.Black)
                   .fontWeight(FontWeight.Bold)
                   .margin({
-                    top:20
+                    top:25
                   })
 
               Search({ placeholder: '搜索'})
@@ -127,8 +130,10 @@ struct search {
                   if(this.keyword === ''){
                     promptAction.showToast({message: '请输入大学名称'})
                   }else {
+
                     this.universities = [] // 清空搜索数组
                     this.requestData()
+
                   }
                 })
             }
@@ -393,7 +398,7 @@ struct search {
                             .width('94%')
 
                           Row() {
-                            Text('删除')
+                            Button('删除')
                               .margin({ right: 15 })
                               .onClick(() => {
                                 AlertDialog.show({
@@ -425,7 +430,7 @@ struct search {
                           }
                           .width('94%')
                           .height(30)
-                          .margin({ top: 10 })
+                          .margin({ top: -10 ,left: 10})
                           .justifyContent(FlexAlign.SpaceBetween)
 
                         }
