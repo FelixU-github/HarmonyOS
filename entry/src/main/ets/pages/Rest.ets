@@ -8,6 +8,7 @@ import { preferences } from '@kit.ArkData';
 struct Rest {
 
   @State isButtonEnabled: boolean = true; // 按钮启用状态
+  @State autoButtonEnabled: boolean = false;
 
   @State meritCount: number = 0; // 功德计数变量
   dataPreferences: preferences.Preferences = preferences.getPreferencesSync(getContext(), { name: 'myStore' });
@@ -231,6 +232,7 @@ struct Rest {
           .onClick(() => {
             // 点击后禁用按钮
             this.isButtonEnabled = false;
+            this.autoButtonEnabled = true;
             // this.auto_add()
             this.startAutoIncrement();
             this.isAutoIncrementing = true;
@@ -270,7 +272,7 @@ struct Rest {
           })
 
         Button("停止自动功德")
-          // .enabled(this.isButtonEnabled) // 按钮启用状态
+          .enabled(this.autoButtonEnabled) // 按钮启用状态
           .type(ButtonType.Normal)
           .borderRadius(130)
           .width(130)
@@ -284,6 +286,7 @@ struct Rest {
             this.stopAutoIncrement();
             this.isAutoIncrementing = false;
             this.isButtonEnabled = true;
+            this.autoButtonEnabled = false;
           })
       }
 
