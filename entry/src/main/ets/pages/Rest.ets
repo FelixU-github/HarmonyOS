@@ -134,14 +134,12 @@ struct Rest {
 
   }
 
-
   delete_count():void{
     this.meritCount = 0
     this.dataPreferences.putSync('meritCount', this.meritCount.toString()); // 保存到本地存储
     this.dataPreferences.flush(); // 确保数据持久化
 
   }
-
 
   build() {
     Column({ space: 3 }) {
