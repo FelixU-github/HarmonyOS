@@ -24,6 +24,8 @@ struct Rest {
     if (!this.autoIncrementInterval) {
       this.autoIncrementInterval = setInterval(() => {
         this.meritCount += 1;
+        this.dataPreferences.putSync('meritCount', this.meritCount.toString()); // 保存到本地存储
+        this.dataPreferences.flush(); // 确保数据持久化
       }, 1000); // 每秒增加一次功德
     }
   }
