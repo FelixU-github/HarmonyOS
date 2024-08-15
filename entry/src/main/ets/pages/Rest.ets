@@ -231,9 +231,9 @@ struct Rest {
           .fontWeight(FontWeight.Bold)
           .fontStyle(FontStyle.Italic)
           .onClick(() => {
-            this.auto_add()
             // 点击后禁用按钮
             this.isButtonEnabled = false;
+            // this.auto_add()
             if (this.isAutoIncrementing) {
               // 如果已经在自动增加，停止自动增加
               this.stopAutoIncrement();
