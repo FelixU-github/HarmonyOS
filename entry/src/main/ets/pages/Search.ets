@@ -101,15 +101,36 @@ struct search {
         TabContent(){
           Column(){
 
-            Row(){
+            Column(){
+
+              if (this.universities.length === 0) {
+                Text('寻找你喜欢的大学')
+                  .fontSize(24)
+                  .fontColor(Color.Black)
+                  .fontWeight(FontWeight.Bold)
+                  .margin({
+                    top:20
+                  })
+              }
+              else {
+                Text('找到'+ this.count + '所大学')
+                  .fontSize(24)
+                  .fontColor(Color.Black)
+                  .fontWeight(FontWeight.Bold)
+                  .margin({
+                    top:20
+                  })
+              }
+
+
               Search({ placeholder: '搜索'})
                 .searchButton('SEARCH')
                 .onChange((value) => {
                   this.keyword = value
                 })
-                .width('95%')
+                .width('90%')
                 .height(40)
-                .margin({left:10,right:10,top:10})
+                .margin({left:10,right:10,top:20})
                 .onClick(()=>{
                   if(this.keyword === ''){
                     promptAction.showToast({message: '请输入大学名称'})
@@ -119,20 +140,17 @@ struct search {
                   }
                 })
             }
+            .height(150)
+            .width('95%')
+            .backgroundColor('#ffffffff')
+            .borderRadius(10)
+            .margin({left:10,right:10,top:10})
+            .shadow({ radius: 10, color: '#696969' ,offsetY: 5})
+
 
             Column() {
 
-              if (this.universities.length === 0) {
-                Text('寻找你喜欢的大学').fontSize(24)
-              }else {
-                Text('找到'+ this.count + '所大学')
-                  .fontSize(20)
-                  .fontColor(Color.Black)
-                  .fontWeight(FontWeight.Bold)
-                  .margin({
-                    bottom: 10
-                  })
-              }
+
               List({ space: 20, initialIndex: 0 }) {
                 ForEach(this.universities, (item: University) => {
                   ListItem() {
@@ -235,9 +253,12 @@ struct search {
             }
             .width('100%')
             .height('100%')
-            .backgroundColor("#F5F5F5")
+            .backgroundColor("#F8F8FF")
+            .margin({top:10})
+
 
           }
+          .backgroundColor('#F8F8FF')
 
         }
         .width('100%')
@@ -252,25 +273,25 @@ struct search {
                 .width("20%")
                 .shadow({ radius: 10, color: '#C0C0C0'})
                 .borderRadius(50)
-                .margin({left:10,right:10})
-            Column(){
-              Row(){
-                Text('账户昵称 ：')
-                Text('XXXXXXXX')
+                .margin({left:30,right:10})
+              Column(){
+                Text('大王叫我来巡山')
+                  .fontSize(25)
+                  .margin({left:20,right:10,top:-5})
+
+                Text('您已收藏 '+this.saved_universities.length+' 所大学')
+                  .fontSize(20)
+                  .margin({left:20,right:10,top:20})
+
               }
-              Row(){
-                Text('账户 ID：')
-                Text('2023120253')
-              }
-            }
 
             }
             .width('100%')
             .height(120)
             .backgroundColor("#ffffffff")
-            if (this.saved_universities.length === 0) {
-              Text('您尚未收藏大学').fontSize(24)
-            }
+
+
+
             List() {
               ForEach(this.saved_universities,
                 (item: University, index: number) => {
