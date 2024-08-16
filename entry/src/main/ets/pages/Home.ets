@@ -578,7 +578,329 @@ struct Home {
               TabContent() {
 
                 Flex({ wrap: FlexWrap.Wrap }) {
-                  Row({space: 10}){
+
+                    Row() {
+                      Search({ placeholder: '搜索' })
+                        .searchButton('SEARCH')
+                        .onChange((value) => {
+                          this.keyword = value
+                        })
+                        .onClick(() => {
+                          if (this.keyword === '') {
+                            promptAction.showToast({ message: '请输入想要查找的内容' })
+                          } else {
+                            promptAction.showToast({ message: '未查找到' + this.keyword + '内容' })
+                          }
+                        })
+                        .width('95%')
+                        .height(40)
+                        .margin({ left: 10, right: 10, top: 10 })
+                    }
+                    .margin({
+                      left: 10,
+                      right: 10,
+                      top: -30,
+                      bottom: 40
+                    })
+
+                    Row({ space: 10 }) {
+                      Column() {
+                        Image($r('app.media.Notice'))
+                          .width(70)
+                          .height(70)
+                          .margin({
+                            left: 5,
+                            right: 5,
+                            bottom: 5,
+                            top: 2
+                          })
+                          .borderRadius(10)
+                          .shadow({ radius: 10, color: '#C0C0C0' })
+                        Text('校园热榜')
+                          .fontSize(12)
+                      }
+
+                      Column() {
+                        Image($r('app.media.Map'))
+                          .width(70)
+                          .height(70)
+                          .margin({
+                            left: 5,
+                            right: 5,
+                            bottom: 5,
+                            top: 2
+                          })
+                          .borderRadius(10)
+                          .shadow({ radius: 10, color: '#C0C0C0' })
+                        Text('校园地图')
+                          .fontSize(12)
+                      }
+
+                      Column() {
+                        Image($r('app.media.Benefit'))
+                          .width(70)
+                          .height(70)
+                          .margin({
+                            left: 5,
+                            right: 5,
+                            bottom: 5,
+                            top: 2
+                          })
+                          .borderRadius(10)
+                          .shadow({ radius: 10, color: '#C0C0C0' })
+                        Text('爱公益')
+                          .fontSize(12)
+                      }
+                    }
+                    .justifyContent(FlexAlign.Center)
+                    .margin({ left: 10 })
+
+                    Row({ space: 10 }) {
+                      Column() {
+                        Image($r('app.media.Lab'))
+                          .width(70)
+                          .height(70)
+                          .margin({
+                            left: 5,
+                            right: 5,
+                            bottom: 5,
+                            top: 2
+                          })
+                          .borderRadius(10)
+                          .shadow({ radius: 10, color: '#C0C0C0' })
+                        Text('实验室')
+                          .fontSize(12)
+                      }
+
+                      Column() {
+                        Image($r('app.media.Calender'))
+                          .width(70)
+                          .height(70)
+                          .margin({
+                            left: 5,
+                            right: 5,
+                            bottom: 5,
+                            top: 2
+                          })
+                          .borderRadius(10)
+                          .shadow({ radius: 10, color: '#C0C0C0' })
+                        Text('校历')
+                          .fontSize(12)
+                      }
+
+                      Column() {
+                        Image($r('app.media.Uni'))
+                          .width(70)
+                          .height(70)
+                          .margin({
+                            left: 5,
+                            right: 5,
+                            bottom: 5,
+                            top: 2
+                          })
+                          .borderRadius(10)
+                          .shadow({ radius: 10, color: '#C0C0C0' })
+                        Text('发现大学')
+                          .fontSize(12)
+                      }
+                    }
+                    .justifyContent(FlexAlign.Center)
+                    .margin({ left: 10 ,top:10})
+
+                    Row({ space: 10 }) {
+                      Column() {
+                        Image($r('app.media.Forum'))
+                          .width(70)
+                          .height(70)
+                          .margin({
+                            left: 5,
+                            right: 5,
+                            bottom: 5,
+                            top: 2
+                          })
+                          .borderRadius(10)
+                          .shadow({ radius: 10, color: '#C0C0C0' })
+                        Text('校园论坛')
+                          .fontSize(12)
+                      }
+
+                      Column() {
+                        Image($r('app.media.Benefit'))
+                          .width(70)
+                          .height(70)
+                          .margin({
+                            left: 5,
+                            right: 5,
+                            bottom: 5,
+                            top: 2
+                          })
+                          .borderRadius(10)
+                          .shadow({ radius: 10, color: '#C0C0C0' })
+                        Text('爱公益')
+                          .fontSize(12)
+                      }
+
+                      Column() {
+                        Image($r('app.media.Benefit'))
+                          .width(70)
+                          .height(70)
+                          .margin({
+                            left: 5,
+                            right: 5,
+                            bottom: 5,
+                            top: 2
+                          })
+                          .borderRadius(10)
+                          .shadow({ radius: 10, color: '#C0C0C0' })
+                        Text('爱公益')
+                          .fontSize(12)
+                      }
+                    }
+                    .justifyContent(FlexAlign.Center)
+                    .margin({ left: 10 ,top:10})
+
+                    Row({ space: 10 }) {
+                      Column() {
+                        Image($r('app.media.Lab'))
+                          .width(70)
+                          .height(70)
+                          .margin({
+                            left: 5,
+                            right: 5,
+                            bottom: 5,
+                            top: 2
+                          })
+                          .borderRadius(10)
+                          .shadow({ radius: 10, color: '#C0C0C0' })
+                        Text('实验室')
+                          .fontSize(12)
+                      }
+
+                      Column() {
+                        Image($r('app.media.Benefit'))
+                          .width(70)
+                          .height(70)
+                          .margin({
+                            left: 5,
+                            right: 5,
+                            bottom: 5,
+                            top: 2
+                          })
+                          .borderRadius(10)
+                          .shadow({ radius: 10, color: '#C0C0C0' })
+                        Text('爱公益')
+                          .fontSize(12)
+                      }
+
+                      Column() {
+                        Image($r('app.media.Benefit'))
+                          .width(70)
+                          .height(70)
+                          .margin({
+                            left: 5,
+                            right: 5,
+                            bottom: 5,
+                            top: 2
+                          })
+                          .borderRadius(10)
+                          .shadow({ radius: 10, color: '#C0C0C0' })
+                        Text('爱公益')
+                          .fontSize(12)
+                      }
+                    }
+                    .justifyContent(FlexAlign.Center)
+                    .margin({ left: 10 ,top:10})
+
+                    Row({ space: 10 }) {
+                      Column() {
+                        Image($r('app.media.Lab'))
+                          .width(70)
+                          .height(70)
+                          .margin({
+                            left: 5,
+                            right: 5,
+                            bottom: 5,
+                            top: 2
+                          })
+                          .borderRadius(10)
+                          .shadow({ radius: 10, color: '#C0C0C0' })
+                        Text('实验室')
+                          .fontSize(12)
+                      }
+
+                      Column() {
+                        Image($r('app.media.Calender'))
+                          .width(70)
+                          .height(70)
+                          .margin({
+                            left: 5,
+                            right: 5,
+                            bottom: 5,
+                            top: 2
+                          })
+                          .borderRadius(10)
+                          .shadow({ radius: 10, color: '#C0C0C0' })
+                        Text('校历')
+                          .fontSize(12)
+                      }
+
+                      Column() {
+                        Image($r('app.media.Uni'))
+                          .width(70)
+                          .height(70)
+                          .margin({
+                            left: 5,
+                            right: 5,
+                            bottom: 5,
+                            top: 2
+                          })
+                          .borderRadius(10)
+                          .shadow({ radius: 10, color: '#C0C0C0' })
+                        Text('发现大学')
+                          .fontSize(12)
+                      }
+                    }
+                    .justifyContent(FlexAlign.Center)
+                    .margin({ left: 10 ,top:10})
+
+
+                  }
+
+              }
+              .tabBar('校园服务')
+              .backgroundColor('#ffffffff')
+              .borderWidth({left:1,right:0,top:0,bottom:0})
+              .borderColor('#DCDCDC')
+
+
+              TabContent() {
+                Flex({ wrap: FlexWrap.Wrap }) {
+
+                  Row() {
+                    Search({ placeholder: '搜索' })
+                      .searchButton('SEARCH')
+                      .onChange((value) => {
+                        this.keyword = value
+                      })
+                      .onClick(() => {
+                        if (this.keyword === '') {
+                          promptAction.showToast({ message: '请输入想要查找的内容' })
+                        } else {
+                          promptAction.showToast({ message: '未查找到' + this.keyword + '内容' })
+                        }
+                      })
+                      .width('95%')
+                      .height(40)
+                      .margin({ left: 10, right: 10, top: 10 })
+                  }
+                  .margin({
+                    left: 10,
+                    right: 10,
+                    top: -90,
+                    bottom: 10
+                  })
+
+                  Row({ space: 10 }) {
                     Column() {
                       Image($r('app.media.Lab'))
                         .width(70)
@@ -628,36 +950,616 @@ struct Home {
                     }
                   }
                   .justifyContent(FlexAlign.Center)
-                  .margin({left:10})
+                  .margin({ left: 10 })
+
+                  Row({ space: 10 }) {
+                    Column() {
+                      Image($r('app.media.Lab'))
+                        .width(70)
+                        .height(70)
+                        .margin({
+                          left: 5,
+                          right: 5,
+                          bottom: 5,
+                          top: 2
+                        })
+                        .borderRadius(10)
+                        .shadow({ radius: 10, color: '#C0C0C0' })
+                      Text('实验室')
+                        .fontSize(12)
+                    }
+
+                    Column() {
+                      Image($r('app.media.Benefit'))
+                        .width(70)
+                        .height(70)
+                        .margin({
+                          left: 5,
+                          right: 5,
+                          bottom: 5,
+                          top: 2
+                        })
+                        .borderRadius(10)
+                        .shadow({ radius: 10, color: '#C0C0C0' })
+                      Text('爱公益')
+                        .fontSize(12)
+                    }
+
+                    Column() {
+                      Image($r('app.media.Benefit'))
+                        .width(70)
+                        .height(70)
+                        .margin({
+                          left: 5,
+                          right: 5,
+                          bottom: 5,
+                          top: 2
+                        })
+                        .borderRadius(10)
+                        .shadow({ radius: 10, color: '#C0C0C0' })
+                      Text('爱公益')
+                        .fontSize(12)
+                    }
+                  }
+                  .justifyContent(FlexAlign.Center)
+                  .margin({ left: 10 ,top:10})
+
+                  Row({ space: 10 }) {
+                    Column() {
+                      Image($r('app.media.Lab'))
+                        .width(70)
+                        .height(70)
+                        .margin({
+                          left: 5,
+                          right: 5,
+                          bottom: 5,
+                          top: 2
+                        })
+                        .borderRadius(10)
+                        .shadow({ radius: 10, color: '#C0C0C0' })
+                      Text('实验室')
+                        .fontSize(12)
+                    }
+
+                    Column() {
+                      Image($r('app.media.Benefit'))
+                        .width(70)
+                        .height(70)
+                        .margin({
+                          left: 5,
+                          right: 5,
+                          bottom: 5,
+                          top: 2
+                        })
+                        .borderRadius(10)
+                        .shadow({ radius: 10, color: '#C0C0C0' })
+                      Text('爱公益')
+                        .fontSize(12)
+                    }
+
+                    Column() {
+                      Image($r('app.media.Benefit'))
+                        .width(70)
+                        .height(70)
+                        .margin({
+                          left: 5,
+                          right: 5,
+                          bottom: 5,
+                          top: 2
+                        })
+                        .borderRadius(10)
+                        .shadow({ radius: 10, color: '#C0C0C0' })
+                      Text('爱公益')
+                        .fontSize(12)
+                    }
+                  }
+                  .justifyContent(FlexAlign.Center)
+                  .margin({ left: 10 ,top:10})
+
+                  Row({ space: 10 }) {
+                    Column() {
+                      Image($r('app.media.Lab'))
+                        .width(70)
+                        .height(70)
+                        .margin({
+                          left: 5,
+                          right: 5,
+                          bottom: 5,
+                          top: 2
+                        })
+                        .borderRadius(10)
+                        .shadow({ radius: 10, color: '#C0C0C0' })
+                      Text('实验室')
+                        .fontSize(12)
+                    }
+
+                    Column() {
+                      Image($r('app.media.Benefit'))
+                        .width(70)
+                        .height(70)
+                        .margin({
+                          left: 5,
+                          right: 5,
+                          bottom: 5,
+                          top: 2
+                        })
+                        .borderRadius(10)
+                        .shadow({ radius: 10, color: '#C0C0C0' })
+                      Text('爱公益')
+                        .fontSize(12)
+                    }
+
+
+
+                  }
+                  .justifyContent(FlexAlign.Center)
+                  .margin({ left: 10 ,top:10})
+
+
                 }
 
               }
-              .tabBar('全部')
-              .backgroundColor('#ffffffff')
-              .borderWidth({left:1,right:0,top:0,bottom:0})
-              .borderColor('#DCDCDC')
-
-
-              TabContent() {
-                Text('推荐的内容').fontSize(30)
-              }
-              .tabBar('推荐')
+              .tabBar('生活服务')
               .backgroundColor('#ffffffff')
               .borderWidth({left:1,right:0,top:0,bottom:0})
               .borderColor('#DCDCDC')
 
               TabContent() {
-                Text('发现的内容').fontSize(30)
+                Flex({ wrap: FlexWrap.Wrap }) {
+
+                  Row() {
+                    Search({ placeholder: '搜索' })
+                      .searchButton('SEARCH')
+                      .onChange((value) => {
+                        this.keyword = value
+                      })
+                      .onClick(() => {
+                        if (this.keyword === '') {
+                          promptAction.showToast({ message: '请输入想要查找的内容' })
+                        } else {
+                          promptAction.showToast({ message: '未查找到' + this.keyword + '内容' })
+                        }
+                      })
+                      .width('95%')
+                      .height(40)
+                      .margin({ left: 10, right: 10, top: 10 })
+                  }
+                  .margin({
+                    left: 10,
+                    right: 10,
+                    top: -90,
+                    bottom: 10
+                  })
+
+                  Row({ space: 10 }) {
+                    Column() {
+                      Image($r('app.media.Lab'))
+                        .width(70)
+                        .height(70)
+                        .margin({
+                          left: 5,
+                          right: 5,
+                          bottom: 5,
+                          top: 2
+                        })
+                        .borderRadius(10)
+                        .shadow({ radius: 10, color: '#C0C0C0' })
+                      Text('实验室')
+                        .fontSize(12)
+                    }
+
+                    Column() {
+                      Image($r('app.media.Benefit'))
+                        .width(70)
+                        .height(70)
+                        .margin({
+                          left: 5,
+                          right: 5,
+                          bottom: 5,
+                          top: 2
+                        })
+                        .borderRadius(10)
+                        .shadow({ radius: 10, color: '#C0C0C0' })
+                      Text('爱公益')
+                        .fontSize(12)
+                    }
+
+                    Column() {
+                      Image($r('app.media.Benefit'))
+                        .width(70)
+                        .height(70)
+                        .margin({
+                          left: 5,
+                          right: 5,
+                          bottom: 5,
+                          top: 2
+                        })
+                        .borderRadius(10)
+                        .shadow({ radius: 10, color: '#C0C0C0' })
+                      Text('爱公益')
+                        .fontSize(12)
+                    }
+                  }
+                  .justifyContent(FlexAlign.Center)
+                  .margin({ left: 10 })
+
+                  Row({ space: 10 }) {
+                    Column() {
+                      Image($r('app.media.Lab'))
+                        .width(70)
+                        .height(70)
+                        .margin({
+                          left: 5,
+                          right: 5,
+                          bottom: 5,
+                          top: 2
+                        })
+                        .borderRadius(10)
+                        .shadow({ radius: 10, color: '#C0C0C0' })
+                      Text('实验室')
+                        .fontSize(12)
+                    }
+
+                    Column() {
+                      Image($r('app.media.Benefit'))
+                        .width(70)
+                        .height(70)
+                        .margin({
+                          left: 5,
+                          right: 5,
+                          bottom: 5,
+                          top: 2
+                        })
+                        .borderRadius(10)
+                        .shadow({ radius: 10, color: '#C0C0C0' })
+                      Text('爱公益')
+                        .fontSize(12)
+                    }
+
+                    Column() {
+                      Image($r('app.media.Benefit'))
+                        .width(70)
+                        .height(70)
+                        .margin({
+                          left: 5,
+                          right: 5,
+                          bottom: 5,
+                          top: 2
+                        })
+                        .borderRadius(10)
+                        .shadow({ radius: 10, color: '#C0C0C0' })
+                      Text('爱公益')
+                        .fontSize(12)
+                    }
+                  }
+                  .justifyContent(FlexAlign.Center)
+                  .margin({ left: 10 ,top:10})
+
+                  Row({ space: 10 }) {
+                    Column() {
+                      Image($r('app.media.Lab'))
+                        .width(70)
+                        .height(70)
+                        .margin({
+                          left: 5,
+                          right: 5,
+                          bottom: 5,
+                          top: 2
+                        })
+                        .borderRadius(10)
+                        .shadow({ radius: 10, color: '#C0C0C0' })
+                      Text('实验室')
+                        .fontSize(12)
+                    }
+
+                    Column() {
+                      Image($r('app.media.Benefit'))
+                        .width(70)
+                        .height(70)
+                        .margin({
+                          left: 5,
+                          right: 5,
+                          bottom: 5,
+                          top: 2
+                        })
+                        .borderRadius(10)
+                        .shadow({ radius: 10, color: '#C0C0C0' })
+                      Text('爱公益')
+                        .fontSize(12)
+                    }
+
+                    Column() {
+                      Image($r('app.media.Benefit'))
+                        .width(70)
+                        .height(70)
+                        .margin({
+                          left: 5,
+                          right: 5,
+                          bottom: 5,
+                          top: 2
+                        })
+                        .borderRadius(10)
+                        .shadow({ radius: 10, color: '#C0C0C0' })
+                      Text('爱公益')
+                        .fontSize(12)
+                    }
+                  }
+                  .justifyContent(FlexAlign.Center)
+                  .margin({ left: 10 ,top:10})
+
+                  Row({ space: 10 }) {
+                    Column() {
+                      Image($r('app.media.Lab'))
+                        .width(70)
+                        .height(70)
+                        .margin({
+                          left: 5,
+                          right: 5,
+                          bottom: 5,
+                          top: 2
+                        })
+                        .borderRadius(10)
+                        .shadow({ radius: 10, color: '#C0C0C0' })
+                      Text('实验室')
+                        .fontSize(12)
+                    }
+
+                    Column() {
+                      Image($r('app.media.Benefit'))
+                        .width(70)
+                        .height(70)
+                        .margin({
+                          left: 5,
+                          right: 5,
+                          bottom: 5,
+                          top: 2
+                        })
+                        .borderRadius(10)
+                        .shadow({ radius: 10, color: '#C0C0C0' })
+                      Text('爱公益')
+                        .fontSize(12)
+                    }
+
+
+
+                  }
+                  .justifyContent(FlexAlign.Center)
+                  .margin({ left: 10 ,top:10})
+
+
+                }
               }
-              .tabBar('发现')
+              .tabBar('公共服务')
               .backgroundColor('#ffffffff')
               .borderWidth({left:1,right:0,top:0,bottom:0})
               .borderColor('#DCDCDC')
 
               TabContent() {
-                Text('我的内容').fontSize(30)
+                Flex({ wrap: FlexWrap.Wrap }) {
+
+                  Row() {
+                    Search({ placeholder: '搜索' })
+                      .searchButton('SEARCH')
+                      .onChange((value) => {
+                        this.keyword = value
+                      })
+                      .onClick(() => {
+                        if (this.keyword === '') {
+                          promptAction.showToast({ message: '请输入想要查找的内容' })
+                        } else {
+                          promptAction.showToast({ message: '未查找到' + this.keyword + '内容' })
+                        }
+                      })
+                      .width('95%')
+                      .height(40)
+                      .margin({ left: 10, right: 10, top: 10 })
+                  }
+                  .margin({
+                    left: 10,
+                    right: 10,
+                    top: -90,
+                    bottom: 10
+                  })
+
+                  Row({ space: 10 }) {
+                    Column() {
+                      Image($r('app.media.Lab'))
+                        .width(70)
+                        .height(70)
+                        .margin({
+                          left: 5,
+                          right: 5,
+                          bottom: 5,
+                          top: 2
+                        })
+                        .borderRadius(10)
+                        .shadow({ radius: 10, color: '#C0C0C0' })
+                      Text('实验室')
+                        .fontSize(12)
+                    }
+
+                    Column() {
+                      Image($r('app.media.Benefit'))
+                        .width(70)
+                        .height(70)
+                        .margin({
+                          left: 5,
+                          right: 5,
+                          bottom: 5,
+                          top: 2
+                        })
+                        .borderRadius(10)
+                        .shadow({ radius: 10, color: '#C0C0C0' })
+                      Text('爱公益')
+                        .fontSize(12)
+                    }
+
+                    Column() {
+                      Image($r('app.media.Benefit'))
+                        .width(70)
+                        .height(70)
+                        .margin({
+                          left: 5,
+                          right: 5,
+                          bottom: 5,
+                          top: 2
+                        })
+                        .borderRadius(10)
+                        .shadow({ radius: 10, color: '#C0C0C0' })
+                      Text('爱公益')
+                        .fontSize(12)
+                    }
+                  }
+                  .justifyContent(FlexAlign.Center)
+                  .margin({ left: 10 })
+
+                  Row({ space: 10 }) {
+                    Column() {
+                      Image($r('app.media.Lab'))
+                        .width(70)
+                        .height(70)
+                        .margin({
+                          left: 5,
+                          right: 5,
+                          bottom: 5,
+                          top: 2
+                        })
+                        .borderRadius(10)
+                        .shadow({ radius: 10, color: '#C0C0C0' })
+                      Text('实验室')
+                        .fontSize(12)
+                    }
+
+                    Column() {
+                      Image($r('app.media.Benefit'))
+                        .width(70)
+                        .height(70)
+                        .margin({
+                          left: 5,
+                          right: 5,
+                          bottom: 5,
+                          top: 2
+                        })
+                        .borderRadius(10)
+                        .shadow({ radius: 10, color: '#C0C0C0' })
+                      Text('爱公益')
+                        .fontSize(12)
+                    }
+
+                    Column() {
+                      Image($r('app.media.Benefit'))
+                        .width(70)
+                        .height(70)
+                        .margin({
+                          left: 5,
+                          right: 5,
+                          bottom: 5,
+                          top: 2
+                        })
+                        .borderRadius(10)
+                        .shadow({ radius: 10, color: '#C0C0C0' })
+                      Text('爱公益')
+                        .fontSize(12)
+                    }
+                  }
+                  .justifyContent(FlexAlign.Center)
+                  .margin({ left: 10 ,top:10})
+
+                  Row({ space: 10 }) {
+                    Column() {
+                      Image($r('app.media.Lab'))
+                        .width(70)
+                        .height(70)
+                        .margin({
+                          left: 5,
+                          right: 5,
+                          bottom: 5,
+                          top: 2
+                        })
+                        .borderRadius(10)
+                        .shadow({ radius: 10, color: '#C0C0C0' })
+                      Text('实验室')
+                        .fontSize(12)
+                    }
+
+                    Column() {
+                      Image($r('app.media.Benefit'))
+                        .width(70)
+                        .height(70)
+                        .margin({
+                          left: 5,
+                          right: 5,
+                          bottom: 5,
+                          top: 2
+                        })
+                        .borderRadius(10)
+                        .shadow({ radius: 10, color: '#C0C0C0' })
+                      Text('爱公益')
+                        .fontSize(12)
+                    }
+
+                    Column() {
+                      Image($r('app.media.Benefit'))
+                        .width(70)
+                        .height(70)
+                        .margin({
+                          left: 5,
+                          right: 5,
+                          bottom: 5,
+                          top: 2
+                        })
+                        .borderRadius(10)
+                        .shadow({ radius: 10, color: '#C0C0C0' })
+                      Text('爱公益')
+                        .fontSize(12)
+                    }
+                  }
+                  .justifyContent(FlexAlign.Center)
+                  .margin({ left: 10 ,top:10})
+
+                  Row({ space: 10 }) {
+                    Column() {
+                      Image($r('app.media.Lab'))
+                        .width(70)
+                        .height(70)
+                        .margin({
+                          left: 5,
+                          right: 5,
+                          bottom: 5,
+                          top: 2
+                        })
+                        .borderRadius(10)
+                        .shadow({ radius: 10, color: '#C0C0C0' })
+                      Text('实验室')
+                        .fontSize(12)
+                    }
+
+                    Column() {
+                      Image($r('app.media.Benefit'))
+                        .width(70)
+                        .height(70)
+                        .margin({
+                          left: 5,
+                          right: 5,
+                          bottom: 5,
+                          top: 2
+                        })
+                        .borderRadius(10)
+                        .shadow({ radius: 10, color: '#C0C0C0' })
+                      Text('爱公益')
+                        .fontSize(12)
+                    }
+
+
+
+                  }
+                  .justifyContent(FlexAlign.Center)
+                  .margin({ left: 10 ,top:10})
+
+
+                }
               }
-              .tabBar("全部")
+              .tabBar("其他服务")
               .backgroundColor('#ffffffff')
               .borderWidth({left:1,right:0,top:0,bottom:0})
               .borderColor('#DCDCDC')
@@ -704,6 +1606,7 @@ struct Home {
               }
               .margin({right:-20,bottom:30})
 
+
               Row(){
 
                 Image($r('app.media.QRCode'))
@@ -721,6 +1624,8 @@ struct Home {
             .height(120)
             .backgroundColor("#ffffffff")
             .margin({left:10,right:10,top:-161})
+            .borderWidth({left:0,right:0,top:0,bottom:0.1})
+            .borderColor('#DCDCDC')
 
 
             Row(){
@@ -830,6 +1735,7 @@ struct Home {
             .margin({top:1})
 
           }
+          .backgroundColor('#F8F8FF')
 
         }
         .width('100%')
@@ -842,6 +1748,6 @@ struct Home {
 
     }
     .height('100%')
-    .backgroundColor('#ffffff')
+    .backgroundColor('#F8F8FF')
   }
 }
