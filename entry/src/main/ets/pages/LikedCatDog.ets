@@ -20,6 +20,14 @@ interface Dog {
   height: number
 }
 
+interface Animal {
+  type: 'cat' | 'dog';
+  id: string;
+  url: string;
+  width: number;
+  height: number;
+}
+
 @Entry
 @Component
 struct LikedCatDog {
@@ -27,10 +35,14 @@ struct LikedCatDog {
   controller: TabsController = new TabsController();
   dataPreferences: preferences.Preferences = preferences.getPreferencesSync(getContext(), options);
 
+  @State animals: Animal[] = [] // 用于存储整合后的猫狗数据
+  @State savedAnimals: Animal[] = []
+
   @State cats: Cat[] = []
   @State saveCats: Cat[] = []
   @State dogs: Dog[] = []
   @State saveDogs: Dog[] = []
+
   @State catScrollPosition: number = 0;
   @State dogScrollPosition: number = 0;
   @State count: number = 0
@@ -42,7 +54,7 @@ struct LikedCatDog {
   @State dogIndex: number = 0
   private swiperController: SwiperController = new SwiperController()
 
-  requestData() { // 请求数据
+  requestDataCat() { // 请求数据
     let httpRequest = http.createHttp()
     httpRequest.request(
       'https://api.thecatapi.com/v1/images/search?limit=10',
@@ -52,6 +64,8 @@ struct LikedCatDog {
           this.cats = [...this.cats, ...newCats]
           this.count = this.cats.length
           this.countCat = this.cats.length
+          let newAnimals: Animal[] = JSON.parse(data.result.toString())
+          this.animals = [...this.animals, ...newAnimals]
         }
       }
     )
@@ -66,6 +80,8 @@ struct LikedCatDog {
         this.dogs = [...this.dogs, ...newDogs]
         this.count = this.dogs.length
         this.countDog = this.dogs.length
+        let newAnimals: Animal[] = JSON.parse(data.result.toString())
+        this.animals = [...this.animals, ...newAnimals]
       }
     )
   }
@@ -73,7 +89,7 @@ struct LikedCatDog {
 
 
   aboutToAppear(): void {
-    this.requestData()
+    this.requestDataCat()
     this.requestDataDog()
   }
 
@@ -251,7 +267,7 @@ struct LikedCatDog {
                   .onClick(() => {
                     this.dogs = []
                     this.cats = []
-                    this.requestData()
+                    this.requestDataCat()
                     this.requestDataDog()
                   })
 
@@ -343,7 +359,7 @@ struct LikedCatDog {
                   .position({ x: '10', y: '85%' })
                   .opacity(0.8)
                   .onClick(() => {
-                    this.requestData()
+                    this.requestDataCat()
                     this.requestDataDog()
                   })
 
@@ -414,7 +430,7 @@ struct LikedCatDog {
               }
 
             }
-            .width('100%')
+            .width('95%')
             .height(120)
             .backgroundColor("#ffffffff")
             .borderRadius(10)
@@ -431,8 +447,8 @@ struct LikedCatDog {
             }else {
               Row(){
                 List() {
-                  ForEach(this.saveCats,
-                    (item: Cat, index: number) => {
+                  ForEach(this.savedAnimals,
+                    (item: Animal, index: number) => {
                       ListItem() {
                         Column() {
                           Image(item.url)
@@ -482,7 +498,7 @@ struct LikedCatDog {
                         .borderWidth({left:1,right:1,top:1,bottom:1})
                         .borderColor('#DCDCDC')
                       }.width('100%')
-                    }, (item: Cat) => {
+                    }, (item: Animal) => {
                       return item.id
                     })
                 }
@@ -551,6 +567,7 @@ struct LikedCatDog {
                 .height('100%')
 
               }
+              .margin({ top: 10 })
 
 
             }
@@ -564,8 +581,32 @@ struct LikedCatDog {
           let value: string = dataPreferences.getSync('cats', '[]').toString();
           this.saveCats = JSON.parse(value)
 
+          // 将猫数据转换为 Animal 类型
+          let catAnimals: Animal[] = this.saveCats.map((cat: Cat): Animal => ({
+            type: 'cat',
+            id: cat.id,
+            url: cat.url,
+            width: cat.width,
+            height: cat.height,
+          }));
+
+
+
           let valueDog: string = dataPreferences.getSync('dogs', '[]').toString();
           this.saveDogs = JSON.parse(valueDog)
+
+
+          // 将狗数据转换为 Animal 类型
+          let dogAnimals: Animal[] = this.saveDogs.map((dog: Dog): Animal => ({
+            type: 'dog',
+            id: dog.id,
+            url: dog.url,
+            width: dog.width,
+            height: dog.height,
+          }));
+
+          this.savedAnimals = [...catAnimals, ...dogAnimals];
+
         })
       }
       .barPosition(BarPosition.End)
