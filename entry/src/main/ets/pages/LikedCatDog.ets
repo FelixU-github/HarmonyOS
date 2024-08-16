@@ -457,12 +457,11 @@ struct LikedCatDog {
                               topRight: 10
                             })
                             .width('94%')
+
                           Row() {
-                            Text(`${item.width} * ${item.height}`).margin({ left: 15 })
+                            Text(`ID:${item.id}`).margin({ left: 15 })
                             Text('删除').margin({ right: 15 })
-
                               .onClick(() => {
-
                                 AlertDialog.show({
                                   title: '提示',
                                   message: '确定要删除吗？',
@@ -493,45 +492,29 @@ struct LikedCatDog {
                                 promptAction.showToast({
                                   message: '已删除'
                                 });
-
                               }
                           },
-                          secondaryButton: {
-                            value: '取消',
-                            action: () => {
+                            secondaryButton: {
+                              value: '取消',
+                              action: () => {
+                              }
                             }
-                          }
+                          })
                         })
+                      }
+                      .width('94%')
+                      .height(30)
+                      .margin({ top: 10 })
+                      .justifyContent(FlexAlign.SpaceBetween)
+                      }
+                      .borderRadius(10)
+                      .margin({ bottom: 20 })
+                      .borderWidth({left:1,right:1,top:1,bottom:1})
+                      .borderColor('#DCDCDC')
 
-                              })
+                      }
+                      .width('100%')
 
-                              // .onClick(() => {
-                              //
-
-                              //         let value: string = dataPreferences.getSync('cats', '[]').toString();
-                              //         let cats: Cat[] = JSON.parse(value)
-                              //         cats.splice(index, 1)
-                              //         dataPreferences.putSync('cats', JSON.stringify(cats))
-                              //         dataPreferences.flush()
-                              //         this.saveCats = cats
-                              //         promptAction.showToast({
-                              //           message: '已删除'
-                              //         })
-
-
-                              //
-                              // })
-                          }
-                          .width('94%')
-                          .height(30)
-                          .margin({ top: 10 })
-                          .justifyContent(FlexAlign.SpaceBetween)
-                        }
-                        .borderRadius(10)
-                        .margin({ bottom: 20 })
-                        .borderWidth({left:1,right:1,top:1,bottom:1})
-                        .borderColor('#DCDCDC')
-                      }.width('100%')
                     }, (item: Animal) => {
                       return item.id
                     })
@@ -548,7 +531,7 @@ struct LikedCatDog {
             }
           }
           .width('100%')
-          .height('100%')
+          .height('500')
         }
         .tabBar(this.LabelImage('我的', 1, $r('app.media.user_selected'), $r('app.media.user_normal')))
         .onWillShow(() => {
