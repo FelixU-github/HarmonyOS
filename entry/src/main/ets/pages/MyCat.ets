@@ -220,6 +220,53 @@ struct Index {
 
         TabContent() {
           Column() {
+            Row(){
+              Image($r('app.media.img'))
+                .width("15%")
+                .shadow({ radius: 10, color: '#C0C0C0'})
+                .borderRadius(50)
+                .margin({left:30,right:10})
+
+              Column(){
+                Row(){
+                  Text('大王叫我来巡山')
+                    .fontSize(20)
+
+                }
+                .margin({left:10,right:10,top:30})
+
+                Row(){
+                  Text('ID：')
+                    .fontColor("#808080")
+                  Text('2023120253')
+                    .fontColor("#808080")
+
+                }
+                .margin({left:-15,top:15})
+              }
+              .margin({right:-20,bottom:30})
+
+
+              Row(){
+
+                Image($r('app.media.QRCode'))
+                  .width(20)
+                  .margin({left:40})
+
+                Image($r('app.media.More'))
+                  .width(25)
+                  .margin({left:10})
+              }
+              .margin({left:15})
+
+            }
+            .width('100%')
+            .height(120)
+            .backgroundColor("#ffffffff")
+            .margin({left:10,right:10,top:-161})
+            .borderWidth({left:0,right:0,top:0,bottom:0.1})
+            .borderColor('#DCDCDC')
+
             List() {
               ForEach(this.saveCats,
                 (item: Cat, index: number) => {
