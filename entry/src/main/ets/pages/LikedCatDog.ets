@@ -462,6 +462,15 @@ struct LikedCatDog {
                             Text('删除').margin({ right: 15 })
 
                               .onClick(() => {
+
+                                AlertDialog.show({
+                                  title: '提示',
+                                  message: '确定要删除吗？',
+                                  autoCancel: true,
+                                  alignment: DialogAlignment.Bottom,
+                                  primaryButton: {
+                                    value: '确定',
+                                    action: () => {
                                 let itemToDelete = this.savedAnimals[index];
 
                                 if (itemToDelete.type === 'cat') {
@@ -484,18 +493,21 @@ struct LikedCatDog {
                                 promptAction.showToast({
                                   message: '已删除'
                                 });
+
+                              }
+                          },
+                          secondaryButton: {
+                            value: '取消',
+                            action: () => {
+                            }
+                          }
+                        })
+
                               })
 
                               // .onClick(() => {
                               //
-                              //   AlertDialog.show({
-                              //     title: '提示',
-                              //     message: '确定要删除吗？',
-                              //     autoCancel: true,
-                              //     alignment: DialogAlignment.Bottom,
-                              //     primaryButton: {
-                              //       value: '确定',
-                              //       action: () => {
+
                               //         let value: string = dataPreferences.getSync('cats', '[]').toString();
                               //         let cats: Cat[] = JSON.parse(value)
                               //         cats.splice(index, 1)
@@ -505,14 +517,8 @@ struct LikedCatDog {
                               //         promptAction.showToast({
                               //           message: '已删除'
                               //         })
-                              //       }
-                              //     },
-                              //     secondaryButton: {
-                              //       value: '取消',
-                              //       action: () => {
-                              //       }
-                              //     }
-                              //   })
+
+
                               //
                               // })
                           }
@@ -530,69 +536,9 @@ struct LikedCatDog {
                       return item.id
                     })
                 }
-                .width('50%')
+                .width('100%')
                 .height('100%')
 
-                List() {
-                  ForEach(
-                    this.saveDogs,
-                    (item: Dog, index: number) => {
-                      ListItem() {
-                        Column() {
-                          Image(item.url)
-                            .borderRadius({
-                              topLeft: 10,
-                              topRight: 10
-                            })
-                          Row() {
-                            Text(`${item.width} * ${item.height}`).margin({ left: 10 })
-                            Text('删除').margin({ right: 10 })
-                              .onClick(() => {
-                                AlertDialog.show({
-                                  title: '提示',
-                                  message: '您确定要删除吗？',
-                                  autoCancel: false,
-                                  alignment: DialogAlignment.Bottom,
-                                  primaryButton: {
-                                    value: '确定',
-                                    action: () => {
-                                      let str: string = this.dataPreferences.getSync('dogs', '[]').toString()
-                                      let dogs: Dog[] = JSON.parse(str)
-                                      dogs.splice(index, 1)
-                                      this.saveDogs = dogs
-                                      this.dataPreferences.putSync('dogs', JSON.stringify(dogs))
-                                      this.dataPreferences.flush()
-                                      promptAction.showToast({ message: '已删除' })
-                                    }
-                                  },
-                                  secondaryButton: {
-                                    value: '取消',
-                                    action: () => {
-                                    }
-                                  }
-                                })
-                              })
-                          }
-                          .width('100%')
-                          .margin({ top: 10, bottom: 10 })
-                          .justifyContent(FlexAlign.SpaceBetween)
-                          .alignItems(VerticalAlign.Center)
-                        }
-                        .width('94%')
-                        .margin({ bottom: 10})
-                        .borderRadius(10)
-                        .borderWidth({left:1,right:1,top:1,bottom:1})
-                        .borderColor('#DCDCDC')
-                      }
-                      .width('100%')
-                    },
-                    (item: Dog) => {
-                      return item.id
-                    }
-                  )
-                }
-                .width('50%')
-                .height('100%')
 
               }
               .margin({ top: 10 })
