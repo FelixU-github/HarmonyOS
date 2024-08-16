@@ -571,6 +571,9 @@ struct Index {
         .onWillShow(() => {
           let value: string = dataPreferences.getSync('cats', '[]').toString();
           this.saveCats = JSON.parse(value)
+
+          let valueDog: string = dataPreferences.getSync('dogs', '[]').toString();
+          this.saveDogs = JSON.parse(valueDog)
         })
       }
       .barPosition(BarPosition.End)
