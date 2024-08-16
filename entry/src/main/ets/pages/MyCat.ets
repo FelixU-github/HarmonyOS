@@ -78,7 +78,8 @@ struct Index {
           .margin({right: 10})
       }
       .justifyContent(FlexAlign.SpaceBetween)
-      .shadow({ radius: 5, color: '#696969' ,offsetY: 5})
+      .borderWidth({left:0,right:0,top:0,bottom:0.1})
+      .borderColor('#DCDCDC')
       .backgroundColor('#ffffff')
       .width('100%')
 
@@ -137,9 +138,7 @@ struct Index {
                   .margin({bottom: 20})
                   .shadow({
                     radius: 10,
-                    color: Color.Gray,
-                    offsetX: 10,
-                    offsetY: 10
+                    color: Color.Gray
                   })
                 }.width('100%')
               },(item: Cat) => {
