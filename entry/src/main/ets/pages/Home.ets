@@ -324,7 +324,6 @@ struct Home {
 
             List() {
 
-
               ListItem(){
                 Row({ }) {
                   Text('通知')
@@ -468,8 +467,6 @@ struct Home {
                 .margin({top:10})
               }
 
-
-
               ListItem(){
                 Row({ }) {
                   Text('资讯')
@@ -541,7 +538,6 @@ struct Home {
                 }
                 .margin({top:10})
               }
-
 
             }
             .lanes(this.egLanes)
@@ -700,6 +696,17 @@ struct Home {
                           })
                           .borderRadius(10)
                           .shadow({ radius: 10, color: '#C0C0C0' })
+                          .onClick(() => {
+                            router.pushUrl({
+                              url: 'pages/Search' // 目标url
+                            }, router.RouterMode.Standard, (err) => {
+                              if (err) {
+                                console.error(`Invoke pushUrl failed, code is ${err.code}, message is ${err.message}`);
+                                return;
+                              }
+                              console.info('Invoke pushUrl succeeded.');
+                            });
+                          })
                         Text('发现大学')
                           .fontSize(12)
                       }
@@ -902,7 +909,7 @@ struct Home {
 
                   Row({ space: 10 }) {
                     Column() {
-                      Image($r('app.media.Lab'))
+                      Image($r('app.media.CatDog'))
                         .width(70)
                         .height(70)
                         .margin({
@@ -913,12 +920,12 @@ struct Home {
                         })
                         .borderRadius(10)
                         .shadow({ radius: 10, color: '#C0C0C0' })
-                      Text('实验室')
+                      Text('发现猫咪')
                         .fontSize(12)
                     }
 
                     Column() {
-                      Image($r('app.media.Benefit'))
+                      Image($r('app.media.Rest'))
                         .width(70)
                         .height(70)
                         .margin({
@@ -929,7 +936,7 @@ struct Home {
                         })
                         .borderRadius(10)
                         .shadow({ radius: 10, color: '#C0C0C0' })
-                      Text('爱公益')
+                      Text('休息一下')
                         .fontSize(12)
                     }
 
