@@ -529,9 +529,12 @@ struct LikedCatDog {
 
             }
             }
-          }
           .width('100%')
           .height('500')
+
+          }
+          .width('100%')
+          .height('100%')
         }
         .tabBar(this.LabelImage('我的', 1, $r('app.media.user_selected'), $r('app.media.user_normal')))
         .onWillShow(() => {
