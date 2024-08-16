@@ -118,7 +118,7 @@ struct Home {
                     .backgroundColor(Color.Pink)
                     .borderRadius(10)
                     .shadow({ radius: 10, color: '#C0C0C0'})
-                }
+                } // 海报轮播图
                 .loop(true)
                 .autoPlay(true)
                 .interval(3000)
@@ -236,7 +236,7 @@ struct Home {
                   Text('论坛')
                     .fontSize(12)
                 }
-              }
+              } // app内容
 
               .margin({left:4,right:4})
 
@@ -293,7 +293,7 @@ struct Home {
                   Text('更多')
                     .fontSize(12)
                 }
-              }
+              } // app 内容
               .margin({left:4,right:4,top:5,bottom:5})
 
             }
@@ -539,7 +539,7 @@ struct Home {
                 .margin({top:10})
               }
 
-            }
+            } // 这是新闻列表
             .lanes(this.egLanes)
             .scrollBar(BarState.Auto)
             .divider(this.egDivider)
