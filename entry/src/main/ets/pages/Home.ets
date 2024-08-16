@@ -4,7 +4,7 @@ class DividerTmp {
   strokeWidth: Length = 1
   startMargin: Length = 30
   endMargin: Length = 30
-  color: ResourceColor = '#0000ff'
+  color: ResourceColor = '#C0C0C0'
 
   constructor(strokeWidth: Length, startMargin: Length, endMargin: Length, color: ResourceColor) {
     this.strokeWidth = strokeWidth
@@ -17,7 +17,7 @@ class DividerTmp {
 @Entry
 @Component
 struct Home {
-  @State egDivider: DividerTmp = new DividerTmp(0.5, 30, 45, '#0000ff')
+  @State egDivider: DividerTmp = new DividerTmp(0.5, 30, 45, '#C0C0C0')
   @State currentIndex: number = 0
   controller: TabsController = new TabsController();
 
@@ -62,7 +62,8 @@ struct Home {
           .margin({right: 10})
       }
       .justifyContent(FlexAlign.SpaceBetween)
-      .shadow({ radius: 5, color: '#696969' ,offsetY: 5})
+      .borderWidth({left:0,right:0,top:0,bottom:0.1})
+      .borderColor('#DCDCDC')
       .backgroundColor('#ffffffff')
       .width('100%')
       .height(40)
@@ -572,36 +573,102 @@ struct Home {
 
           Column(){
             Tabs({ barPosition: BarPosition.Start }) {
+
               // TabContent的内容:首页、发现、推荐、我的
               TabContent() {
+
                 Flex({ wrap: FlexWrap.Wrap }) {
-                  Text('首页的内容').fontSize(30)
+                  Row({space: 10}){
+                    Column() {
+                      Image($r('app.media.Lab'))
+                        .width(70)
+                        .height(70)
+                        .margin({
+                          left: 5,
+                          right: 5,
+                          bottom: 5,
+                          top: 2
+                        })
+                        .borderRadius(10)
+                        .shadow({ radius: 10, color: '#C0C0C0' })
+                      Text('实验室')
+                        .fontSize(12)
+                    }
+
+                    Column() {
+                      Image($r('app.media.Benefit'))
+                        .width(70)
+                        .height(70)
+                        .margin({
+                          left: 5,
+                          right: 5,
+                          bottom: 5,
+                          top: 2
+                        })
+                        .borderRadius(10)
+                        .shadow({ radius: 10, color: '#C0C0C0' })
+                      Text('爱公益')
+                        .fontSize(12)
+                    }
+
+                    Column() {
+                      Image($r('app.media.Benefit'))
+                        .width(70)
+                        .height(70)
+                        .margin({
+                          left: 5,
+                          right: 5,
+                          bottom: 5,
+                          top: 2
+                        })
+                        .borderRadius(10)
+                        .shadow({ radius: 10, color: '#C0C0C0' })
+                      Text('爱公益')
+                        .fontSize(12)
+                    }
+                  }
+                  .justifyContent(FlexAlign.Center)
+                  .margin({left:10})
                 }
 
-
               }
-              .tabBar('首页')
+              .tabBar('全部')
+              .backgroundColor('#ffffffff')
+              .borderWidth({left:1,right:0,top:0,bottom:0})
+              .borderColor('#DCDCDC')
+
 
               TabContent() {
                 Text('推荐的内容').fontSize(30)
               }
               .tabBar('推荐')
+              .backgroundColor('#ffffffff')
+              .borderWidth({left:1,right:0,top:0,bottom:0})
+              .borderColor('#DCDCDC')
 
               TabContent() {
                 Text('发现的内容').fontSize(30)
               }
               .tabBar('发现')
+              .backgroundColor('#ffffffff')
+              .borderWidth({left:1,right:0,top:0,bottom:0})
+              .borderColor('#DCDCDC')
 
               TabContent() {
                 Text('我的内容').fontSize(30)
               }
-              .tabBar("我的")
+              .tabBar("全部")
+              .backgroundColor('#ffffffff')
+              .borderWidth({left:1,right:0,top:0,bottom:0})
+              .borderColor('#DCDCDC')
             }
             .vertical(true)
-            .barWidth(100)
+            .barWidth(80)
             .barHeight(200)
+            .backgroundColor('#00000000') // 这是第二个页面的容器的背景
 
           }
+
 
         }
         .width('100%')
@@ -775,6 +842,6 @@ struct Home {
 
     }
     .height('100%')
-    .backgroundColor('#F8F8FF')
+    .backgroundColor('#ffffff')
   }
 }
