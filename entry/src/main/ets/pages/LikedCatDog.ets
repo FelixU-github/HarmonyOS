@@ -460,35 +460,61 @@ struct LikedCatDog {
                           Row() {
                             Text(`${item.width} * ${item.height}`).margin({ left: 15 })
                             Text('删除').margin({ right: 15 })
+
                               .onClick(() => {
+                                let itemToDelete = this.savedAnimals[index];
 
-                                AlertDialog.show({
-                                  title: '提示',
-                                  message: '确定要删除吗？',
-                                  autoCancel: true,
-                                  alignment: DialogAlignment.Bottom,
-                                  primaryButton: {
-                                    value: '确定',
-                                    action: () => {
-                                      let value: string = dataPreferences.getSync('cats', '[]').toString();
-                                      let cats: Cat[] = JSON.parse(value)
-                                      cats.splice(index, 1)
-                                      dataPreferences.putSync('cats', JSON.stringify(cats))
-                                      dataPreferences.flush()
-                                      this.saveCats = cats
-                                      promptAction.showToast({
-                                        message: '已删除'
-                                      })
-                                    }
-                                  },
-                                  secondaryButton: {
-                                    value: '取消',
-                                    action: () => {
-                                    }
-                                  }
-                                })
+                                if (itemToDelete.type === 'cat') {
+                                  // 从 cats 数组中删除
+                                  this.saveCats = this.saveCats.filter(cat => cat.id !== itemToDelete.id);
+                                  // 更新本地存储
+                                  dataPreferences.putSync('cats', JSON.stringify(this.saveCats));
+                                } else if (itemToDelete.type === 'dog') {
+                                  // 从 dogs 数组中删除
+                                  this.saveDogs = this.saveDogs.filter(dog => dog.id !== itemToDelete.id);
+                                  // 更新本地存储
+                                  dataPreferences.putSync('dogs', JSON.stringify(this.saveDogs));
+                                }
 
+                                // 更新 savedAnimals 数组
+                                this.savedAnimals = this.savedAnimals.filter(animal => animal.id !== itemToDelete.id);
+
+                                // 刷新 UI
+                                dataPreferences.flush();
+                                promptAction.showToast({
+                                  message: '已删除'
+                                });
                               })
+
+                              // .onClick(() => {
+                              //
+                              //   AlertDialog.show({
+                              //     title: '提示',
+                              //     message: '确定要删除吗？',
+                              //     autoCancel: true,
+                              //     alignment: DialogAlignment.Bottom,
+                              //     primaryButton: {
+                              //       value: '确定',
+                              //       action: () => {
+                              //         let value: string = dataPreferences.getSync('cats', '[]').toString();
+                              //         let cats: Cat[] = JSON.parse(value)
+                              //         cats.splice(index, 1)
+                              //         dataPreferences.putSync('cats', JSON.stringify(cats))
+                              //         dataPreferences.flush()
+                              //         this.saveCats = cats
+                              //         promptAction.showToast({
+                              //           message: '已删除'
+                              //         })
+                              //       }
+                              //     },
+                              //     secondaryButton: {
+                              //       value: '取消',
+                              //       action: () => {
+                              //       }
+                              //     }
+                              //   })
+                              //
+                              // })
                           }
                           .width('94%')
                           .height(30)
