@@ -180,7 +180,7 @@ struct Home {
                     .shadow({ radius: 10, color: '#C0C0C0'})
                     .onClick(() => {
                       router.pushUrl({
-                        url: 'pages/MyCat' // 目标url
+                        url: 'pages/LikedCatDog' // 目标url
                       }, router.RouterMode.Standard, (err) => {
                         if (err) {
                           console.error(`Invoke pushUrl failed, code is ${err.code}, message is ${err.message}`);
