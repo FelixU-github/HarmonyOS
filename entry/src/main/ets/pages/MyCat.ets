@@ -401,8 +401,9 @@ struct Index {
 
 
                 if (this.saveCats.length > 0) {
-                  Text('您已收藏 ' + this.saveCats.length + ' 只猫咪')
+                  Text('您已收藏 ' + this.saveCats.length + ' 只猫咪和' + this.saveDogs.length + ' 只狗')
                     .fontSize(20)
+                    .maxLines(2)
                     .margin({ left: 20, right: 10, top: 20 })
                 } else {
                   Text('您还没有收藏猫狗')
@@ -413,7 +414,7 @@ struct Index {
               }
 
             }
-            .width('95%')
+            .width('100%')
             .height(120)
             .backgroundColor("#ffffffff")
             .borderRadius(10)
@@ -421,7 +422,7 @@ struct Index {
             .margin({ top: 10 })
 
           Column(){
-            if (this.saveCats.length === 0){
+            if (this.saveDogs.length === 0){
               Image($r("app.media.wasp"))
                 .width(200)
               Text('等待收藏猫狗')
