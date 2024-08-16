@@ -13,17 +13,33 @@ interface Cat {
   height: number
 }
 
+interface Dog {
+  id: string,
+  url: string,
+  width: number,
+  height: number
+}
+
 @Entry
 @Component
 struct Index {
   @State currentIndex: number = 0
   controller: TabsController = new TabsController();
+  dataPreferences: preferences.Preferences = preferences.getPreferencesSync(getContext(), options);
 
   @State cats: Cat[] = []
   @State saveCats: Cat[] = []
+  @State dogs: Dog[] = []
+  @State saveDogs: Dog[] = []
+  @State catScrollPosition: number = 0;
+  @State dogScrollPosition: number = 0;
   @State count: number = 0
+  @State countTotal: number = 0
+  @State countDog: number = 0
+  @State countCat: number = 0
   @State visible: Visibility = Visibility.Hidden
   @State imageIndex: number = 0
+  @State dogIndex: number = 0
   private swiperController: SwiperController = new SwiperController()
 
   requestData() { // 请求数据
@@ -35,13 +51,30 @@ struct Index {
           let newCats: Cat[] = JSON.parse(data.result.toString())
           this.cats = [...this.cats, ...newCats]
           this.count = this.cats.length
+          this.countCat = this.cats.length
         }
       }
     )
   }
 
+  requestDataDog(): void {
+    let httpRequest = http.createHttp()
+    httpRequest.request(
+      "https://api.thedogapi.com/v1/images/search?limit=10",
+      (err, data) => {
+        let newDogs: Dog[] = JSON.parse(data.result.toString())
+        this.dogs = [...this.dogs, ...newDogs]
+        this.count = this.dogs.length
+        this.countDog = this.dogs.length
+      }
+    )
+  }
+
+
+
   aboutToAppear(): void {
     this.requestData()
+    this.requestDataDog()
   }
 
   @Builder LabelImage(label: string, targetIndex: number, selectedImg: Resource, normalImg: Resource) {
@@ -61,8 +94,12 @@ struct Index {
 
   }
 
+
+
+
   build() {
     Column() {
+
       Row(){
         Image($r('app.media.back'))
           .width('6%')
@@ -72,7 +109,7 @@ struct Index {
               url: 'pages/Home'
             })
           })
-        Text('寻找你喜欢的猫咪')
+        Text('寻找你喜欢的猫狗')
         Image($r('app.media.share'))
           .width('6%')
           .margin({right: 10})
@@ -82,137 +119,268 @@ struct Index {
       .borderColor('#DCDCDC')
       .backgroundColor('#ffffff')
       .width('100%')
-
-      .align(Alignment.Top)
+      .height(25)
+      // .align(Alignment.Top)
       .margin({bottom: 10})
+
+
 
       Tabs({controller: this.controller}) {
 
         TabContent() {
-          Stack() {
-            List() {
-              ForEach(this.cats, (item: Cat, index: number) => {
-                ListItem() {
-                  Column() {
-                    Image(item.url)
-                      .borderRadius({
-                        topLeft: 10,
-                        topRight: 10
-                      })
-                      .width('94%')
-                      .onClick(() => {
-                        this.visible = Visibility.Visible
-                        this.imageIndex = index
-                      })
-                    Row() {
-                      Text(`${item.width} * ${item.height}`).margin({left: 15})
-                      Text('收藏').margin({right: 15})
-                        .onClick(() => {
-                          let value: string = dataPreferences.getSync('cats', '[]').toString();
-                          let cats: Cat[] = JSON.parse(value)
-                          if(cats.length >= 5) {
-                            promptAction.showToast({message: '最多收藏5只猫'})
-                          } else {
-                            let result = cats.some((value) => {
-                              return value.id === item.id
-                            })
-                            if(result) {
-                              promptAction.showToast({message: '不能重复收藏'})
-                            } else {
-                              cats.push(item)
-                              dataPreferences.putSync('cats', JSON.stringify(cats))
-                              dataPreferences.flush()
-                              promptAction.showToast({
-                                message: '已收藏'
-                              })
-                            }
-                          }
-                        })
-                    }
-                    .width('94%')
-                    .height(30)
-                    .margin({top: 10})
-                    .justifyContent(FlexAlign.SpaceBetween)
-                  }
-                  .borderRadius(10)
-                  .margin({bottom: 20})
-                  .shadow({
-                    radius: 10,
-                    color: Color.Gray
-                  })
-                }.width('100%')
-              },(item: Cat) => {
-                return item.id
-              })
-            }
-            .width('100%')
-            .height('100%')
-            Text('刷新')
-              .onClick(() => {
-                this.cats = []
-                this.requestData()
-                promptAction.showToast({message: '已刷新'})
-              })
-              .width(50)
-              .height(50)
-              .backgroundColor(Color.Pink)
-              .opacity(0.7)
-              .textAlign(TextAlign.Center)
-              .borderRadius(25)
-              .position({x: '80%', y: '80%'})
-            Text('更多')
-              .onClick(() => {
-                this.requestData()
-                promptAction.showToast({message: '已加载更多猫'})
-              })
-              .width(50)
-              .height(50)
-              .backgroundColor(Color.Pink)
-              .opacity(0.7)
-              .textAlign(TextAlign.Center)
-              .borderRadius(25)
-              .position({x: '80%', y: '90%'})
-            Text('' + this.count)
-              .width(30)
-              .height(30)
-              .fontSize(18)
-              .backgroundColor(Color.Orange)
-              .textAlign(TextAlign.Center)
-              .position({x: '85%', y: 10})
 
-            Swiper(this.swiperController) {
-              ForEach(this.cats, (item: Cat) => {
-                Image(item.url)
-                  .width('90%')
-                  .height(160)
-                  .backgroundColor(0xAFEEEE)
-                  .onClick(() => {
-                    this.visible = Visibility.Hidden
-                  })
-              }, (item: Cat) => item.id)
+          Column() {
+            Row(){
+              Text('已经发现了' + this.countCat+ '只猫和' + this.countDog + '只狗')
+                .margin({left: 80})
+
             }
-            .visibility(this.visible)
-            .width('98%')
-            .height('100%')
-            .cachedCount(2)
-            .index(this.imageIndex)
-            .autoPlay(true)
-            .interval(4000)
-            .indicator( // 设置圆点导航点样式
-              new DotIndicator()
-                .itemWidth(15)
-                .itemHeight(15)
-                .selectedItemWidth(15)
-                .selectedItemHeight(15)
-                .color(Color.Pink)
-                .selectedColor(Color.Blue))
-            .loop(true)
-            .duration(1000)
-            .itemSpace(0)
-            .displayArrow(true, false)
+            .backgroundColor('#ffffffff')
+            .width(`98%`)
+            .height(40)
+            .borderRadius(10)
+            .borderWidth({left:1,right:1,top:1,bottom:1})
+            .borderColor('#DCDCDC')
+            // .position({ x: '85%', y: 10 })
+
+
+            Row() {
+              Stack() {
+                List() {
+                  ForEach(this.cats, (item: Cat, index: number) => {
+                    ListItem() {
+                      Column() {
+                        Image(item.url)
+                          .borderRadius({
+                            topLeft: 10,
+                            topRight: 10,
+                          })
+                          .width('94%')
+                          .onClick(() => {
+                            this.visible = Visibility.Visible
+                            this.imageIndex = index
+                          })
+                        Row() {
+                          Text(`ID：${item.id} `).margin({ left: 10 })
+                          Text('收藏').margin({ right: 15 })
+                            .onClick(() => {
+                              let value: string = dataPreferences.getSync('cats', '[]').toString();
+                              let cats: Cat[] = JSON.parse(value)
+                              if (cats.length >= 5) {
+                                promptAction.showToast({ message: '最多收藏5只猫' })
+                              } else {
+                                let result = cats.some((value) => {
+                                  return value.id === item.id
+                                })
+                                if (result) {
+                                  promptAction.showToast({ message: '不能重复收藏' })
+                                } else {
+                                  cats.push(item)
+                                  dataPreferences.putSync('cats', JSON.stringify(cats))
+                                  dataPreferences.flush()
+                                  promptAction.showToast({
+                                    message: '已收藏'
+                                  })
+                                }
+                              }
+                            })
+                        }
+                        .width('90%')
+                        .height(30)
+                        .margin({ top: 10 })
+                        .justifyContent(FlexAlign.SpaceBetween)
+                      }
+                      .borderRadius(10)
+                      .margin({ bottom: 5 })
+                      .borderWidth({left:1,right:1,top:1,bottom:1})
+                      .borderColor('#DCDCDC')
+
+                    }
+                    .width('100%')
+                    .margin({ top:5 })
+
+                  }, (item: Cat) => {
+                    return item.id
+                  })
+                }
+                .width('100%')
+                .height('100%')
+
+
+
+
+                Swiper(this.swiperController) {
+                  ForEach(this.cats, (item: Cat) => {
+                    Image(item.url)
+                      .width('90%')
+                      .height(160)
+                      .backgroundColor(0xAFEEEE)
+                      .onClick(() => {
+                        this.visible = Visibility.Hidden
+                      })
+                  }, (item: Cat) => item.id)
+                }
+                .visibility(this.visible)
+                .width('98%')
+                .height('100%')
+                .cachedCount(2)
+                .index(this.imageIndex)
+                .autoPlay(true)
+                .interval(4000)
+                .indicator( // 设置圆点导航点样式
+                  new DotIndicator()
+                    .itemWidth(15)
+                    .itemHeight(15)
+                    .selectedItemWidth(15)
+                    .selectedItemHeight(15)
+                    .color(Color.Pink)
+                    .selectedColor(Color.Blue))
+                .loop(true)
+                .duration(1000)
+                .itemSpace(0)
+                .displayArrow(true, false)
+
+                Text('刷新')
+                  .backgroundColor('#E6E6FA')
+                  .width(160)
+                  .height(50)
+                  .textAlign(TextAlign.Center)
+                  .borderRadius(25)
+                  .position({ x: '10', y: '85%' })
+                  .opacity(0.8)
+                  .onClick(() => {
+                    this.dogs = []
+                    this.cats = []
+                    this.requestData()
+                    this.requestDataDog()
+                  })
+
+
+              }
+              .width('50%')
+              .height('100%')
+
+              Stack() {
+                List() {
+                  ForEach(
+                    this.dogs,
+                    (item: Dog, index: number) => {
+                      ListItem() {
+                        Column() {
+                          Image(item.url)
+                            .borderRadius({
+                              topLeft: 10,
+                              topRight: 10
+                            })
+                            .onClick(() => {
+                              this.visible = Visibility.Visible
+                              this.dogIndex = index
+                            })
+                          Row() {
+                            Text(`ID:${item.id}`).margin({ left: 10 })
+                            Text('收藏').margin({ right: 10 })
+                              .onClick(() => {
+                                let str: string = this.dataPreferences.getSync('dogs', '[]').toString()
+                                let dogs: Dog[] = JSON.parse(str)
+                                console.log('' + dogs.length)
+                                if (dogs.length >= 5) {
+                                  promptAction.showToast({ message: '最多收藏5条狗' })
+                                } else {
+                                  let result: boolean = dogs.some((value: Dog, index: number, array: Dog[]) => {
+                                    return value.id === item.id
+                                  })
+                                  if (result) {
+                                    promptAction.showToast({ message: '不能重复收藏' })
+                                  } else {
+                                    dogs.push(item)
+                                    this.dataPreferences.putSync('dogs', JSON.stringify(dogs))
+                                    this.dataPreferences.flush()
+                                    promptAction.showToast({ message: '已收藏' })
+                                  }
+                                }
+                              })
+                          }
+                          .width('100%')
+                          .margin({ top: 10, bottom: 10 })
+                          .justifyContent(FlexAlign.SpaceBetween)
+                          .alignItems(VerticalAlign.Center)
+                        }
+                        .width('94%')
+                        .margin({ bottom: 10 })
+                        .borderRadius(10)
+                        .borderWidth({left:1,right:1,top:1,bottom:1})
+                        .borderColor('#DCDCDC')
+                      }
+                      .width('100%')
+                    },
+                    (item: Dog) => {
+                      return item.id
+                    }
+                  )
+                }
+                .width('100%')
+
+                // Text('刷新')
+                //   .backgroundColor(Color.Pink)
+                //   .width(50)
+                //   .height(50)
+                //   .textAlign(TextAlign.Center)
+                //   .borderRadius(25)
+                //   .position({ x: '10%', y: '80%' })
+                //   .opacity(0.8)
+                //   .onClick(() => {
+                //     this.dogs = []
+                //     this.cats = []
+                //     this.requestData()
+                //     this.requestDataDog()
+                //   })
+                Text('发现更多')
+                  .backgroundColor('#E6E6FA')
+                  .width(160)
+                  .height(50)
+                  .textAlign(TextAlign.Center)
+                  .borderRadius(25)
+                  .position({ x: '10', y: '85%' })
+                  .opacity(0.8)
+                  .onClick(() => {
+                    this.requestData()
+                    this.requestDataDog()
+                  })
+
+                Swiper() {
+                  ForEach(this.dogs, (item: Dog) => {
+                    Image(item.url).objectFit(ImageFit.Contain)
+                  }, (item: Dog) => {
+                    return item.id
+                  })
+                }
+                //.autoPlay(true)
+                .index(this.dogIndex)
+                .interval(3000)
+                .displayArrow(true, false)
+                .indicator(Indicator.digit()// 设置数字导航点样式
+                  .bottom(50)
+                  .fontColor(Color.Red)
+                  .selectedFontColor(Color.Red)
+                  .digitFont({ size: 20, weight: FontWeight.Normal })
+                  .selectedDigitFont({ size: 20, weight: FontWeight.Normal }))
+                .width('100%')
+                .height('100%')
+                .backgroundColor(Color.White)
+                .visibility(this.visible)
+                .onClick(() => {
+                  this.visible = Visibility.Hidden
+                })
+
+              }
+              .width('50%')
+              .height('100%')
+
+            }
+            .margin({top: 10})
+
           }
-          .width('100%')
-          .height('100%')
+
         }
         .tabBar(this.LabelImage('首页', 0, $r('app.media.home_selected'), $r('app.media.home_normal')))
 
@@ -220,26 +388,26 @@ struct Index {
 
         TabContent() {
           Column() {
-            Row(){
+            Row() {
               Image($r('app.media.img'))
                 .width("20%")
-                .shadow({ radius: 10, color: '#C0C0C0'})
+                .shadow({ radius: 10, color: '#C0C0C0' })
                 .borderRadius(50)
-                .margin({left:30,right:10})
-              Column(){
+                .margin({ left: 30, right: 10 })
+              Column() {
                 Text('大王叫我来巡山')
                   .fontSize(25)
-                  .margin({left:20,right:10,top:-5})
+                  .margin({ left: 20, right: 10, top: -5 })
 
 
                 if (this.saveCats.length > 0) {
-                  Text('您已收藏 '+this.saveCats.length+' 只猫咪')
+                  Text('您已收藏 ' + this.saveCats.length + ' 只猫咪')
                     .fontSize(20)
-                    .margin({left:20,right:10,top:20})
-                }else {
-                  Text('您还没有收藏猫咪')
+                    .margin({ left: 20, right: 10, top: 20 })
+                } else {
+                  Text('您还没有收藏猫狗')
                     .fontSize(20)
-                    .margin({left:20,right:10,top:20})
+                    .margin({ left: 20, right: 10, top: 20 })
                 }
 
               }
@@ -249,71 +417,151 @@ struct Index {
             .height(120)
             .backgroundColor("#ffffffff")
             .borderRadius(10)
-            .shadow({ radius: 10, color: '#D3D3D3'})
-            .margin({top:10})
+            .shadow({ radius: 10, color: '#D3D3D3' })
+            .margin({ top: 10 })
 
-
-            List() {
-              ForEach(this.saveCats,
-                (item: Cat, index: number) => {
-                ListItem() {
-                  Column() {
-                    Image(item.url)
-                      .borderRadius({
-                        topLeft: 10,
-                        topRight: 10
-                      })
-                      .width('94%')
-                    Row() {
-                      Text(`${item.width} * ${item.height}`).margin({left: 15})
-                      Text('删除').margin({right: 15})
-                        .onClick(() => {
-                          AlertDialog.show({
-                            title: '提示',
-                            message: '确定要删除吗？',
-                            autoCancel: true,
-                            alignment: DialogAlignment.Bottom,
-                            primaryButton: {
-                              value: '确定',
-                              action: () => {
-                                let value: string = dataPreferences.getSync('cats', '[]').toString();
-                                let cats: Cat[] = JSON.parse(value)
-                                cats.splice(index, 1)
-                                dataPreferences.putSync('cats', JSON.stringify(cats))
-                                dataPreferences.flush()
-                                this.saveCats = cats
-                                promptAction.showToast({
-                                  message: '已删除'
+          Column(){
+            if (this.saveCats.length === 0){
+              Image($r("app.media.wasp"))
+                .width(200)
+              Text('等待收藏猫狗')
+                .fontSize(20)
+                .margin({top:10})
+            }else {
+              Row(){
+                List() {
+                  ForEach(this.saveCats,
+                    (item: Cat, index: number) => {
+                      ListItem() {
+                        Column() {
+                          Image(item.url)
+                            .borderRadius({
+                              topLeft: 10,
+                              topRight: 10
+                            })
+                            .width('94%')
+                          Row() {
+                            Text(`${item.width} * ${item.height}`).margin({ left: 15 })
+                            Text('删除').margin({ right: 15 })
+                              .onClick(() => {
+                                AlertDialog.show({
+                                  title: '提示',
+                                  message: '确定要删除吗？',
+                                  autoCancel: true,
+                                  alignment: DialogAlignment.Bottom,
+                                  primaryButton: {
+                                    value: '确定',
+                                    action: () => {
+                                      let value: string = dataPreferences.getSync('cats', '[]').toString();
+                                      let cats: Cat[] = JSON.parse(value)
+                                      cats.splice(index, 1)
+                                      dataPreferences.putSync('cats', JSON.stringify(cats))
+                                      dataPreferences.flush()
+                                      this.saveCats = cats
+                                      promptAction.showToast({
+                                        message: '已删除'
+                                      })
+                                    }
+                                  },
+                                  secondaryButton: {
+                                    value: '取消',
+                                    action: () => {
+                                    }
+                                  }
                                 })
-                              }
-                            },
-                            secondaryButton: {
-                              value: '取消',
-                              action: () => {}
-                            }
-                          })
+                              })
+                          }
+                          .width('94%')
+                          .height(30)
+                          .margin({ top: 10 })
+                          .justifyContent(FlexAlign.SpaceBetween)
+                        }
+                        .borderRadius(10)
+                        .margin({ bottom: 20 })
+                        .shadow({
+                          radius: 10,
+                          color: Color.Gray,
+                          offsetX: 10,
+                          offsetY: 10
                         })
+                      }.width('100%')
+                    }, (item: Cat) => {
+                      return item.id
+                    })
+                }
+                .width('50%')
+                .height('100%')
+
+                List() {
+                  ForEach(
+                    this.saveDogs,
+                    (item: Dog, index: number) => {
+                      ListItem() {
+                        Column() {
+                          Image(item.url)
+                            .borderRadius({
+                              topLeft: 10,
+                              topRight: 10
+                            })
+                          Row() {
+                            Text(`${item.width} * ${item.height}`).margin({ left: 10 })
+                            Text('删除').margin({ right: 10 })
+                              .onClick(() => {
+                                AlertDialog.show({
+                                  title: '提示',
+                                  message: '您确定要删除吗？',
+                                  autoCancel: false,
+                                  alignment: DialogAlignment.Bottom,
+                                  primaryButton: {
+                                    value: '确定',
+                                    action: () => {
+                                      let str: string = this.dataPreferences.getSync('dogs', '[]').toString()
+                                      let dogs: Dog[] = JSON.parse(str)
+                                      dogs.splice(index, 1)
+                                      this.saveDogs = dogs
+                                      this.dataPreferences.putSync('dogs', JSON.stringify(dogs))
+                                      this.dataPreferences.flush()
+                                      promptAction.showToast({ message: '已删除' })
+                                    }
+                                  },
+                                  secondaryButton: {
+                                    value: '取消',
+                                    action: () => {
+                                    }
+                                  }
+                                })
+                              })
+                          }
+                          .width('100%')
+                          .margin({ top: 10, bottom: 10 })
+                          .justifyContent(FlexAlign.SpaceBetween)
+                          .alignItems(VerticalAlign.Center)
+                        }
+                        .width('94%')
+                        .margin({ bottom: 30 })
+                        .borderRadius(10)
+                        .shadow({
+                          radius: 5,
+                          color: Color.Gray,
+                          offsetX: 5,
+                          offsetY: 5
+                        })
+                      }
+                      .width('100%')
+                    },
+                    (item: Dog) => {
+                      return item.id
                     }
-                    .width('94%')
-                    .height(30)
-                    .margin({top: 10})
-                    .justifyContent(FlexAlign.SpaceBetween)
-                  }
-                  .borderRadius(10)
-                  .margin({bottom: 20})
-                  .shadow({
-                    radius: 10,
-                    color: Color.Gray,
-                    offsetX: 10,
-                    offsetY: 10
-                  })
-                }.width('100%')
-              },(item: Cat) => {
-                return item.id
-              })
+                  )
+                }
+                .width('50%')
+                .height('100%')
+
+              }
+
+
             }
-            .width('100%')
-            .height('100%')
+            }
           }
           .width('100%')
           .height('100%')
