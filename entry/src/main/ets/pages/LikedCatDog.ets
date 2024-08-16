@@ -416,9 +416,9 @@ struct LikedCatDog {
                   .margin({ left: 20, right: 10, top: -5 })
 
 
-                if (this.saveCats.length > 0) {
+                if (this.savedAnimals.length > 0) {
                   Text('您已收藏 ' + this.saveCats.length + ' 只猫咪和' + this.saveDogs.length + ' 只狗')
-                    .fontSize(10)
+                    .fontSize(15)
                     .maxLines(2)
                     .margin({ left: 20, right: 10, top: 20 })
                 } else {
@@ -438,10 +438,10 @@ struct LikedCatDog {
             .margin({ top: 10 })
 
           Column(){
-            if (this.saveDogs.length === 0){
+            if (this.savedAnimals.length === 0){
               Image($r("app.media.wasp"))
                 .width(200)
-              Text('等待收藏猫狗')
+              Text('正在等待收藏猫狗')
                 .fontSize(20)
                 .margin({top:10})
             }else {
@@ -461,6 +461,7 @@ struct LikedCatDog {
                             Text(`${item.width} * ${item.height}`).margin({ left: 15 })
                             Text('删除').margin({ right: 15 })
                               .onClick(() => {
+
                                 AlertDialog.show({
                                   title: '提示',
                                   message: '确定要删除吗？',
@@ -486,6 +487,7 @@ struct LikedCatDog {
                                     }
                                   }
                                 })
+
                               })
                           }
                           .width('94%')
