@@ -427,6 +427,8 @@ struct search {
                                       promptAction.showToast({
                                         message: '已删除'
                                       })
+                                      this.isButtonEnabled = true;
+                                      this.collection = '收藏'
                                     }
                                   },
                                   secondaryButton: {
