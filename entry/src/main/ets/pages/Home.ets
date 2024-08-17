@@ -920,7 +920,7 @@ struct Home {
                         })
                         .borderRadius(10)
                         .shadow({ radius: 10, color: '#C0C0C0' })
-                      Text('发现猫咪')
+                      Text('发现猫狗')
                         .fontSize(12)
                     }
 
@@ -961,7 +961,7 @@ struct Home {
 
                   Row({ space: 10 }) {
                     Column() {
-                      Image($r('app.media.Lab'))
+                      Image($r('app.media.Cat'))
                         .width(70)
                         .height(70)
                         .margin({
@@ -972,12 +972,12 @@ struct Home {
                         })
                         .borderRadius(10)
                         .shadow({ radius: 10, color: '#C0C0C0' })
-                      Text('实验室')
+                      Text('发现猫咪')
                         .fontSize(12)
                     }
 
                     Column() {
-                      Image($r('app.media.Benefit'))
+                      Image($r('app.media.Dog'))
                         .width(70)
                         .height(70)
                         .margin({
@@ -988,7 +988,7 @@ struct Home {
                         })
                         .borderRadius(10)
                         .shadow({ radius: 10, color: '#C0C0C0' })
-                      Text('爱公益')
+                      Text('发现狗狗')
                         .fontSize(12)
                     }
 
