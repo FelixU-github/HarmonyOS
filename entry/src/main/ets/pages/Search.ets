@@ -407,7 +407,7 @@ struct search {
 
                           Row() {
                             Button('删除')
-                              .margin({ right: 15 })
+                              .margin({ right: 15,bottom: 10 })
                               .onClick(() => {
                                 AlertDialog.show({
                                   title: '提示',
