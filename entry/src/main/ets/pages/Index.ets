@@ -1,10 +1,16 @@
 // Index.ets
-import {router} from '@kit.ArkUI'
+import {router ,promptAction} from '@kit.ArkUI'
 import { BusinessError } from '@kit.BasicServicesKit';
+
+
 
 @Entry
 @Component
 struct Index {
+
+
+
+
 
   build() {
     Column() {
@@ -79,12 +85,19 @@ struct Index {
 
           // Login
           .onClick(()=>{
-            // 使用replaceUrl，销毁登录页，释放内存.
-            router.pushUrl({ url: 'pages/Home'}).then(()=>{
-              console.info('Succeeded in jumping to the second page')
-            }).catch((err:BusinessError)=>{
-              console.error(`Failed to jump to the second page. Code is ${err.code}, message is ${err.message}`)
-            })
+            setTimeout(()=>{
+              promptAction.showToast({ message: '登录成功' })
+            },1000)
+              promptAction.showToast({ message: '正在登录' })
+
+            setTimeout(()=>{
+              // 使用replaceUrl，销毁登录页，释放内存.
+              router.pushUrl({ url: 'pages/Home'}).then(()=>{
+                console.info('Succeeded in jumping to the second page')
+              }).catch((err:BusinessError)=>{
+                console.error(`Failed to jump to the second page. Code is ${err.code}, message is ${err.message}`)
+              })
+            },2000)
           })
         }
         .margin({ top:30 })
