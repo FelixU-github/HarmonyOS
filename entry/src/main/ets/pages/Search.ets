@@ -240,7 +240,8 @@ struct search {
                                   return value.name=== item.name
                                 })
                                 if(result) {
-
+                                  this.isButtonEnabled = false;
+                                  this.collection = '已收藏'
                                   promptAction.showToast({message: '不能重复收藏'})
                                 }
                                   else {
