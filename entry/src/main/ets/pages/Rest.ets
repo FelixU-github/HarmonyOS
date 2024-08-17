@@ -169,7 +169,10 @@ struct Rest {
       Text(`已累计功德：${this.meritCount}`)
         .fontSize(20)
         .fontWeight(FontWeight.Bold)
-        .margin({top: 20, bottom: 20})
+        .margin({top: 20})
+      Text('(使用本地存储-用户首选项)')
+        .fontSize(10)
+        .margin({top: 5, bottom: 5})
 
 
       Row() {
