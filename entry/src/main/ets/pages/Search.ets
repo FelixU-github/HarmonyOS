@@ -117,6 +117,14 @@ struct search {
                   .margin({
                     top:25
                   })
+              Row(){
+                Text('(使用本地存储-用户首选项) ')
+                  .fontSize(10)
+                Text(' (使用网络)')
+                  .fontSize(10)
+              }
+              .margin({top:10})
+
 
               Search({ placeholder: '搜索'})
                 .searchButton('SEARCH')
@@ -125,7 +133,7 @@ struct search {
                 })
                 .width('90%')
                 .height(40)
-                .margin({left:10,right:10,top:20})
+                .margin({left:10,right:10,top:15})
                 .onClick(()=>{
                   if(this.keyword === ''){
                     promptAction.showToast({message: '请输入大学名称'})
@@ -430,7 +438,7 @@ struct search {
                           }
                           .width('94%')
                           .height(30)
-                          .margin({ top: -10 ,left: 10})
+                          .margin({ top: -20 ,left: 10})
                           .justifyContent(FlexAlign.SpaceBetween)
 
                         }
