@@ -1,9 +1,9 @@
 // Signup.ets
-import { promptAction, router } from '@kit.ArkUI';
-import { BusinessError } from '@kit.BasicServicesKit';
+import {  router } from '@kit.ArkUI';
+
 @Entry
 @Component
-struct Index {
+struct Signup {
   @State message: string = 'This is Signup page.'
 
   build() {
@@ -12,6 +12,10 @@ struct Index {
         Text(this.message)
           .fontSize(50)
           .fontWeight(FontWeight.Bold)
+          .margin(10)
+        Text('（待开发）')
+          .fontSize(50)
+          .fontWeight(FontWeight.Bold).margin(10)
 
         Button() {
           Text('Return')
@@ -23,7 +27,7 @@ struct Index {
         .type(ButtonType.Normal)
         .borderRadius(20)
         .margin({
-          top: 400,
+          top: 300,
           bottom: 40
         })
         .backgroundColor('#ff2d2dc4')
