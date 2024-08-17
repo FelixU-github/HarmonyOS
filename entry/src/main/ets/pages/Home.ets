@@ -784,7 +784,7 @@ struct Home {
                       }
 
                       Column() {
-                        Image($r('app.media.Benefit'))
+                        Image($r('app.media.Wait'))
                           .width(70)
                           .height(70)
                           .margin({
@@ -795,12 +795,12 @@ struct Home {
                           })
                           .borderRadius(10)
                           .shadow({ radius: 10, color: '#C0C0C0' })
-                        Text('爱公益')
+                        Text('待开发')
                           .fontSize(12)
                       }
 
                       Column() {
-                        Image($r('app.media.Benefit'))
+                        Image($r('app.media.Wait'))
                           .width(70)
                           .height(70)
                           .margin({
@@ -811,7 +811,7 @@ struct Home {
                           })
                           .borderRadius(10)
                           .shadow({ radius: 10, color: '#C0C0C0' })
-                        Text('爱公益')
+                        Text('待开发')
                           .fontSize(12)
                       }
                     }
