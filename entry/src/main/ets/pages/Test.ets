@@ -15,7 +15,6 @@ interface University {
   country: string;
   state_province: string | null;
   web_pages: string[];
-  isCollected?: boolean; // 新增字段，用于标记是否已收藏
 }
 
 @Entry
@@ -226,8 +225,8 @@ struct search {
                           .margin({left:20, bottom:15})
 
                         Row(){
-                          Button(item.state_province === null ? '收藏' : '已收藏')
-                            .enabled(item.state_province === null) // 按钮启用状态
+                          Button(item.state_province === undefined ? '收藏' : '已收藏')
+                            .enabled(item.state_province === undefined) // 按钮启用状态
                             .width('50%')
                             .fontSize(16)
                             .margin({left:10, bottom:10})
@@ -238,7 +237,7 @@ struct search {
                               if(universities.length >= 100) {
                                 promptAction.showToast({message: '最多收藏100所大学'})
                               } else {
-                                if (item.state_province === null) {
+                                if (item.state_province === undefined) {
                                   item.state_province = 'collected'; // 更新 state_province 表示已收藏
                                   universities.push(item);
                                   dataPreferences.putSync('universities', JSON.stringify(universities));
