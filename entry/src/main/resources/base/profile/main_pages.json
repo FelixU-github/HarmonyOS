@@ -8,6 +8,7 @@
     "pages/Signup",
     "pages/LikedCatDog",
     "pages/Search",
-    "pages/Rest"
+    "pages/Rest",
+    "pages/Wechat"
   ]
 }
