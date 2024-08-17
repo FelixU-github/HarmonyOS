@@ -2,30 +2,12 @@
 import {router ,promptAction} from '@kit.ArkUI'
 import { BusinessError } from '@kit.BasicServicesKit';
 
-
-
 @Entry
 @Component
 struct Index {
 
-
-
-
-
   build() {
     Column() {
-
-      // Row(){
-      //   Image($r('app.media.close'))
-      //     .width('6%')
-      //   Image($r('app.media.share'))
-      //     .width('6%')
-      // }
-      // .width('100%')
-      // .height(40)
-      // .justifyContent(FlexAlign.SpaceBetween)
-      // .backgroundColor('#DCDCDC')
-
       // This is LOGO
       Column({space:20}) {
         Image($r('app.media.HIT'))
@@ -129,6 +111,18 @@ struct Index {
                 .width('25%')
                 .shadow({ radius: 30, color: '#cdcdcd' })
                 .borderRadius(10)
+                .onClick(() => {
+                  router.pushUrl({
+                    url: 'pages/Wechat' // 目标url
+                  }, router.RouterMode.Standard, (err) => {
+                    if (err) {
+                      console.error(`Invoke pushUrl failed, code is ${err.code}, message is ${err.message}`);
+                      return;
+                    }
+                    console.info('Invoke pushUrl succeeded.');
+                  });
+                })
+
               Image($r('app.media.GitHubLogo'))
                 .width('25%')
                 .shadow({ radius: 30, color: '#cdcdcd' })
