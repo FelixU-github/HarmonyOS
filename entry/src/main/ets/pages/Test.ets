@@ -39,6 +39,8 @@ struct search {
 
         this.universities = [...this.universities, ...New_universities]
         this.count = this.universities.length
+        let value: string = dataPreferences.getSync('universities', '[]').toString();
+
         console.info('count:' + this.count)
         if (this.count === 0) {
           promptAction.showToast({message: '未找到名字包含' + this.keyword + '的大学'})
@@ -232,6 +234,7 @@ struct search {
                             .fontSize(16)
                             .margin({left:10, bottom:10})
                             .onClick(() => {
+
                               let value: string = dataPreferences.getSync('universities', '[]').toString();
                               let universities: University[] = JSON.parse(value)
 
