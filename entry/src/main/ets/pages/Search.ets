@@ -174,7 +174,7 @@ struct search {
 
 
             Column() {
-              if (this.universities.length === 0) {
+              if (this.search_universities.length === 0) {
                 Image($r("app.media.wasp"))
                   .width(200)
                   .margin({top:10})
