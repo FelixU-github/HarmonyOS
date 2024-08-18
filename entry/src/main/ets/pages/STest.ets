@@ -15,6 +15,7 @@ interface University {
   domains: string[];
   country: string;
   state_province: string | null;
+  // "state-province": string | null;
   web_pages: string[];
 }
 
@@ -32,6 +33,8 @@ struct search {
   controller: TabsController = new TabsController();
 
 
+
+
   requestData() {
     const url = `http://universities.hipolabs.com/search?name=${encodeURIComponent(this.keyword)}`;
     httpRequest.request(url, (err, data) => {
@@ -43,6 +46,27 @@ struct search {
         this.search_universities = []
         this.search_universities = [...this.search_universities, ...New_universities]
 
+        // let Unis: University[] = this.search_universities.map((university: University): University => ({
+        //   alpha_two_code: university.alpha_two_code,
+        //   name: university.name,
+        //   domains:university.domains,
+        //   country:university.country,
+        //   state_province:university."state-province",
+        //   web_pages: university.web_pages
+        // }));
+
+        // let Unis: University[] = this.search_universities.map((university: University): University => {
+        //   let stateProvince: string | null = university["state-province"]; // 显式指定类型
+        //
+        //   return {
+        //     alpha_two_code: university.alpha_two_code,
+        //     name: university.name,
+        //     domains: university.domains,
+        //     country: university.country,
+        //     state_province: stateProvince, // 映射为 state_province
+        //     web_pages: university.web_pages
+        //   };
+        // });
 
         dataPreferences.putSync('search_universities', JSON.stringify(this.search_universities))
         // dataPreferences.delete('search_universities')
