@@ -237,7 +237,7 @@ struct search {
                                 promptAction.showToast({message: '最多收藏100所大学'})
                               } else {
                                 let result = universities.some((value) => {
-                                  return value.name=== item.name
+                                  return value.name === item.name
                                 })
                                 if(result) {
                                   this.isButtonEnabled = false;
