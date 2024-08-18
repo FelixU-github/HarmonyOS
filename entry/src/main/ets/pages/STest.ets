@@ -304,6 +304,7 @@ struct search {
                               }
 
                             })
+                            .enabled(item.alpha_two_code === 'CN') // 按钮启用状态
                         }
 
                       }
@@ -347,10 +348,10 @@ struct search {
         .width('100%')
         .height('100%')
         .tabBar(this.LabelImage('发现', 0, $r('app.media.search_selected'), $r('app.media.search_normal')))
-        // .onWillShow(() => {
-        //   let value: string = dataPreferences.getSync('search_universities', '[]').toString();
-        //   this.search_universities = JSON.parse(value)
-        // })
+        .onWillShow(() => {
+          let value: string = dataPreferences.getSync('search_universities', '[]').toString();
+          this.search_universities = JSON.parse(value)
+        })
 
 
         TabContent() {
