@@ -26,6 +26,7 @@ struct search {
   @State count: number = 0
   @State saved_universities: University[] = []
   @State universities: University[] = []
+  @State search_universities: University[] = []
   @State currentIndex: number = 0
   controller: TabsController = new TabsController();
 
@@ -37,6 +38,15 @@ struct search {
         // 解析为 University 对象数组
         let New_universities: University[] = JSON.parse(data.result.toString())
         this.universities = [...this.universities, ...New_universities]
+
+        this.search_universities = []
+        this.search_universities = [...this.search_universities, ...New_universities]
+
+
+        dataPreferences.putSync('search_universities', JSON.stringify(this.search_universities))
+        dataPreferences.flush()
+
+
         this.count = this.universities.length
         console.info('count:' + this.count)
         if (this.count === 0) {
@@ -172,7 +182,7 @@ struct search {
 
 
               List({ space: 20, initialIndex: 0 }) {
-                ForEach(this.universities, (item: University) => {
+                ForEach(this.search_universities, (item: University) => {
                   ListItem() {
                     Column({space:5}){
                       Row({space: 10}){
@@ -224,8 +234,8 @@ struct search {
                           .margin({left:20, bottom:15})
 
                         Row(){
-                          Button(this.collection)
-                            .enabled(this.isButtonEnabled) // 按钮启用状态
+                          Button(item.state_province === undefined ? '收藏' : '已收藏')
+                            .enabled(item.state_province === undefined) // 按钮启用状态
                             .width('50%')
                             .fontSize(16)
                             .margin({left:10, bottom:10})
@@ -236,21 +246,41 @@ struct search {
                               if(universities.length >= 100) {
                                 promptAction.showToast({message: '最多收藏100所大学'})
                               } else {
-                                let result = universities.some((value) => {
-                                  return value.name=== item.name
-                                })
-                                if(result) {
-                                  this.isButtonEnabled = false;
-                                  this.collection = '已收藏'
-                                  promptAction.showToast({message: '不能重复收藏'})
-                                }
-                                  else {
-                                    this.isButtonEnabled = false;
-                                    this.collection = '已收藏'
 
-                                    universities.push(item)
-                                    dataPreferences.putSync('universities', JSON.stringify(universities))
-                                    dataPreferences.flush()
+                                if (item.state_province === undefined) {
+
+                                  item.state_province = 'collected'; // 更新 state_province 表示已收藏
+                                  universities.push(item);
+
+                                  dataPreferences.putSync('search_universities', JSON.stringify(this.search_universities));
+                                  dataPreferences.flush();
+
+                                  universities.push(item)
+
+                                  dataPreferences.putSync('universities', JSON.stringify(universities))
+                                  dataPreferences.flush()
+
+                                  promptAction.showToast({
+                                    message: '已收藏'
+                                  });
+
+                                // let result = universities.some((value) => {
+                                //   return value.name=== item.name
+                                // })
+                                // if(result) {
+                                //   this.isButtonEnabled = false;
+                                //   this.collection = '已收藏'
+                                //   promptAction.showToast({message: '不能重复收藏'})
+                                //
+
+                                } else {
+                                    // this.isButtonEnabled = false;
+                                    // this.collection = '已收藏'
+
+                                    // universities.push(item)
+                                    //
+                                    // dataPreferences.putSync('universities', JSON.stringify(universities))
+                                    // dataPreferences.flush()
 
                                     promptAction.showToast({
                                       message: '已收藏'
@@ -301,6 +331,10 @@ struct search {
         .width('100%')
         .height('100%')
         .tabBar(this.LabelImage('发现', 0, $r('app.media.search_selected'), $r('app.media.search_normal')))
+        .onWillShow(() => {
+          let value: string = dataPreferences.getSync('search_universities', '[]').toString();
+          this.search_universities = JSON.parse(value)
+        })
 
 
         TabContent() {
