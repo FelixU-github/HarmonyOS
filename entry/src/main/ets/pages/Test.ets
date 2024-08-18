@@ -171,6 +171,7 @@ struct search {
 
               }
 
+            Column(){
 
               List({ space: 20, initialIndex: 0 }) {
                 ForEach(this.universities, (item: University) => {
@@ -279,9 +280,11 @@ struct search {
               .margin({top:10})
               .scrollBar(BarState.Auto)
             }
+              .height('90%')
 
+          }
             .width('95%')
-            .height('100%')
+            .height('70%')
             .backgroundColor("#ffffffff")
             .margin({top:10})
             .borderRadius(10)
@@ -341,6 +344,7 @@ struct search {
                   .fontSize(20)
                   .margin({top:10})
               }else {
+
                 List() {
                   ForEach(this.saved_universities,
                     (item: University, index: number) => {
@@ -452,10 +456,12 @@ struct search {
                       return item.name
                     })
                 }
+                .height('90%')
+
               }
             }
             .width('95%')
-            .height('100%')
+            .height('75%')
             .backgroundColor("#ffffff")
             .borderRadius(10)
             .margin({ top: 10 })
