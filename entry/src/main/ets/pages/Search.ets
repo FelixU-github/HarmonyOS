@@ -460,7 +460,7 @@ struct search {
                     return item.name
                   })
               }
-              .height(420)
+              .height(465).margin({top:10})
             }
           }
           .width('95%')
