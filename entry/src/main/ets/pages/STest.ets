@@ -269,10 +269,6 @@ struct search {
 
                               if(result) {
 
-                                item.state_province = 'collected'; // 更新 state_province 表示已收藏
-                                search_universities.push(item);
-                                dataPreferences.putSync('search_universities', JSON.stringify(search_universities));
-                                dataPreferences.flush()
                                 promptAction.showToast({ message: '不能重复收藏' })
 
                               } else {
@@ -280,6 +276,12 @@ struct search {
                                 dataPreferences.putSync('saved_universities', JSON.stringify(saved_universities))
                                 dataPreferences.flush()
                                 promptAction.showToast({ message: '已成功收藏' })
+
+
+                                item.state_province = 'collected'; // 更新 state_province 表示已收藏
+                                search_universities.push(item);
+                                dataPreferences.putSync('search_universities', JSON.stringify(search_universities));
+                                dataPreferences.flush()
 
                                 }
                               }
