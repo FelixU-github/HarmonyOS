@@ -250,45 +250,29 @@ struct search {
 
                               if(saved_universities.length >= 100) {
                                 promptAction.showToast({message: '最多收藏100所大学'})
+                              }
+                              else{
+                                let result = saved_universities.some((value) => {
+                                  return value.name === item.name
+                              })
+
+                              if(result) {
+
+                                item.state_province = 'collected'; // 更新 state_province 表示已收藏
+                                search_universities.push(item);
+                                dataPreferences.putSync('search_universities', JSON.stringify(search_universities));
+                                dataPreferences.flush()
+                                promptAction.showToast({ message: '不能重复收藏' })
+
                               } else {
+                                saved_universities.push(item);
+                                dataPreferences.putSync('saved_universities', JSON.stringify(saved_universities))
+                                dataPreferences.flush()
+                                promptAction.showToast({ message: '已成功收藏' })
 
-                                if (item.state_province === undefined) {
-
-                                  item.state_province = 'collected'; // 更新 state_province 表示已收藏
-                                  saved_universities.push(item);
-                                  search_universities.push(item);
-                                  dataPreferences.putSync('search_universities', JSON.stringify(search_universities));
-                                  dataPreferences.putSync('saved_universities', JSON.stringify(saved_universities))
-                                  dataPreferences.flush()
-
-
-                                  promptAction.showToast({
-                                    message: '已收藏'
-                                  });
-
-                                  // let result = universities.some((value) => {
-                                  //   return value.name=== item.name
-                                  // })
-                                  // if(result) {
-                                  //   this.isButtonEnabled = false;
-                                  //   this.collection = '已收藏'
-                                  //   promptAction.showToast({message: '不能重复收藏'})
-                                  //
-
-                                } else {
-                                  // this.isButtonEnabled = false;
-                                  // this.collection = '已收藏'
-
-                                  // universities.push(item)
-                                  //
-                                  // dataPreferences.putSync('universities', JSON.stringify(universities))
-                                  // dataPreferences.flush()
-
-                                  promptAction.showToast({
-                                    message: '已收藏'
-                                  })
                                 }
                               }
+
                             })
                         }
 
