@@ -440,11 +440,11 @@ struct search {
                                       value: '确定',
                                       action: () => {
                                         let value: string = dataPreferences.getSync('saved_universities', '[]').toString();
-                                        let universities: University[] = JSON.parse(value)
-                                        universities.splice(index, 1)
-                                        dataPreferences.putSync('saved_universities', JSON.stringify(universities))
+                                        let saved_universities: University[] = JSON.parse(value)
+                                        saved_universities.splice(index, 1)
+                                        dataPreferences.putSync('saved_universities', JSON.stringify(saved_universities))
                                         dataPreferences.flush()
-                                        // this.saved_universities = universities
+                                        this.saved_universities = saved_universities
                                         promptAction.showToast({
                                           message: '已删除'
                                         })
