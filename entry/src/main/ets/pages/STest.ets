@@ -57,6 +57,7 @@ struct search {
 
 
         dataPreferences.putSync('search_universities', JSON.stringify(this.search_universities))
+        dataPreferences.delete('search_universities')
         dataPreferences.flush()
 
 
@@ -249,13 +250,7 @@ struct search {
                         Row(){
                           Button('delete')
                             .onClick(()=>{
-                              dataPreferences.delete('search_universities', (err: BusinessError) => {
-                                if (err) {
-                                  console.error("Failed to delete the key 'startup'. code =" + err.code + ", message =" + err.message);
-                                  return;
-                                }
-                                console.info("Succeeded in deleting the key 'startup'.");
-                              })
+                              dataPreferences.delete('search_universities')
                             })
                           Button(item.state_province === undefined ? '收藏' : '已收藏')
                             .enabled(item.state_province === undefined) // 按钮启用状态
