@@ -278,10 +278,7 @@ struct search {
                               })
 
                               if(result) {
-                                // item.state_province = 'collected'; // 更新 state_province 表示已收藏
-                                // search_universities.push(item);
-                                // dataPreferences.putSync('search_universities', JSON.stringify(search_universities));
-                                // dataPreferences.flush()
+
                                 promptAction.showToast({ message: '不能重复收藏' })
 
                               } else {
@@ -291,11 +288,18 @@ struct search {
                                 promptAction.showToast({ message: '已成功收藏' })
 
                                 item.alpha_two_code = 'CNC'; // 更新 state_province 表示已收藏
-                                this.search_universities = [...this.search_universities]; // 重新赋值以触发 UI 更新
                                 search_universities.push(item);
+                                this.search_universities = [...this.search_universities]; // 重新赋值以触发 UI 更新
+
                                 dataPreferences.putSync('search_universities', JSON.stringify(search_universities));
                                 dataPreferences.flush()
 
+
+                                item.alpha_two_code = 'CNC'; // 更新 state_province 表示已收藏
+                                this.search_universities.push(item);
+                                this.search_universities = [...this.search_universities]; // 重新赋值以触发 UI 更新
+                                dataPreferences.putSync('search_universities', JSON.stringify(search_universities));
+                                dataPreferences.flush()
                                 }
                               }
 
