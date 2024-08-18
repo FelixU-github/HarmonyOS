@@ -305,10 +305,7 @@ struct search {
                               this.search_universities = [...this.search_universities]; // 触发 UI 更新
                             })
                             .enabled(item.alpha_two_code === 'CN') // 按钮启用状态
-                            .onClick(() => {
-                              this.search_universities = [...this.search_universities]; // 触发 UI 更新
-
-                            })
+                            
                         }
 
                       }
