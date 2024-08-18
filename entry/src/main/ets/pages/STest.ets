@@ -49,7 +49,7 @@ struct search {
         dataPreferences.flush()
 
 
-        this.count = this.universities.length
+        this.count = this.search_universities.length
         console.info('count:' + this.count)
         if (this.count === 0) {
           promptAction.showToast({message: '未找到名字包含' + this.keyword + '的大学'})
@@ -151,7 +151,7 @@ struct search {
                     promptAction.showToast({message: '请输入大学名称'})
                   }else {
 
-                    this.universities = [] // 清空搜索数组
+                    this.search_universities = [] // 清空搜索数组
                     this.requestData()
 
                   }
@@ -317,10 +317,10 @@ struct search {
         .width('100%')
         .height('100%')
         .tabBar(this.LabelImage('发现', 0, $r('app.media.search_selected'), $r('app.media.search_normal')))
-        // .onWillShow(() => {
-        //   let value: string = dataPreferences.getSync('search_universities', '[]').toString();
-        //   this.search_universities = JSON.parse(value)
-        // })
+        .onWillShow(() => {
+          let value: string = dataPreferences.getSync('search_universities', '[]').toString();
+          this.search_universities = JSON.parse(value)
+        })
 
 
         TabContent() {
@@ -441,6 +441,12 @@ struct search {
                                       action: () => {
                                         let value: string = dataPreferences.getSync('saved_universities', '[]').toString();
                                         let saved_universities: University[] = JSON.parse(value)
+                                        item.state_province = 'undefined'; // 更新 state_province 表示已收藏
+                                        this.search_universities.push(item);
+                                        dataPreferences.putSync('search_universities', JSON.stringify(this.search_universities));
+                                        dataPreferences.flush()
+
+
                                         saved_universities.splice(index, 1)
                                         dataPreferences.putSync('saved_universities', JSON.stringify(saved_universities))
                                         dataPreferences.flush()
