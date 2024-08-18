@@ -45,7 +45,10 @@ struct search {
 
 
         dataPreferences.putSync('search_universities', JSON.stringify(this.search_universities))
-        // dataPreferences.delete('search_universities')
+        dataPreferences.delete('search_universities')
+        dataPreferences.delete('saved_universities')
+        dataPreferences.delete('universities')
+        
         dataPreferences.flush()
 
 
