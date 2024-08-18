@@ -1,6 +1,7 @@
 import { http } from '@kit.NetworkKit';
 import { promptAction, router } from '@kit.ArkUI';
 import { preferences } from '@kit.ArkData';
+import { BusinessError } from '@kit.BasicServicesKit';
 
 let httpRequest = http.createHttp();
 
@@ -26,6 +27,7 @@ struct search {
   @State count: number = 0
   @State saved_universities: University[] = []
   @State universities: University[] = []
+  @State search_universities: University[] = []
   @State currentIndex: number = 0
   controller: TabsController = new TabsController();
 
@@ -37,7 +39,21 @@ struct search {
         // 解析为 University 对象数组
         let New_universities: University[] = JSON.parse(data.result.toString())
         this.universities = [...this.universities, ...New_universities]
-        this.count = this.universities.length
+
+        this.search_universities = []
+        this.search_universities = [...this.search_universities, ...New_universities]
+
+
+        dataPreferences.putSync('search_universities', JSON.stringify(this.search_universities))
+        // dataPreferences.delete('search_universities')
+        // dataPreferences.delete('saved_universities')
+        // dataPreferences.delete('universities')
+        // dataPreferences.flush()
+
+        dataPreferences.flush()
+
+
+        this.count = this.search_universities.length
         console.info('count:' + this.count)
         if (this.count === 0) {
           promptAction.showToast({message: '未找到名字包含' + this.keyword + '的大学'})
@@ -49,7 +65,7 @@ struct search {
           // console.info('Country: ' + university.country);
           // console.info('Web Pages: ' + university.web_pages.join(', '));
           // console.info('Domains: ' + university.domains.join(', '));
-          // console.info('State Province: ' + university.state_province);
+          console.info('State Province: ' + university.state_province);
           // console.info('-----');
         })
       } else {
@@ -117,6 +133,13 @@ struct search {
                 .margin({
                   top:25
                 })
+              // Button('Clear')
+              //   .onClick(()=>{
+              //     dataPreferences.delete('search_universities')
+              //     dataPreferences.delete('saved_universities')
+              //     dataPreferences.delete('universities')
+              //     dataPreferences.flush()
+              //   })
               Row(){
                 Text('(使用本地存储-用户首选项) ')
                   .fontSize(10)
@@ -139,7 +162,7 @@ struct search {
                     promptAction.showToast({message: '请输入大学名称'})
                   }else {
 
-                    this.universities = [] // 清空搜索数组
+                    this.search_universities = [] // 清空搜索数组
                     this.requestData()
 
                   }
@@ -154,7 +177,7 @@ struct search {
 
 
             Column() {
-              if (this.universities.length === 0) {
+              if (this.search_universities.length === 0) {
                 Image($r("app.media.wasp"))
                   .width(200)
                   .margin({top:10})
@@ -172,7 +195,7 @@ struct search {
 
 
               List({ space: 20, initialIndex: 0 }) {
-                ForEach(this.universities, (item: University) => {
+                ForEach(this.search_universities, (item: University) => {
                   ListItem() {
                     Column({space:5}){
                       Row({space: 10}){
@@ -224,40 +247,64 @@ struct search {
                           .margin({left:20, bottom:15})
 
                         Row(){
-                          Button(this.collection)
-                            .enabled(this.isButtonEnabled) // 按钮启用状态
+                          Button(item.alpha_two_code === 'CN' ? '收藏' : '已收藏')
+                            .enabled(item.alpha_two_code === 'CN') // 按钮启用状态
                             .width('50%')
                             .fontSize(16)
                             .margin({left:10, bottom:10})
                             .onClick(() => {
-                              let value: string = dataPreferences.getSync('universities', '[]').toString();
-                              let universities: University[] = JSON.parse(value)
+                              let value: string = dataPreferences.getSync('saved_universities', '[]').toString();
+                              let saved_universities: University[] = JSON.parse(value)
 
-                              if(universities.length >= 100) {
+                              let value_search: string = dataPreferences.getSync('search_universities', '[]').toString();
+                              let search_universities: University[] = JSON.parse(value_search)
+
+
+                              if(saved_universities.length >= 100) {
                                 promptAction.showToast({message: '最多收藏100所大学'})
-                              } else {
-                                let result = universities.some((value) => {
+                              }
+                              else{
+                                // if (item.state_province === undefined) {
+                                //   item.state_province = 'collected'; // 更新 state_province 表示已收藏
+                                //   search_universities.push(item);
+                                //   dataPreferences.putSync('search_universities', JSON.stringify(this.search_universities));
+                                //   dataPreferences.flush()
+                                // }
+
+
+
+                                let result = saved_universities.some((value) => {
                                   return value.name === item.name
                                 })
-                                if(result) {
-                                  this.isButtonEnabled = false;
-                                  this.collection = '已收藏'
-                                  promptAction.showToast({message: '不能重复收藏'})
-                                }
-                                else {
-                                  this.isButtonEnabled = false;
-                                  this.collection = '已收藏'
 
-                                  universities.push(item)
-                                  dataPreferences.putSync('universities', JSON.stringify(universities))
+                                if(result) {
+
+                                  promptAction.showToast({ message: '不能重复收藏' })
+
+                                } else {
+                                  saved_universities.push(item);
+                                  dataPreferences.putSync('saved_universities', JSON.stringify(saved_universities))
+                                  dataPreferences.flush()
+                                  promptAction.showToast({ message: '已成功收藏' })
+
+                                  item.alpha_two_code = 'CNC'; // 更新 state_province 表示已收藏
+                                  search_universities.push(item);
+                                  this.search_universities = [...this.search_universities]; // 重新赋值以触发 UI 更新
+
+                                  dataPreferences.putSync('search_universities', JSON.stringify(search_universities));
                                   dataPreferences.flush()
 
-                                  promptAction.showToast({
-                                    message: '已收藏'
-                                  })
+
+                                  item.alpha_two_code = 'CNC'; // 更新 state_province 表示已收藏
+                                  this.search_universities.push(item);
+                                  this.search_universities = [...this.search_universities]; // 重新赋值以触发 UI 更新
+                                  dataPreferences.putSync('search_universities', JSON.stringify(search_universities));
+                                  dataPreferences.flush()
                                 }
                               }
+
                             })
+                            .enabled(item.alpha_two_code === 'CN') // 按钮启用状态
                         }
 
                       }
@@ -281,12 +328,13 @@ struct search {
 
               }
               .width('100%')
+              .height(400)
               .margin({top:10})
               .scrollBar(BarState.Auto)
             }
 
             .width('95%')
-            .height('100%')
+            .height('70%')
             .backgroundColor("#ffffffff")
             .margin({top:10})
             .borderRadius(10)
@@ -300,6 +348,10 @@ struct search {
         .width('100%')
         .height('100%')
         .tabBar(this.LabelImage('发现', 0, $r('app.media.search_selected'), $r('app.media.search_normal')))
+        .onWillShow(() => {
+          let value: string = dataPreferences.getSync('saved_universities', '[]').toString();
+          this.saved_universities = JSON.parse(value)
+        })
 
 
         TabContent() {
@@ -418,17 +470,23 @@ struct search {
                                     primaryButton: {
                                       value: '确定',
                                       action: () => {
-                                        let value: string = dataPreferences.getSync('universities', '[]').toString();
-                                        let universities: University[] = JSON.parse(value)
-                                        universities.splice(index, 1)
-                                        dataPreferences.putSync('universities', JSON.stringify(universities))
+                                        let value: string = dataPreferences.getSync('saved_universities', '[]').toString();
+                                        let saved_universities: University[] = JSON.parse(value)
+                                        item.alpha_two_code = 'CN' // 更新 state_province 表示已收藏
+                                        this.search_universities.push(item);
+                                        dataPreferences.putSync('search_universities', JSON.stringify(this.search_universities));
                                         dataPreferences.flush()
-                                        this.saved_universities = universities
+
+
+                                        saved_universities.splice(index, 1)
+                                        dataPreferences.putSync('saved_universities', JSON.stringify(saved_universities))
+                                        dataPreferences.flush()
+                                        this.saved_universities = saved_universities
                                         promptAction.showToast({
                                           message: '已删除'
                                         })
-                                        this.isButtonEnabled = true;
-                                        this.collection = '收藏'
+                                        // this.isButtonEnabled = true;
+                                        // this.collection = '收藏'
                                       }
                                     },
                                     secondaryButton: {
@@ -459,10 +517,11 @@ struct search {
                       return item.name
                     })
                 }
+                .height(465).margin({top:10})
               }
             }
             .width('95%')
-            .height('100%')
+            .height('75%')
             .backgroundColor("#ffffff")
             .borderRadius(10)
             .margin({ top: 10 })
@@ -475,7 +534,7 @@ struct search {
         }
         .tabBar(this.LabelImage('收藏', 1, $r('app.media.like_selected'), $r('app.media.like_normal')))
         .onWillShow(() => {
-          let value: string = dataPreferences.getSync('universities', '[]').toString();
+          let value: string = dataPreferences.getSync('saved_universities', '[]').toString();
           this.saved_universities = JSON.parse(value)
         })
       }
