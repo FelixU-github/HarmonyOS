@@ -281,12 +281,13 @@ struct search {
 
               }
               .width('100%')
+              .height(400)
               .margin({top:10})
               .scrollBar(BarState.Auto)
             }
 
             .width('95%')
-            .height('100%')
+            .height('70%')
             .backgroundColor("#ffffffff")
             .margin({top:10})
             .borderRadius(10)
@@ -459,10 +460,11 @@ struct search {
                     return item.name
                   })
               }
+              .height(420)
             }
           }
           .width('95%')
-          .height('100%')
+          .height('75%')
           .backgroundColor("#ffffff")
           .borderRadius(10)
           .margin({ top: 10 })
