@@ -42,6 +42,16 @@ struct search {
         this.search_universities = []
         this.search_universities = [...this.search_universities, ...New_universities]
 
+        // let result = this.universities.some((value) => {
+        //   return value.name=== this.saved_universities.values.name
+        // })
+        // if(result) {
+        //
+        //   this.isButtonEnabled = false;
+        //   this.collection = '已收藏'
+        //   promptAction.showToast({message: '不能重复收藏'})
+
+
 
         dataPreferences.putSync('search_universities', JSON.stringify(this.search_universities))
         dataPreferences.flush()
@@ -240,7 +250,7 @@ struct search {
                             .fontSize(16)
                             .margin({left:10, bottom:10})
                             .onClick(() => {
-                              let value: string = dataPreferences.getSync('universities', '[]').toString();
+                              let value: string = dataPreferences.getSync('search_universities', '[]').toString();
                               let universities: University[] = JSON.parse(value)
 
                               if(universities.length >= 100) {
@@ -251,14 +261,13 @@ struct search {
 
                                   item.state_province = 'collected'; // 更新 state_province 表示已收藏
                                   universities.push(item);
-
                                   dataPreferences.putSync('search_universities', JSON.stringify(this.search_universities));
                                   dataPreferences.flush();
 
                                   universities.push(item)
-
                                   dataPreferences.putSync('universities', JSON.stringify(universities))
                                   dataPreferences.flush()
+
 
                                   promptAction.showToast({
                                     message: '已收藏'
