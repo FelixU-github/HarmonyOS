@@ -251,6 +251,17 @@ struct search {
                           Button('delete')
                             .onClick(()=>{
                               dataPreferences.delete('search_universities')
+                              dataPreferences.has('search_universities', (err: BusinessError, val: boolean) => {
+                                if (err) {
+                                  console.error("Failed to check the key 'startup'. code =" + err.code + ", message =" + err.message);
+                                  return;
+                                }
+                                if (val) {
+                                  console.info("The key 'search_universities' is contained.");
+                                } else {
+                                  console.info("The key 'search_universities' dose not contain.");
+                                }
+                              })
                             })
                           Button(item.state_province === undefined ? '收藏' : '已收藏')
                             .enabled(item.state_province === undefined) // 按钮启用状态
