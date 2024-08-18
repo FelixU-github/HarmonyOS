@@ -26,7 +26,6 @@ struct search {
   @State count: number = 0
   @State saved_universities: University[] = []
   @State universities: University[] = []
-  @State search_universities: University[] = []
   @State currentIndex: number = 0
   controller: TabsController = new TabsController();
 
@@ -38,25 +37,6 @@ struct search {
         // 解析为 University 对象数组
         let New_universities: University[] = JSON.parse(data.result.toString())
         this.universities = [...this.universities, ...New_universities]
-
-        this.search_universities = []
-        this.search_universities = [...this.search_universities, ...New_universities]
-
-        // let result = this.universities.some((value) => {
-        //   return value.name=== this.saved_universities.values.name
-        // })
-        // if(result) {
-        //
-        //   this.isButtonEnabled = false;
-        //   this.collection = '已收藏'
-        //   promptAction.showToast({message: '不能重复收藏'})
-
-
-
-        dataPreferences.putSync('search_universities', JSON.stringify(this.search_universities))
-        dataPreferences.flush()
-
-
         this.count = this.universities.length
         console.info('count:' + this.count)
         if (this.count === 0) {
@@ -130,13 +110,13 @@ struct search {
 
             Column(){
 
-                Text('发现你喜欢的大学')
-                  .fontSize(24)
-                  .fontColor(Color.Black)
-                  .fontWeight(FontWeight.Bold)
-                  .margin({
-                    top:25
-                  })
+              Text('发现你喜欢的大学')
+                .fontSize(24)
+                .fontColor(Color.Black)
+                .fontWeight(FontWeight.Bold)
+                .margin({
+                  top:25
+                })
               Row(){
                 Text('(使用本地存储-用户首选项) ')
                   .fontSize(10)
@@ -174,7 +154,7 @@ struct search {
 
 
             Column() {
-              if (this.search_universities.length === 0) {
+              if (this.universities.length === 0) {
                 Image($r("app.media.wasp"))
                   .width(200)
                   .margin({top:10})
@@ -192,7 +172,7 @@ struct search {
 
 
               List({ space: 20, initialIndex: 0 }) {
-                ForEach(this.search_universities, (item: University) => {
+                ForEach(this.universities, (item: University) => {
                   ListItem() {
                     Column({space:5}){
                       Row({space: 10}){
@@ -244,58 +224,41 @@ struct search {
                           .margin({left:20, bottom:15})
 
                         Row(){
-                          Button(item.state_province === undefined ? '收藏' : '已收藏')
-                            .enabled(item.state_province === undefined) // 按钮启用状态
+                          Button(this.collection)
+                            .enabled(this.isButtonEnabled) // 按钮启用状态
                             .width('50%')
                             .fontSize(16)
                             .margin({left:10, bottom:10})
                             .onClick(() => {
                               let value: string = dataPreferences.getSync('universities', '[]').toString();
-                              let save_universities: University[] = JSON.parse(value)
+                              let universities: University[] = JSON.parse(value)
 
-                              if(save_universities.length >= 100) {
+                              if(universities.length >= 100) {
                                 promptAction.showToast({message: '最多收藏100所大学'})
                               } else {
+                                let result = universities.some((value) => {
+                                  return value.name=== item.name
+                                })
+                                if(result) {
+                                  this.isButtonEnabled = false;
+                                  this.collection = '已收藏'
+                                  promptAction.showToast({message: '不能重复收藏'})
+                                }
+                                else {
+                                  this.isButtonEnabled = false;
+                                  this.collection = '已收藏'
 
-                                if (item.state_province === undefined) {
-
-                                  item.state_province = 'collected'; // 更新 state_province 表示已收藏
-                                  save_universities.push(item);
-                                  dataPreferences.putSync('search_universities', JSON.stringify(this.search_universities));
-
-                                  dataPreferences.putSync('universities', JSON.stringify(this.saved_universities))
+                                  universities.push(item)
+                                  dataPreferences.putSync('universities', JSON.stringify(universities))
                                   dataPreferences.flush()
-
 
                                   promptAction.showToast({
                                     message: '已收藏'
-                                  });
-
-                                // let result = universities.some((value) => {
-                                //   return value.name=== item.name
-                                // })
-                                // if(result) {
-                                //   this.isButtonEnabled = false;
-                                //   this.collection = '已收藏'
-                                //   promptAction.showToast({message: '不能重复收藏'})
-                                //
-
-                                } else {
-                                    // this.isButtonEnabled = false;
-                                    // this.collection = '已收藏'
-
-                                    // universities.push(item)
-                                    //
-                                    // dataPreferences.putSync('universities', JSON.stringify(universities))
-                                    // dataPreferences.flush()
-
-                                    promptAction.showToast({
-                                      message: '已收藏'
-                                    })
-                                  }
+                                  })
                                 }
+                              }
                             })
-                          }
+                        }
 
                       }
                       .margin({top:10,left:5})
@@ -318,13 +281,12 @@ struct search {
 
               }
               .width('100%')
-              .height(400)
               .margin({top:10})
               .scrollBar(BarState.Auto)
             }
 
             .width('95%')
-            .height('70%')
+            .height('100%')
             .backgroundColor("#ffffffff")
             .margin({top:10})
             .borderRadius(10)
@@ -338,10 +300,6 @@ struct search {
         .width('100%')
         .height('100%')
         .tabBar(this.LabelImage('发现', 0, $r('app.media.search_selected'), $r('app.media.search_normal')))
-        .onWillShow(() => {
-          let value: string = dataPreferences.getSync('search_universities', '[]').toString();
-          this.search_universities = JSON.parse(value)
-        })
 
 
         TabContent() {
@@ -388,128 +346,127 @@ struct search {
                   .fontSize(20)
                   .margin({top:10})
               }else {
-              List() {
-                ForEach(this.saved_universities,
-                  (item: University, index: number) => {
-                    ListItem() {
-                      Column() {
-                        Row({space: 10}){
-                          Image($r('app.media.university'))
-                            .width(50)
-                            .height(50)
-                            .margin({left: 10,top: 10,bottom: 10})
-                            .border({radius: 10})
-                            .shadow({ radius: 10, color: '#C0C0C0'})
+                List() {
+                  ForEach(this.saved_universities,
+                    (item: University, index: number) => {
+                      ListItem() {
+                        Column() {
+                          Row({space: 10}){
+                            Image($r('app.media.university'))
+                              .width(50)
+                              .height(50)
+                              .margin({left: 10,top: 10,bottom: 10})
+                              .border({radius: 10})
+                              .shadow({ radius: 10, color: '#C0C0C0'})
 
-                          Text(item.name)
-                            .width(250)
-                            .maxLines(2)
-                            .margin(5)
-                            .fontSize(14)
-                            .fontStyle(FontStyle.Italic)
-                            .fontWeight(FontWeight.Bold)
-                            .fontColor('#0000ff')
+                            Text(item.name)
+                              .width(250)
+                              .maxLines(2)
+                              .margin(5)
+                              .fontSize(14)
+                              .fontStyle(FontStyle.Italic)
+                              .fontWeight(FontWeight.Bold)
+                              .fontColor('#0000ff')
 
-                        }
-                        .width('100%')
-                        .margin({left: 10,right: 10})
-                        .backgroundColor('#fff8f8fc')
-                        .border({radius: 10})
-
-                        Column({space: 10}) {
-                          Text('国家：' + item.country)
-                            .width('100%')
-                            .fontSize(16)
-                            .textAlign(TextAlign.Start)
-                            .margin({ left: 20 })
-
-                          Text('省份的信息：' + item.state_province)
-                            .width('100%')
-                            .fontSize(16)
-                            .textAlign(TextAlign.Start)
-                            .margin({ left: 20 })
-
-                          Text('官方域名：' + item.domains)
-                            .width('100%')
-                            .fontSize(16)
-                            .textAlign(TextAlign.JUSTIFY)
-                            .margin({ left: 20 })
-
-                          Text('官方网站：' + item.web_pages)
-                            .width('100%')
-                            .fontSize(16)
-                            .textAlign(TextAlign.JUSTIFY)
-                            .margin({ left: 20, bottom: 15 })
-
-                          Image(item.name)
-                            .borderRadius({
-                              topLeft: 10,
-                              topRight: 10
-                            })
-                            .width('94%')
-
-                          Row() {
-                            Button('删除')
-                              .margin({ right: 15,bottom: 10 })
-                              .onClick(() => {
-                                AlertDialog.show({
-                                  title: '提示',
-                                  message: '确定要删除吗？',
-                                  autoCancel: true,
-                                  alignment: DialogAlignment.Bottom,
-                                  primaryButton: {
-                                    value: '确定',
-                                    action: () => {
-                                      let value: string = dataPreferences.getSync('universities', '[]').toString();
-                                      let universities: University[] = JSON.parse(value)
-                                      universities.splice(index, 1)
-                                      dataPreferences.putSync('universities', JSON.stringify(universities))
-                                      dataPreferences.flush()
-                                      this.saved_universities = universities
-                                      promptAction.showToast({
-                                        message: '已删除'
-                                      })
-                                      this.isButtonEnabled = true;
-                                      this.collection = '收藏'
-                                    }
-                                  },
-                                  secondaryButton: {
-                                    value: '取消',
-                                    action: () => {
-                                    }
-                                  }
-                                })
-                              })
                           }
-                          .width('94%')
-                          .height(30)
-                          .margin({ top: -20 ,left: 10})
-                          .justifyContent(FlexAlign.SpaceBetween)
+                          .width('100%')
+                          .margin({left: 10,right: 10})
+                          .backgroundColor('#fff8f8fc')
+                          .border({radius: 10})
+
+                          Column({space: 10}) {
+                            Text('国家：' + item.country)
+                              .width('100%')
+                              .fontSize(16)
+                              .textAlign(TextAlign.Start)
+                              .margin({ left: 20 })
+
+                            Text('省份的信息：' + item.state_province)
+                              .width('100%')
+                              .fontSize(16)
+                              .textAlign(TextAlign.Start)
+                              .margin({ left: 20 })
+
+                            Text('官方域名：' + item.domains)
+                              .width('100%')
+                              .fontSize(16)
+                              .textAlign(TextAlign.JUSTIFY)
+                              .margin({ left: 20 })
+
+                            Text('官方网站：' + item.web_pages)
+                              .width('100%')
+                              .fontSize(16)
+                              .textAlign(TextAlign.JUSTIFY)
+                              .margin({ left: 20, bottom: 15 })
+
+                            Image(item.name)
+                              .borderRadius({
+                                topLeft: 10,
+                                topRight: 10
+                              })
+                              .width('94%')
+
+                            Row() {
+                              Button('删除')
+                                .margin({ right: 15,bottom: 10 })
+                                .onClick(() => {
+                                  AlertDialog.show({
+                                    title: '提示',
+                                    message: '确定要删除吗？',
+                                    autoCancel: true,
+                                    alignment: DialogAlignment.Bottom,
+                                    primaryButton: {
+                                      value: '确定',
+                                      action: () => {
+                                        let value: string = dataPreferences.getSync('universities', '[]').toString();
+                                        let universities: University[] = JSON.parse(value)
+                                        universities.splice(index, 1)
+                                        dataPreferences.putSync('universities', JSON.stringify(universities))
+                                        dataPreferences.flush()
+                                        this.saved_universities = universities
+                                        promptAction.showToast({
+                                          message: '已删除'
+                                        })
+                                        this.isButtonEnabled = true;
+                                        this.collection = '收藏'
+                                      }
+                                    },
+                                    secondaryButton: {
+                                      value: '取消',
+                                      action: () => {
+                                      }
+                                    }
+                                  })
+                                })
+                            }
+                            .width('94%')
+                            .height(30)
+                            .margin({ top: -20 ,left: 10})
+                            .justifyContent(FlexAlign.SpaceBetween)
+
+                          }
 
                         }
-
-                      }
-                      .width('95%')
-                      .borderRadius(10)
-                      .margin({ top: 10, bottom: 10 })
-                      .shadow({
-                        radius: 10,
-                        color: Color.Gray
-                      })
-                    }.width('100%')
-                  }, (item: University) => {
-                    return item.name
-                  })
+                        .width('95%')
+                        .borderRadius(10)
+                        .margin({ top: 10, bottom: 10 })
+                        .shadow({
+                          radius: 10,
+                          color: Color.Gray
+                        })
+                      }.width('100%')
+                    }, (item: University) => {
+                      return item.name
+                    })
+                }
               }
-              .height(465).margin({top:10})
             }
-          }
-          .width('95%')
-          .height('75%')
-          .backgroundColor("#ffffff")
-          .borderRadius(10)
-          .margin({ top: 10 })
-          .shadow({ radius: 10, color: '#D3D3D3' })
+            .width('95%')
+            .height('100%')
+            .backgroundColor("#ffffff")
+            .borderRadius(10)
+            .margin({ top: 10 })
+            .shadow({ radius: 10, color: '#D3D3D3' })
 
           }
           .backgroundColor("#F8F8FF")
