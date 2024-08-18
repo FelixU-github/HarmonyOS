@@ -264,44 +264,41 @@ struct search {
                                 promptAction.showToast({message: '最多收藏100所大学'})
                               }
                               else{
-                                if (item.state_province === undefined) {
-                                  item.state_province = 'collected'; // 更新 state_province 表示已收藏
-                                  search_universities.push(item);
-                                  dataPreferences.putSync('search_universities', JSON.stringify(this.search_universities));
-                                  dataPreferences.flush()
-                                }
+                                // if (item.state_province === undefined) {
+                                //   item.state_province = 'collected'; // 更新 state_province 表示已收藏
+                                //   search_universities.push(item);
+                                //   dataPreferences.putSync('search_universities', JSON.stringify(this.search_universities));
+                                //   dataPreferences.flush()
+                                // }
 
 
                                 
-                              //   let result = saved_universities.some((value) => {
-                              //     return value.name === item.name
-                              // })
-                              //
-                              // if(result) {
-                              //   // item.state_province = 'collected'; // 更新 state_province 表示已收藏
-                              //   // search_universities.push(item);
-                              //   // dataPreferences.putSync('search_universities', JSON.stringify(search_universities));
-                              //   // dataPreferences.flush()
-                              //   promptAction.showToast({ message: '不能重复收藏' })
-                              //
-                              // } else {
-                              //   saved_universities.push(item);
-                              //   dataPreferences.putSync('saved_universities', JSON.stringify(saved_universities))
-                              //   dataPreferences.flush()
-                              //   promptAction.showToast({ message: '已成功收藏' })
-                              //
-                              //   item.state_province = 'collected'; // 更新 state_province 表示已收藏
-                              //   search_universities.push(item);
-                              //   dataPreferences.putSync('search_universities', JSON.stringify(search_universities));
-                              //   dataPreferences.flush()
-                              //
-                              //
-                              //   item.state_province = 'collected'; // 更新 state_province 表示已收藏
-                              //   search_universities.push(item);
-                              //   dataPreferences.putSync('search_universities', JSON.stringify(search_universities));
-                              //   dataPreferences.flush()
-                              //
-                              //   }
+                                let result = saved_universities.some((value) => {
+                                  return value.name === item.name
+                              })
+
+                              if(result) {
+                                // item.state_province = 'collected'; // 更新 state_province 表示已收藏
+                                // search_universities.push(item);
+                                // dataPreferences.putSync('search_universities', JSON.stringify(search_universities));
+                                // dataPreferences.flush()
+                                promptAction.showToast({ message: '不能重复收藏' })
+
+                              } else {
+                                saved_universities.push(item);
+                                dataPreferences.putSync('saved_universities', JSON.stringify(saved_universities))
+                                dataPreferences.flush()
+                                promptAction.showToast({ message: '已成功收藏' })
+
+                                item.state_province = 'collected'; // 更新 state_province 表示已收藏
+                                this.search_universities = [...this.search_universities]; // 重新赋值以触发 UI 更新
+                                search_universities.push(item);
+                                dataPreferences.putSync('search_universities', JSON.stringify(search_universities));
+                                dataPreferences.flush()
+
+
+
+                                }
                               }
 
                             })
