@@ -256,7 +256,20 @@ struct LikedCatDog {
                 .itemSpace(0)
                 .displayArrow(true, false)
 
-                Text('刷新')
+                Text('刷新一下猫咪')
+                  .backgroundColor('#E6E6FA')
+                  .width(160)
+                  .height(50)
+                  .textAlign(TextAlign.Center)
+                  .borderRadius(25)
+                  .position({ x: '10', y: '75%' })
+                  .opacity(0.8)
+                  .onClick(() => {
+                    this.cats = []
+                    this.requestDataCat()
+                  })
+
+                Text('发现更多猫咪')
                   .backgroundColor('#E6E6FA')
                   .width(160)
                   .height(50)
@@ -265,12 +278,8 @@ struct LikedCatDog {
                   .position({ x: '10', y: '85%' })
                   .opacity(0.8)
                   .onClick(() => {
-                    this.dogs = []
-                    this.cats = []
                     this.requestDataCat()
-                    this.requestDataDog()
                   })
-
 
               }
               .width('50%')
@@ -336,21 +345,20 @@ struct LikedCatDog {
                 }
                 .width('100%')
 
-                // Text('刷新')
-                //   .backgroundColor(Color.Pink)
-                //   .width(50)
-                //   .height(50)
-                //   .textAlign(TextAlign.Center)
-                //   .borderRadius(25)
-                //   .position({ x: '10%', y: '80%' })
-                //   .opacity(0.8)
-                //   .onClick(() => {
-                //     this.dogs = []
-                //     this.cats = []
-                //     this.requestData()
-                //     this.requestDataDog()
-                //   })
-                Text('发现更多')
+                Text('刷新一下狗狗')
+                  .backgroundColor('#E6E6FA')
+                  .width(160)
+                  .height(50)
+                  .textAlign(TextAlign.Center)
+                  .borderRadius(25)
+                  .position({ x: '10', y: '75%' })
+                  .opacity(0.8)
+                  .onClick(() => {
+                    this.dogs = []
+                    this.requestDataDog()
+                  })
+
+                Text('发现更多狗狗')
                   .backgroundColor('#E6E6FA')
                   .width(160)
                   .height(50)
@@ -359,7 +367,7 @@ struct LikedCatDog {
                   .position({ x: '10', y: '85%' })
                   .opacity(0.8)
                   .onClick(() => {
-                    this.requestDataCat()
+                    // this.requestDataCat()
                     this.requestDataDog()
                   })
 
