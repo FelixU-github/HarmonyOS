@@ -1,6 +1,7 @@
 import { http } from '@kit.NetworkKit';
 import { promptAction, router } from '@kit.ArkUI';
 import { preferences } from '@kit.ArkData';
+import { BusinessError } from '@kit.BasicServicesKit';
 
 let httpRequest = http.createHttp();
 
@@ -17,44 +18,63 @@ interface University {
   web_pages: string[];
 }
 
-interface UniversityState {
-  university: University;
-  isButtonEnabled: boolean;
-  buttonText: string;
-}
-
 @Entry
 @Component
 struct search {
-  @State keyword: string = '';
-  @State count: number = 0;
-  @State saved_universities: University[] = [];
-  @State universities: University[] = [];
-  @State universityStates: UniversityState[] = []; // 用于存储每个大学的按钮状态
-  @State currentIndex: number = 0;
+  @State isButtonEnabled: boolean = true; // 按钮启用状态
+  @State collection: string = '收藏'
+  @State keyword: string = ''
+  @State count: number = 0
+  @State saved_universities: University[] = []
+  @State universities: University[] = []
+  @State search_universities: University[] = []
+  @State currentIndex: number = 0
   controller: TabsController = new TabsController();
+
 
   requestData() {
     const url = `http://universities.hipolabs.com/search?name=${encodeURIComponent(this.keyword)}`;
     httpRequest.request(url, (err, data) => {
       if (!err) {
-        let newUniversities: University[] = JSON.parse(data.result.toString());
-        this.universities = [...this.universities, ...newUniversities];
-        this.count = this.universities.length;
+        // 解析为 University 对象数组
+        let New_universities: University[] = JSON.parse(data.result.toString())
+        this.universities = [...this.universities, ...New_universities]
 
-        // 初始化每个University的按钮状态
-        this.universityStates = this.universities.map((university: University): UniversityState => {
-          let isSaved = this.saved_universities.some(savedUniv => savedUniv.name === university.name);
-          return {
-            university: university,
-            isButtonEnabled: !isSaved,
-            buttonText: isSaved ? '已收藏' : '收藏'
-          };
-        });
+        this.search_universities = []
+        this.search_universities = [...this.search_universities, ...New_universities]
 
+        // let result = this.universities.some((value) => {
+        //   return value.name=== this.saved_universities.values.name
+        // })
+        // if(result) {
+        //
+        //   this.isButtonEnabled = false;
+        //   this.collection = '已收藏'
+        //   promptAction.showToast({message: '不能重复收藏'})
+
+
+
+
+
+        dataPreferences.putSync('search_universities', JSON.stringify(this.search_universities))
+        dataPreferences.flush()
+
+
+        this.count = this.universities.length
+        console.info('count:' + this.count)
         if (this.count === 0) {
-          promptAction.showToast({ message: '未找到名字包含' + this.keyword + '的大学' });
+          promptAction.showToast({message: '未找到名字包含' + this.keyword + '的大学'})
         }
+
+        // 打印大学的信息
+        New_universities.slice(0,5).forEach((university) => {
+          console.info('University Name: ' + university.name);
+          // console.info('Country: ' + university.country);
+          // console.info('Web Pages: ' + university.web_pages.join(', '));
+          // console.info('Domains: ' + university.domains.join(', '));
+          // console.info('State Province: ' + university.state_province);
+          // console.info('-----');
+        })
       } else {
         console.info('error:' + JSON.stringify(err));
       }
@@ -120,6 +140,14 @@ struct search {
                 .margin({
                   top:25
                 })
+              Row(){
+                Text('(使用本地存储-用户首选项) ')
+                  .fontSize(10)
+                Text(' (使用网络)')
+                  .fontSize(10)
+              }
+              .margin({top:10})
+
 
               Search({ placeholder: '搜索'})
                 .searchButton('SEARCH')
@@ -128,7 +156,7 @@ struct search {
                 })
                 .width('90%')
                 .height(40)
-                .margin({left:10,right:10,top:20})
+                .margin({left:10,right:10,top:15})
                 .onClick(()=>{
                   if(this.keyword === ''){
                     promptAction.showToast({message: '请输入大学名称'})
@@ -149,7 +177,7 @@ struct search {
 
 
             Column() {
-              if (this.universities.length === 0) {
+              if (this.search_universities.length === 0) {
                 Image($r("app.media.wasp"))
                   .width(200)
                   .margin({top:10})
@@ -167,7 +195,7 @@ struct search {
 
 
               List({ space: 20, initialIndex: 0 }) {
-                ForEach(this.universityStates, (state: UniversityState) => {
+                ForEach(this.search_universities, (item: University) => {
                   ListItem() {
                     Column({space:5}){
                       Row({space: 10}){
@@ -178,7 +206,7 @@ struct search {
                           .border({radius: 10})
                           .shadow({ radius: 10, color: '#C0C0C0'})
 
-                        Text(state.university.name)
+                        Text(item.name)
                           .width(250)
                           .maxLines(2)
                           .margin(5)
@@ -194,58 +222,89 @@ struct search {
                       .border({radius: 10})
 
                       Column({space: 10}){
-                        Text('国家：'+state.university.country)
+                        Text('国家：'+item.country)
                           .width('100%')
                           .fontSize(16)
                           .textAlign(TextAlign.Start)
                           .margin({left:20})
 
-                        Text('省份的信息：'+state.university.state_province)
+                        Text('省份的信息：'+item.state_province)
                           .width('100%')
                           .fontSize(16)
                           .textAlign(TextAlign.Start)
                           .margin({left:20})
 
-                        Text('官方域名：'+state.university.domains)
+                        Text('官方域名：'+item.domains)
                           .width('100%')
                           .fontSize(16)
                           .textAlign(TextAlign.JUSTIFY)
                           .margin({left:20})
 
-                        Text('官方网站：'+state.university.web_pages)
+                        Text('官方网站：'+item.web_pages)
                           .width('100%')
                           .fontSize(16)
                           .textAlign(TextAlign.JUSTIFY)
                           .margin({left:20, bottom:15})
 
-                        Row() {
-                          Button(state.buttonText)
-                            .enabled(state.isButtonEnabled)
+                        Row(){
+                          Button('delete')
+                            .onClick(()=>{
+                              dataPreferences.delete('search_universities', (err: BusinessError) => {
+                                if (err) {
+                                  console.error("Failed to delete the key 'startup'. code =" + err.code + ", message =" + err.message);
+                                  return;
+                                }
+                                console.info("Succeeded in deleting the key 'startup'.");
+                              })
+                            })
+                          Button(item.state_province === undefined ? '收藏' : '已收藏')
+                            .enabled(item.state_province === undefined) // 按钮启用状态
                             .width('50%')
                             .fontSize(16)
-                            .margin({ left: 10, bottom: 10 })
+                            .margin({left:10, bottom:10})
                             .onClick(() => {
                               let value: string = dataPreferences.getSync('universities', '[]').toString();
-                              let universities: University[] = JSON.parse(value);
+                              let save_universities: University[] = JSON.parse(value)
 
-                              if (universities.length >= 100) {
-                                promptAction.showToast({ message: '最多收藏100所大学' });
+                              if(save_universities.length >= 100) {
+                                promptAction.showToast({message: '最多收藏100所大学'})
                               } else {
-                                let result = universities.some(univ => univ.name === state.university.name);
-                                if (result) {
-                                  promptAction.showToast({ message: '不能重复收藏' });
-                                } else {
-                                  universities.push(state.university);
-                                  dataPreferences.putSync('universities', JSON.stringify(universities));
-                                  dataPreferences.flush();
 
-                                  // 更新按钮状态
-                                  state.isButtonEnabled = false;
-                                  state.buttonText = '已收藏';
+                                if (item.state_province === undefined) {
+
+                                  item.state_province = 'collected'; // 更新 state_province 表示已收藏
+                                  save_universities.push(item);
+                                  dataPreferences.putSync('search_universities', JSON.stringify(this.search_universities));
+
+                                  dataPreferences.putSync('universities', JSON.stringify(this.saved_universities))
+                                  dataPreferences.flush()
+
 
                                   promptAction.showToast({
                                     message: '已收藏'
                                   });
+
+                                  // let result = universities.some((value) => {
+                                  //   return value.name=== item.name
+                                  // })
+                                  // if(result) {
+                                  //   this.isButtonEnabled = false;
+                                  //   this.collection = '已收藏'
+                                  //   promptAction.showToast({message: '不能重复收藏'})
+                                  //
+
+                                } else {
+                                  // this.isButtonEnabled = false;
+                                  // this.collection = '已收藏'
+
+                                  // universities.push(item)
+                                  //
+                                  // dataPreferences.putSync('universities', JSON.stringify(universities))
+                                  // dataPreferences.flush()
+
+                                  promptAction.showToast({
+                                    message: '已收藏'
+                                  })
                                 }
                               }
                             })
@@ -272,12 +331,13 @@ struct search {
 
               }
               .width('100%')
+              .height(400)
               .margin({top:10})
               .scrollBar(BarState.Auto)
             }
 
             .width('95%')
-            .height('100%')
+            .height('70%')
             .backgroundColor("#ffffffff")
             .margin({top:10})
             .borderRadius(10)
@@ -291,6 +351,10 @@ struct search {
         .width('100%')
         .height('100%')
         .tabBar(this.LabelImage('发现', 0, $r('app.media.search_selected'), $r('app.media.search_normal')))
+        .onWillShow(() => {
+          let value: string = dataPreferences.getSync('search_universities', '[]').toString();
+          this.search_universities = JSON.parse(value)
+        })
 
 
         TabContent() {
@@ -399,7 +463,7 @@ struct search {
 
                             Row() {
                               Button('删除')
-                                .margin({ right: 15 })
+                                .margin({ right: 15,bottom: 10 })
                                 .onClick(() => {
                                   AlertDialog.show({
                                     title: '提示',
@@ -418,6 +482,8 @@ struct search {
                                         promptAction.showToast({
                                           message: '已删除'
                                         })
+                                        this.isButtonEnabled = true;
+                                        this.collection = '收藏'
                                       }
                                     },
                                     secondaryButton: {
@@ -430,7 +496,7 @@ struct search {
                             }
                             .width('94%')
                             .height(30)
-                            .margin({ top: -10 ,left: 10})
+                            .margin({ top: -20 ,left: 10})
                             .justifyContent(FlexAlign.SpaceBetween)
 
                           }
@@ -448,10 +514,11 @@ struct search {
                       return item.name
                     })
                 }
+                .height(465).margin({top:10})
               }
             }
             .width('95%')
-            .height('100%')
+            .height('75%')
             .backgroundColor("#ffffff")
             .borderRadius(10)
             .margin({ top: 10 })
