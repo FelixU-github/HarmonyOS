@@ -270,7 +270,10 @@ struct Rest {
           .fontStyle(FontStyle.Italic)
           .onClick(() => {
             this.delete_count()
+            promptAction.showToast({ message: '功德重置成功' });
+
           })
+
 
         Button("停止自动功德")
           .enabled(this.autoButtonEnabled) // 按钮启用状态
