@@ -36,11 +36,8 @@ struct search {
       if (!err) {
         // 解析为 University 对象数组
         let New_universities: University[] = JSON.parse(data.result.toString())
-
         this.universities = [...this.universities, ...New_universities]
         this.count = this.universities.length
-        let value: string = dataPreferences.getSync('universities', '[]').toString();
-
         console.info('count:' + this.count)
         if (this.count === 0) {
           promptAction.showToast({message: '未找到名字包含' + this.keyword + '的大学'})
@@ -173,7 +170,6 @@ struct search {
 
               }
 
-            Column(){
 
               List({ space: 20, initialIndex: 0 }) {
                 ForEach(this.universities, (item: University) => {
@@ -228,34 +224,37 @@ struct search {
                           .margin({left:20, bottom:15})
 
                         Row(){
-                          Button(item.state_province === undefined ? '收藏' : '已收藏')
-                            .enabled(item.state_province === undefined) // 按钮启用状态
+                          Button(this.collection)
+                            .enabled(this.isButtonEnabled) // 按钮启用状态
                             .width('50%')
                             .fontSize(16)
                             .margin({left:10, bottom:10})
                             .onClick(() => {
-
                               let value: string = dataPreferences.getSync('universities', '[]').toString();
                               let universities: University[] = JSON.parse(value)
 
                               if(universities.length >= 100) {
                                 promptAction.showToast({message: '最多收藏100所大学'})
                               } else {
-                                if (item.state_province === undefined) {
-                                  item.state_province = 'collected'; // 更新 state_province 表示已收藏
-                                  universities.push(item);
-                                  dataPreferences.putSync('universities', JSON.stringify(universities));
-                                  dataPreferences.flush();
+                                let result = universities.some((value) => {
+                                  return value.name === item.name
+                                })
+                                if(result) {
+                                  this.isButtonEnabled = false;
+                                  this.collection = '已收藏'
+                                  promptAction.showToast({message: '不能重复收藏'})
+                                }
+                                else {
+                                  this.isButtonEnabled = false;
+                                  this.collection = '已收藏'
+
+                                  universities.push(item)
+                                  dataPreferences.putSync('universities', JSON.stringify(universities))
+                                  dataPreferences.flush()
 
                                   promptAction.showToast({
                                     message: '已收藏'
-                                  });
-
-
-                                } else {
-
-
-                                  promptAction.showToast({ message: '不能重复收藏' });
+                                  })
                                 }
                               }
                             })
@@ -285,11 +284,9 @@ struct search {
               .margin({top:10})
               .scrollBar(BarState.Auto)
             }
-              .height('90%')
 
-          }
             .width('95%')
-            .height('70%')
+            .height('100%')
             .backgroundColor("#ffffffff")
             .margin({top:10})
             .borderRadius(10)
@@ -349,7 +346,6 @@ struct search {
                   .fontSize(20)
                   .margin({top:10})
               }else {
-
                 List() {
                   ForEach(this.saved_universities,
                     (item: University, index: number) => {
@@ -431,6 +427,8 @@ struct search {
                                         promptAction.showToast({
                                           message: '已删除'
                                         })
+                                        this.isButtonEnabled = true;
+                                        this.collection = '收藏'
                                       }
                                     },
                                     secondaryButton: {
@@ -461,12 +459,10 @@ struct search {
                       return item.name
                     })
                 }
-                .height('90%')
-
               }
             }
             .width('95%')
-            .height('75%')
+            .height('100%')
             .backgroundColor("#ffffff")
             .borderRadius(10)
             .margin({ top: 10 })
