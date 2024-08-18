@@ -259,6 +259,11 @@ struct search {
                               let value_search: string = dataPreferences.getSync('search_universities', '[]').toString();
                               let search_universities: University[] = JSON.parse(value_search)
 
+                              item.state_province = 'collected'; // 更新 state_province 表示已收藏
+                              search_universities.push(item);
+                              dataPreferences.putSync('search_universities', JSON.stringify(search_universities));
+                              dataPreferences.flush()
+
                               if(saved_universities.length >= 100) {
                                 promptAction.showToast({message: '最多收藏100所大学'})
                               }
@@ -268,7 +273,10 @@ struct search {
                               })
 
                               if(result) {
-
+                                item.state_province = 'collected'; // 更新 state_province 表示已收藏
+                                search_universities.push(item);
+                                dataPreferences.putSync('search_universities', JSON.stringify(search_universities));
+                                dataPreferences.flush()
                                 promptAction.showToast({ message: '不能重复收藏' })
 
                               } else {
