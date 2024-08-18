@@ -45,10 +45,11 @@ struct search {
 
 
         dataPreferences.putSync('search_universities', JSON.stringify(this.search_universities))
-        dataPreferences.delete('search_universities')
-        dataPreferences.delete('saved_universities')
-        dataPreferences.delete('universities')
-        
+        // dataPreferences.delete('search_universities')
+        // dataPreferences.delete('saved_universities')
+        // dataPreferences.delete('universities')
+        // dataPreferences.flush()
+
         dataPreferences.flush()
 
 
@@ -131,6 +132,13 @@ struct search {
                 .fontWeight(FontWeight.Bold)
                 .margin({
                   top:25
+                })
+              Button('Clear')
+                .onClick(()=>{
+                  dataPreferences.delete('search_universities')
+                  dataPreferences.delete('saved_universities')
+                  dataPreferences.delete('universities')
+                  dataPreferences.flush()
                 })
               Row(){
                 Text('(使用本地存储-用户首选项) ')
