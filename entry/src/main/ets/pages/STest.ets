@@ -65,7 +65,7 @@ struct search {
           // console.info('Country: ' + university.country);
           // console.info('Web Pages: ' + university.web_pages.join(', '));
           // console.info('Domains: ' + university.domains.join(', '));
-          // console.info('State Province: ' + university.state_province);
+          console.info('State Province: ' + university.state_province);
           // console.info('-----');
         })
       } else {
@@ -247,8 +247,8 @@ struct search {
                           .margin({left:20, bottom:15})
 
                         Row(){
-                          Button(item.state_province === null ? '收藏' : '已收藏')
-                            .enabled(item.state_province === null) // 按钮启用状态
+                          Button(item.alpha_two_code === 'CN' ? '收藏' : '已收藏')
+                            .enabled(item.alpha_two_code === 'CN') // 按钮启用状态
                             .width('50%')
                             .fontSize(16)
                             .margin({left:10, bottom:10})
@@ -290,8 +290,8 @@ struct search {
                                 dataPreferences.flush()
                                 promptAction.showToast({ message: '已成功收藏' })
 
-                                item.state_province = 'collected'; // 更新 state_province 表示已收藏
-                                this.search_universities = [...this.search_universities]; // 重新赋值以触发 UI 更新
+                                item.alpha_two_code = 'CNC'; // 更新 state_province 表示已收藏
+                                // this.search_universities = [...this.search_universities]; // 重新赋值以触发 UI 更新
                                 search_universities.push(item);
                                 dataPreferences.putSync('search_universities', JSON.stringify(search_universities));
                                 dataPreferences.flush()
@@ -467,7 +467,7 @@ struct search {
                                       action: () => {
                                         let value: string = dataPreferences.getSync('saved_universities', '[]').toString();
                                         let saved_universities: University[] = JSON.parse(value)
-                                        item.state_province = null // 更新 state_province 表示已收藏
+                                        item.alpha_two_code = 'CN' // 更新 state_province 表示已收藏
                                         this.search_universities.push(item);
                                         dataPreferences.putSync('search_universities', JSON.stringify(this.search_universities));
                                         dataPreferences.flush()
