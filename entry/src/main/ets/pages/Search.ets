@@ -250,22 +250,20 @@ struct search {
                             .fontSize(16)
                             .margin({left:10, bottom:10})
                             .onClick(() => {
-                              let value: string = dataPreferences.getSync('search_universities', '[]').toString();
-                              let universities: University[] = JSON.parse(value)
+                              let value: string = dataPreferences.getSync('universities', '[]').toString();
+                              let save_universities: University[] = JSON.parse(value)
 
-                              if(universities.length >= 100) {
+                              if(save_universities.length >= 100) {
                                 promptAction.showToast({message: '最多收藏100所大学'})
                               } else {
 
                                 if (item.state_province === undefined) {
 
                                   item.state_province = 'collected'; // 更新 state_province 表示已收藏
-                                  universities.push(item);
+                                  save_universities.push(item);
                                   dataPreferences.putSync('search_universities', JSON.stringify(this.search_universities));
-                                  dataPreferences.flush();
 
-                                  universities.push(item)
-                                  dataPreferences.putSync('universities', JSON.stringify(universities))
+                                  dataPreferences.putSync('universities', JSON.stringify(this.saved_universities))
                                   dataPreferences.flush()
 
 
