@@ -57,7 +57,7 @@ struct search {
 
 
         dataPreferences.putSync('search_universities', JSON.stringify(this.search_universities))
-        dataPreferences.delete('search_universities')
+        // dataPreferences.delete('search_universities')
         dataPreferences.flush()
 
 
@@ -251,17 +251,7 @@ struct search {
                           Button('delete')
                             .onClick(()=>{
                               dataPreferences.delete('search_universities')
-                              dataPreferences.has('search_universities', (err: BusinessError, val: boolean) => {
-                                if (err) {
-                                  console.error("Failed to check the key 'startup'. code =" + err.code + ", message =" + err.message);
-                                  return;
-                                }
-                                if (val) {
-                                  console.info("The key 'search_universities' is contained.");
-                                } else {
-                                  console.info("The key 'search_universities' dose not contain.");
-                                }
-                              })
+
                             })
                           Button(item.state_province === undefined ? '收藏' : '已收藏')
                             .enabled(item.state_province === undefined) // 按钮启用状态
@@ -269,20 +259,23 @@ struct search {
                             .fontSize(16)
                             .margin({left:10, bottom:10})
                             .onClick(() => {
-                              let value: string = dataPreferences.getSync('universities', '[]').toString();
-                              let save_universities: University[] = JSON.parse(value)
+                              let value: string = dataPreferences.getSync('saved_universities', '[]').toString();
+                              let saved_universities: University[] = JSON.parse(value)
 
-                              if(save_universities.length >= 100) {
+                              let value_search: string = dataPreferences.getSync('search_universities', '[]').toString();
+                              let search_universities: University[] = JSON.parse(value_search)
+
+                              if(saved_universities.length >= 100) {
                                 promptAction.showToast({message: '最多收藏100所大学'})
                               } else {
 
                                 if (item.state_province === undefined) {
 
                                   item.state_province = 'collected'; // 更新 state_province 表示已收藏
-                                  save_universities.push(item);
-                                  dataPreferences.putSync('search_universities', JSON.stringify(this.search_universities));
-
-                                  dataPreferences.putSync('saved_universities', JSON.stringify(this.saved_universities))
+                                  saved_universities.push(item);
+                                  search_universities.push(item);
+                                  dataPreferences.putSync('search_universities', JSON.stringify(search_universities));
+                                  dataPreferences.putSync('saved_universities', JSON.stringify(saved_universities))
                                   dataPreferences.flush()
 
 
@@ -357,10 +350,10 @@ struct search {
         .width('100%')
         .height('100%')
         .tabBar(this.LabelImage('发现', 0, $r('app.media.search_selected'), $r('app.media.search_normal')))
-        .onWillShow(() => {
-          let value: string = dataPreferences.getSync('search_universities', '[]').toString();
-          this.search_universities = JSON.parse(value)
-        })
+        // .onWillShow(() => {
+        //   let value: string = dataPreferences.getSync('search_universities', '[]').toString();
+        //   this.search_universities = JSON.parse(value)
+        // })
 
 
         TabContent() {
@@ -479,17 +472,17 @@ struct search {
                                     primaryButton: {
                                       value: '确定',
                                       action: () => {
-                                        let value: string = dataPreferences.getSync('universities', '[]').toString();
+                                        let value: string = dataPreferences.getSync('saved_universities', '[]').toString();
                                         let universities: University[] = JSON.parse(value)
                                         universities.splice(index, 1)
-                                        dataPreferences.putSync('universities', JSON.stringify(universities))
+                                        dataPreferences.putSync('saved_universities', JSON.stringify(universities))
                                         dataPreferences.flush()
                                         this.saved_universities = universities
                                         promptAction.showToast({
                                           message: '已删除'
                                         })
-                                        this.isButtonEnabled = true;
-                                        this.collection = '收藏'
+                                        // this.isButtonEnabled = true;
+                                        // this.collection = '收藏'
                                       }
                                     },
                                     secondaryButton: {
@@ -537,7 +530,7 @@ struct search {
         }
         .tabBar(this.LabelImage('收藏', 1, $r('app.media.like_selected'), $r('app.media.like_normal')))
         .onWillShow(() => {
-          let value: string = dataPreferences.getSync('universities', '[]').toString();
+          let value: string = dataPreferences.getSync('saved_universities', '[]').toString();
           this.saved_universities = JSON.parse(value)
         })
       }
