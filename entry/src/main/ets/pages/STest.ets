@@ -282,7 +282,7 @@ struct search {
                                   save_universities.push(item);
                                   dataPreferences.putSync('search_universities', JSON.stringify(this.search_universities));
 
-                                  dataPreferences.putSync('universities', JSON.stringify(this.saved_universities))
+                                  dataPreferences.putSync('saved_universities', JSON.stringify(this.saved_universities))
                                   dataPreferences.flush()
 
 
